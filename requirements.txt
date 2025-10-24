@@ -1,0 +1,19 @@
+# Python dependencies for Odoo 18 and custom modules
+# Add your third-party Python packages here
+
+# Example dependencies:
+# xlrd==2.0.1
+# xlwt==1.3.0
+# openpyxl==3.0.10
+# python-dateutil==2.8.2
+# requests==2.31.0
+# pandas==2.0.3
+
+# For barcode/QR code generation
+# python-barcode==0.15.1
+# qrcode==7.4.2
+
+# For PDF generation
+# reportlab==4.0.4
+
+# Add your specific module requirements below:
