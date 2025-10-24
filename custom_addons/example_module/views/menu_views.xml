@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Root Menu -->
+    <menuitem id="menu_example_root"
+              name="Example"
+              sequence="100"
+              web_icon="example_module,static/description/icon.png"/>
+    
+    <!-- Example Submenu -->
+    <menuitem id="menu_example_records"
+              name="Example Records"
+              parent="menu_example_root"
+              action="action_example_model"
+              sequence="10"/>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_example_configuration"
+              name="Configuration"
+              parent="menu_example_root"
+              sequence="100"/>
+
+</odoo>
