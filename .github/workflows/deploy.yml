@@ -20,4 +20,4 @@ jobs:
           script: |
             cd /odoo/odoo18-prod/custom/addons/gaya18
             git pull --ff-only
-            sudo systemctl restart odoo
+            sudo systemctl restart odoo-server
