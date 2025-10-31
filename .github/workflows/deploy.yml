@@ -18,6 +18,6 @@ jobs:
           username: ${{ secrets.GAYA18_USER }}
           key: ${{ secrets.GAYA18_SSH_KEY }}
           script: |
-            cd /odoo/odoo18-prod/custom/addons/gaya18
+            cd /odoo/odoo18-prod/custom/addons
             git pull --ff-only
             sudo systemctl restart odoo-server
