@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_actions_act_window_invoice,ir_actions_act_window_invoice,base.model_ir_actions_act_window,account.group_account_invoice,1,0,0,0
+access_ir_actions_act_window_view_invoice,ir_actions_act_window_view_invoice,base.model_ir_actions_act_window_view,account.group_account_invoice,1,0,0,0
