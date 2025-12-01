@@ -28,6 +28,7 @@ to resolve the permission error.
     'data': [
         'security/ir.model.access.csv',
     ],
+    'images': ['static/description/icon.png'],
     'installable': True,
     'application': False,
     'auto_install': False,
