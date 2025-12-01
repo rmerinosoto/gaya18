@@ -2,7 +2,7 @@
 {
     'name': 'Gaya - Fix Global Invoice Access',
     'version': '18.0.1.0.1',
-    
+    'author':'ANFEPI: Rodrigo Merino Soto'
     'category': 'Accounting/Localizations',
     'summary': 'Allow invoice users to access Global Invoice wizard without Settings permission',
     'description': """
