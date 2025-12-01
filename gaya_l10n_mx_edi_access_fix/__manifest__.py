@@ -20,7 +20,6 @@ access to this model which by default requires base.group_system (Settings).
 This module adds a minimal read-only access rule for account.group_account_invoice
 to resolve the permission error.
     """,
-    'author': 'Gaya Vainilla y Especias',
     'depends': [
         'base',
         'account',
