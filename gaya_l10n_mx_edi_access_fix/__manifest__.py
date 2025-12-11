@@ -1,33 +1,33 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Gaya - Fix Global Invoice Access',
-    'version': '18.0.1.0.2',
+    'version': '18.0.1.0.15',
     'author':'ANFEPI: Rodrigo Merino Soto',
     'category': 'Accounting/Localizations',
-    'summary': 'Allow invoice users to access Global Invoice wizard without Settings permission',
+    'summary': 'Allow invoice users to create Global Invoices from POS without Settings permission',
     'description': """
 Fix Global Invoice Access for Invoice Users
 ============================================
 
-This module adds read access to ir.actions.act_window for users with the 
-Invoicing group, allowing them to use the "Create Global Invoice" action 
-from POS and Accounting without requiring the Settings permission.
+This module allows users with the Invoicing group (account.group_account_invoice)
+to create Global Invoices from POS without requiring Settings permission
+(base.group_system).
 
-The core issue is that the method l10n_mx_edi_action_create_global_invoice()
-returns a dictionary with type 'ir.actions.act_window', and Odoo validates
-access to this model which by default requires base.group_system (Settings).
+The solution overrides the action_create_global_invoice() method in the
+l10n_mx_edi.global_invoice.create wizard to execute with sudo() privileges,
+bypassing permission checks that would otherwise block non-admin users.
 
-This module adds a minimal read-only access rule for account.group_account_invoice
-to resolve the permission error.
+Key features:
+- Overrides l10n_mx_edi.global_invoice.create wizard
+- Uses sudo() to bypass permission restrictions
+- Includes detailed logging for troubleshooting
+- Must load after l10n_mx_edi_pos to ensure proper method resolution order
     """,
     'depends': [
-        'base',
-        'account',
         'l10n_mx_edi',
+        'l10n_mx_edi_pos',
     ],
-    'data': [
-        'security/ir.model.access.csv',
-    ],
+    'data': [],
     'images': ['static/description/icon.png'],
     'installable': True,
     'application': False,
