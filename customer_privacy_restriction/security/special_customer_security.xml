@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="group_view_special_customers" model="res.groups">
+            <field name="name">Ver clientes confidenciales</field>
+            <field name="category_id" ref="base.module_category_sales_sales"/>
+            <field name="comment">Permite consultar ventas y facturas de clientes marcados como confidenciales.</field>
+        </record>
+    </data>
+</odoo>
