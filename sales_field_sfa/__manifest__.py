@@ -1,0 +1,35 @@
+{
+    "name": "Sales Field SFA",
+    "summary": "Seguimiento comercial de campo con panel OWL",
+    "version": "18.0.1.0.1",
+    "category": "Sales",
+    "author": "Tu Empresa",
+    "license": "OEEL-1",
+    "depends": [
+        "base",
+        "mail",
+        "contacts",
+        "sale_management",
+        "account",
+        "web",
+    ],
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "data/sequence.xml",
+        "views/partner_views.xml",
+        "views/interaction_views.xml",
+        "views/dashboard_action.xml",
+        "views/menu.xml",
+    ],
+    "assets": {
+        "web.assets_backend": [
+            "sales_field_sfa/static/src/js/debug_probe.js",
+            "sales_field_sfa/static/src/js/dashboard.js",
+            "sales_field_sfa/static/src/xml/dashboard.xml",
+        ],
+    },
+    "post_init_hook": "post_init_hook",
+    "application": True,
+    "installable": True,
+}
