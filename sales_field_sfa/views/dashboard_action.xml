@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_sales_field_dashboard" model="ir.actions.client">
+        <field name="name">Mi Panel</field>
+        <field name="tag">sales_field_sfa.dashboard</field>
+    </record>
+
+    <record id="action_sales_field_dashboard_manager" model="ir.actions.client">
+        <field name="name">Panel Gerencial</field>
+        <field name="tag">sales_field_sfa.dashboard</field>
+        <field name="context">{'manager_only': True}</field>
+    </record>
+</odoo>

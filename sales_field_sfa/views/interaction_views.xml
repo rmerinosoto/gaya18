@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sales_interaction_tree" model="ir.ui.view">
+        <field name="name">sales.interaction.tree</field>
+        <field name="model">sales.interaction</field>
+        <field name="arch" type="xml">
+            <list string="Interacciones" default_order="interaction_datetime desc">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="interaction_type"/>
+                <field name="interaction_datetime"/>
+                <field name="result"/>
+                <field name="next_action_date"/>
+                <field name="sale_order_id"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sales_interaction_form" model="ir.ui.view">
+        <field name="name">sales.interaction.form</field>
+        <field name="model">sales.interaction</field>
+        <field name="arch" type="xml">
+            <form string="Interacción" create="1" edit="1">
+                <header>
+                    <button name="action_create_quotation" type="object" string="Crear Cotización" class="btn-primary"/>
+                    <button name="action_request_partner_assignment" type="object" string="Solicitar Asignación de Cliente" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="partner_id"/>
+                            <field name="partner_channel"/>
+                            <field name="partner_visit_frequency"/>
+                            <field name="interaction_type"/>
+                            <field name="interaction_datetime"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="result"/>
+                            <field name="next_action_date"/>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="assignment_request_state" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Notas de la interacción..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sales_interaction_kanban" model="ir.ui.view">
+        <field name="name">sales.interaction.kanban</field>
+        <field name="model">sales.interaction</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="interaction_type" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="interaction_type"/>
+                <field name="interaction_datetime"/>
+                <field name="result"/>
+                <field name="next_action_date"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="fw-bold mb-1"><field name="partner_id"/></div>
+                            <div class="text-muted"><field name="interaction_type"/></div>
+                            <div><field name="interaction_datetime"/></div>
+                            <div>Resultado: <field name="result"/></div>
+                            <div>Próxima: <field name="next_action_date"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_sales_interaction_calendar" model="ir.ui.view">
+        <field name="name">sales.interaction.calendar</field>
+        <field name="model">sales.interaction</field>
+        <field name="arch" type="xml">
+            <calendar string="Interacciones" date_start="interaction_datetime" color="interaction_type">
+                <field name="partner_id"/>
+                <field name="interaction_type"/>
+                <field name="result"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_sales_interaction_search" model="ir.ui.view">
+        <field name="name">sales.interaction.search</field>
+        <field name="model">sales.interaction</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Interacciones">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="interaction_type"/>
+                <field name="result"/>
+
+                <filter name="today" string="Hoy" domain="[('interaction_datetime', '&gt;=', context_today().strftime('%%Y-%%m-%%d 00:00:00')), ('interaction_datetime', '&lt;=', context_today().strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                <filter name="this_week" string="Esta Semana" domain="[('interaction_datetime', '&gt;=', (context_today() - relativedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d 00:00:00')), ('interaction_datetime', '&lt;=', (context_today() + relativedelta(days=6-context_today().weekday())).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                <filter name="this_month" string="Este Mes" domain="[('interaction_datetime', '&gt;=', context_today().strftime('%%Y-%%m-01 00:00:00')), ('interaction_datetime', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                <filter name="overdue" string="Atrasadas" domain="[('next_action_date', '&lt;', context_today())]"/>
+                <filter name="no_next_action" string="Sin próxima acción" domain="[('next_action_date', '=', False)]"/>
+
+                <group expand="0" string="Agrupar Por">
+                    <filter name="group_type" string="Tipo" context="{'group_by':'interaction_type'}"/>
+                    <filter name="group_result" string="Resultado" context="{'group_by':'result'}"/>
+                    <filter name="group_partner" string="Cliente" context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sales_interaction" model="ir.actions.act_window">
+        <field name="name">Interacciones</field>
+        <field name="res_model">sales.interaction</field>
+        <field name="view_mode">kanban,list,calendar,form</field>
+        <field name="search_view_id" ref="view_sales_interaction_search"/>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{'default_user_id': uid}</field>
+    </record>
+</odoo>

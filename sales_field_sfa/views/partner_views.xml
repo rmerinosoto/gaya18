@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_sales_field_sfa" model="ir.ui.view">
+        <field name="name">res.partner.form.sales.field.sfa</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//group" position="inside">
+                <group string="Seguimiento Comercial">
+                    <field name="user_id"/>
+                    <field name="x_customer_status"/>
+                    <field name="x_channel"/>
+                    <field name="x_visit_frequency"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
