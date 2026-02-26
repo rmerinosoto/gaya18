@@ -3,7 +3,7 @@
     "summary": "Seguimiento comercial de campo con panel OWL",
     "version": "18.0.1.0.1",
     "category": "Sales",
-    "author": "Tu Empresa",
+    "author": "ANFEPI: Rodrigo Merino",
     "license": "OEEL-1",
     "depends": [
         "base",
@@ -30,6 +30,7 @@
         ],
     },
     "post_init_hook": "post_init_hook",
+    "images": ["static/description/icon.png"],
     "application": True,
     "installable": True,
 }
