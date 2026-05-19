@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Gaya - Stock Quant Report Filter',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'author': 'ANFEPI: Rodrigo Merino',
     'category': 'Inventory/Inventory',
     'summary': 'Restringe el reporte Inventario/Reportes/Ubicaciones a ubicaciones internas',

@@ -10,8 +10,18 @@
             (Proveedor/Cliente/Transit) que referencian productos de otras
             compañías.
         -->
+        <!--
+            sudo() en la construcción es necesario porque
+            stock.quant.action_view_quants() llama internamente a
+            _quant_tasks()._clean_reservations(), que itera sobre
+            stock.quant y lee product.uom_id.rounding. Sin sudo, ese
+            recorrido falla con AccessError sobre product.product para
+            usuarios mono-compañía (el bug original). El sudo solo aplica
+            a la construcción del action_window; el dominio devuelto se
+            ejecuta luego con los permisos reales del usuario.
+        -->
         <record id="stock.action_view_quants" model="ir.actions.server">
-            <field name="code">action = model.with_context(
+            <field name="code">action = model.sudo().with_context(
     search_default_internal_loc=1,
     always_show_loc=1,
 ).action_view_quants()
