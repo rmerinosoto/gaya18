@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--
+            Sobrescribe la acción de servidor del menú
+            Inventario > Reportes > Ubicaciones para limitar el reporte
+            a quants en ubicaciones internas. Evita AccessError sobre
+            product.product al expandir quants en ubicaciones virtuales
+            (Proveedor/Cliente/Transit) que referencian productos de otras
+            compañías.
+        -->
+        <record id="stock.action_view_quants" model="ir.actions.server">
+            <field name="code">action = model.with_context(
+    search_default_internal_loc=1,
+    always_show_loc=1,
+).action_view_quants()
+action['domain'] = [('location_id.usage', '=', 'internal')]
+</field>
+        </record>
+
+    </data>
+</odoo>
