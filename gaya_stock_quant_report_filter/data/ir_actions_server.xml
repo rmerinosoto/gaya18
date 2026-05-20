@@ -19,12 +19,39 @@
             usuarios mono-compañía (el bug original). El sudo solo aplica
             a la construcción del action_window; el dominio devuelto se
             ejecuta luego con los permisos reales del usuario.
+
+            Menú: Inventario > Reportes > Ubicaciones.
         -->
         <record id="stock.action_view_quants" model="ir.actions.server">
             <field name="code">action = model.sudo().with_context(
     search_default_internal_loc=1,
     always_show_loc=1,
 ).action_view_quants()
+action['domain'] = [('location_id.usage', '=', 'internal')]
+</field>
+        </record>
+
+        <!--
+            Acción "Actualizar cantidad" (Ajuste de Inventario), invocada
+            desde el dashboard de Inventario. Es un act_window directo sin
+            dominio fijo; solo tenía search_default_internal_loc como
+            filtro removible. Fuerza el mismo recorte a ubicaciones internas.
+        -->
+        <record id="stock.dashboard_open_quants" model="ir.actions.act_window">
+            <field name="domain">[('location_id.usage', '=', 'internal')]</field>
+        </record>
+
+        <!--
+            "Inventario físico" (Inventario > Operaciones > Inventario físico).
+            La implementación estándar de action_view_inventory() ya filtra a
+            usage in ('internal','transit'), pero 'transit' incluye la
+            ubicación virtual global "Inter-company transit" (company NULL)
+            donde quedan quants residuales de operaciones cross-company.
+            Aplicamos sudo() para que _quant_tasks corra sin AccessError y
+            restringimos el dominio a solo 'internal'.
+        -->
+        <record id="stock.action_view_inventory_tree" model="ir.actions.server">
+            <field name="code">action = model.sudo().action_view_inventory()
 action['domain'] = [('location_id.usage', '=', 'internal')]
 </field>
         </record>
