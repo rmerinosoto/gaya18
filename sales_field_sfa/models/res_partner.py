@@ -11,8 +11,9 @@ class ResPartner(models.Model):
             ("inactive", "Inactivo"),
         ],
         string="Estado Cliente",
-        default="prospect",
         tracking=True,
+        # why: sin default. Antes era "prospect" y ensuciaba 12,505 partners
+        # no comerciales (proveedores, contactos internos, sucursales).
     )
     x_channel = fields.Selection(
         [

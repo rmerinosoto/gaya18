@@ -7,6 +7,9 @@ class SalesInteraction(models.Model):
     _description = "Interacción Comercial"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "interaction_datetime desc, id desc"
+    # why: enforça check_company=True en los Many2one declarados con ese flag.
+    # Sin esto el flag se ignora silenciosamente.
+    _check_company_auto = True
 
     name = fields.Char(
         string="Referencia",
@@ -20,6 +23,8 @@ class SalesInteraction(models.Model):
         string="Cliente",
         required=True,
         tracking=True,
+        index=True,
+        check_company=True,
     )
     user_id = fields.Many2one(
         "res.users",
@@ -27,6 +32,7 @@ class SalesInteraction(models.Model):
         required=True,
         default=lambda self: self.env.user,
         tracking=True,
+        index=True,
     )
     company_id = fields.Many2one(
         "res.company",
@@ -51,6 +57,7 @@ class SalesInteraction(models.Model):
         required=True,
         default=fields.Datetime.now,
         tracking=True,
+        index=True,
     )
     result = fields.Selection(
         [
@@ -66,8 +73,8 @@ class SalesInteraction(models.Model):
         required=True,
         tracking=True,
     )
-    next_action_date = fields.Date(string="Próxima Acción")
-    sale_order_id = fields.Many2one("sale.order", string="Cotización")
+    next_action_date = fields.Date(string="Próxima Acción", index=True)
+    sale_order_id = fields.Many2one("sale.order", string="Cotización", check_company=True)
     notes = fields.Text(string="Notas")
     partner_channel = fields.Selection(
         related="partner_id.x_channel",
@@ -83,6 +90,8 @@ class SalesInteraction(models.Model):
         [
             ("not_requested", "No solicitada"),
             ("requested", "Solicitada"),
+            ("approved", "Aprobada"),
+            ("rejected", "Rechazada"),
         ],
         string="Solicitud de Asignación",
         default="not_requested",
@@ -174,12 +183,66 @@ class SalesInteraction(models.Model):
         self._create_assignment_request()
         return True
 
+    def action_approve_assignment(self):
+        """Manager-only: reasigna el partner al user solicitante y cierra todas
+        las solicitudes pendientes para el mismo partner."""
+        self.ensure_one()
+        if not self.env.user.has_group("sales_field_sfa.group_sales_field_manager"):
+            raise UserError(_("Solo Gerencia puede aprobar reasignaciones."))
+        if self.assignment_request_state != "requested":
+            raise UserError(_("Esta interacción no tiene una solicitud pendiente."))
+        self.partner_id.sudo().write({"user_id": self.user_id.id})
+        # why: una misma solicitud puede haber generado interacciones gemelas
+        # (otro vendedor pidiendo lo mismo) — cerramos todas las pendientes del
+        # partner para evitar que sigan apareciendo abiertas tras la decision.
+        pending = self.search([
+            ("partner_id", "=", self.partner_id.id),
+            ("assignment_request_state", "=", "requested"),
+        ])
+        pending.write({"assignment_request_state": "approved"})
+        self.partner_id.message_post(
+            body=_("Reasignación aprobada por %(mgr)s. Nuevo vendedor: %(user)s.") % {
+                "mgr": self.env.user.display_name,
+                "user": self.user_id.display_name,
+            },
+            subtype_xmlid="mail.mt_note",
+        )
+        return True
+
+    def action_reject_assignment(self):
+        self.ensure_one()
+        if not self.env.user.has_group("sales_field_sfa.group_sales_field_manager"):
+            raise UserError(_("Solo Gerencia puede rechazar reasignaciones."))
+        if self.assignment_request_state != "requested":
+            raise UserError(_("Esta interacción no tiene una solicitud pendiente."))
+        self.write({"assignment_request_state": "rejected"})
+        self.message_post(
+            body=_("Solicitud de reasignación rechazada por %(mgr)s.") % {"mgr": self.env.user.display_name},
+            subtype_xmlid="mail.mt_note",
+        )
+        return True
+
     def _process_partner_assignment(self):
         for rec in self:
             partner = rec.partner_id
             if not partner:
                 continue
-            if not partner.user_id:
+            # why: bloqueamos la fila del partner para evitar que dos vendedores
+            # creando interacciones simultaneas del mismo cliente sin user_id
+            # se pisen el ultimo write. SELECT FOR UPDATE re-lee el estado
+            # actual y serializa con cualquier transaccion concurrente.
+            # El flush previo asegura que escrituras pendientes en el ORM ya
+            # esten en disco antes del SELECT raw — sin esto, dos transacciones
+            # concurrentes podrian leer user_id=NULL y pisarse.
+            self.env.flush_all()
+            self.env.cr.execute(
+                "SELECT user_id FROM res_partner WHERE id = %s FOR UPDATE",
+                (partner.id,),
+            )
+            current_user_id = self.env.cr.fetchone()[0]
+            partner.invalidate_recordset(["user_id"])
+
+            if not current_user_id:
                 partner.sudo().write({"user_id": rec.user_id.id})
                 rec.write(
                     {
@@ -192,7 +255,7 @@ class SalesInteraction(models.Model):
                     body=_("Cliente asignado automáticamente a %(user)s por no tener vendedor previo.") % {"user": rec.user_id.display_name},
                     subtype_xmlid="mail.mt_note",
                 )
-            elif partner.user_id != rec.user_id:
+            elif current_user_id != rec.user_id.id:
                 rec._create_assignment_request()
 
     def _create_assignment_request(self):

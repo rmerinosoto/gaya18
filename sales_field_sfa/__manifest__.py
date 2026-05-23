@@ -4,7 +4,7 @@
     "version": "18.0.1.0.1",
     "category": "Sales",
     "author": "ANFEPI: Rodrigo Merino",
-    "license": "OEEL-1",
+    "license": "LGPL-3",
     "depends": [
         "base",
         "mail",
@@ -24,12 +24,12 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "sales_field_sfa/static/src/js/debug_probe.js",
             "sales_field_sfa/static/src/js/dashboard.js",
             "sales_field_sfa/static/src/xml/dashboard.xml",
         ],
     },
     "post_init_hook": "post_init_hook",
+    "uninstall_hook": "uninstall_hook",
     "images": ["static/description/icon.png"],
     "application": True,
     "installable": True,

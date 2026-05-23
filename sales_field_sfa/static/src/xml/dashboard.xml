@@ -153,7 +153,7 @@
                                 <t t-foreach="state.data.lists.interactions_today || []" t-as="item" t-key="item.id">
                                     <li class="list-group-item" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
                                         <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
-                                        <small class="text-muted"><t t-esc="item.interaction_type"/> - <t t-esc="item.result"/></small>
+                                        <small class="text-muted"><t t-esc="labelType(item.interaction_type)"/> - <t t-esc="labelResult(item.result)"/></small>
                                     </li>
                                 </t>
                                 <t t-if="!(state.data.lists.interactions_today || []).length">

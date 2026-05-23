@@ -4,11 +4,8 @@ import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
-console.log("[sales_field_sfa] dashboard.js cargado");
-
 class SalesFieldDashboard extends Component {
     setup() {
-        console.log("[sales_field_sfa] setup dashboard");
         this.orm = useService("orm");
         this.action = useService("action");
         const actionContext =
@@ -32,7 +29,6 @@ class SalesFieldDashboard extends Component {
         });
 
         onWillStart(async () => {
-            console.log("[sales_field_sfa] onWillStart dashboard");
             await this.loadData();
         });
     }
@@ -40,7 +36,6 @@ class SalesFieldDashboard extends Component {
     async loadData() {
         this.state.loading = true;
         try {
-            console.log("[sales_field_sfa] RPC dashboard_data inicio");
             const kwargs = {};
             if (this.state.filters.month) {
                 kwargs.date_ref = `${this.state.filters.month}-01`;
@@ -57,13 +52,19 @@ class SalesFieldDashboard extends Component {
             if (!this.state.filters.userId && this.state.data.selected_user) {
                 this.state.filters.userId = String(this.state.data.selected_user.id);
             }
-            console.log("[sales_field_sfa] RPC dashboard_data OK", this.state.data);
-        } catch (err) {
-            console.error("[sales_field_sfa] RPC dashboard_data ERROR", err);
-            throw err;
         } finally {
             this.state.loading = false;
         }
+    }
+
+    labelType(key) {
+        const labels = (this.state.data && this.state.data.labels && this.state.data.labels.interaction_type) || {};
+        return labels[key] || key;
+    }
+
+    labelResult(key) {
+        const labels = (this.state.data && this.state.data.labels && this.state.data.labels.result) || {};
+        return labels[key] || key;
     }
 
     formatMoney(value) {

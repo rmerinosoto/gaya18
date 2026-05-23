@@ -86,6 +86,13 @@ class SalesFieldDashboard(models.AbstractModel):
         for invoice_id, dates in dates_by_invoice.items():
             if dates:
                 paid_dates[invoice_id] = max(dates)
+
+        # why: facturas marcadas paid sin reconcile (refund autoaplicado, asiento
+        # manual) quedaban en False y desaparecian del KPI. Fallback a la fecha
+        # de la propia factura — mejor sub-aproximacion que perder el dato.
+        for inv in invoices:
+            if not paid_dates.get(inv.id):
+                paid_dates[inv.id] = inv.invoice_date or inv.date
         return paid_dates
 
     @api.model
@@ -122,17 +129,18 @@ class SalesFieldDashboard(models.AbstractModel):
             ("interaction_datetime", "<=", fields.Datetime.to_string(month_end_dt)),
         ]
 
-        total_interactions = interaction_model.search_count(interaction_month_domain)
-
-        # Keep this explicit to avoid read_group count key differences across builds.
-        type_counts = {
-            "visit": interaction_model.search_count(interaction_month_domain + [("interaction_type", "=", "visit")]),
-            "call": interaction_model.search_count(interaction_month_domain + [("interaction_type", "=", "call")]),
-            "whatsapp": interaction_model.search_count(interaction_month_domain + [("interaction_type", "=", "whatsapp")]),
-            "followup": interaction_model.search_count(interaction_month_domain + [("interaction_type", "=", "followup")]),
-        }
-
         valid_results = ["contacted", "interested", "quotation_sent", "order_taken"]
+
+        # why: una sola query agrupada por interaction_type cubre total + 4 tipos.
+        type_counts = {"visit": 0, "call": 0, "whatsapp": 0, "followup": 0}
+        for itype, count in interaction_model._read_group(
+            domain=interaction_month_domain,
+            groupby=["interaction_type"],
+            aggregates=["__count"],
+        ):
+            if itype in type_counts:
+                type_counts[itype] = count
+        total_interactions = sum(type_counts.values())
         prospect_contacted = interaction_model.search_count(
             interaction_month_domain
             + [
@@ -157,11 +165,16 @@ class SalesFieldDashboard(models.AbstractModel):
             ]
         )
 
+        # why: la fecha real de pago se reconstruye desde reconciles, asi que no
+        # podemos filtrar el mes en SQL. Pero descartamos facturas viejas: una
+        # emitida hace >90 dias rara vez se paga dentro del mes consultado.
+        invoice_date_floor = (month_start - timedelta(days=90)).isoformat()
         invoice_domain = [
             ("move_type", "=", "out_invoice"),
             ("state", "=", "posted"),
             ("payment_state", "=", "paid"),
             ("company_id", "in", allowed_company_ids),
+            ("invoice_date", ">=", invoice_date_floor),
             "|",
             ("invoice_user_id", "=", dashboard_user.id),
             "&",
@@ -403,6 +416,7 @@ class SalesFieldDashboard(models.AbstractModel):
                     ("state", "=", "posted"),
                     ("payment_state", "=", "paid"),
                     ("company_id", "in", allowed_company_ids),
+                    ("invoice_date", ">=", invoice_date_floor),
                     "|",
                     ("invoice_user_id", "in", seller_ids),
                     "&",
@@ -496,12 +510,17 @@ class SalesFieldDashboard(models.AbstractModel):
                     "sellers_summary": sellers_summary,
                 }
 
+        interaction_field = self.env["sales.interaction"]._fields
         return {
             "month_start": month_start.isoformat(),
             "month_end": month_end.isoformat(),
             "is_manager": is_manager,
             "selected_user": {"id": dashboard_user.id, "name": dashboard_user.name},
             "user_options": user_options,
+            "labels": {
+                "interaction_type": dict(interaction_field["interaction_type"]._description_selection(self.env)),
+                "result": dict(interaction_field["result"]._description_selection(self.env)),
+            },
             "kpis": {
                 "total_interactions": total_interactions,
                 "visit": type_counts.get("visit", 0),

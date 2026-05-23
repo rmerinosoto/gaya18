@@ -6,7 +6,13 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//sheet//group" position="inside">
-                <group string="Seguimiento Comercial">
+                <!-- why: customer_rank invisible para poder referenciarlo desde
+                     el atributo invisible del grupo siguiente. -->
+                <field name="customer_rank" invisible="1"/>
+                <!-- why: el grupo SFA aplica solo a partners comerciales para
+                     no ensuciar proveedores, contactos internos y sucursales
+                     con campos que no les corresponden. -->
+                <group string="Seguimiento Comercial" invisible="customer_rank == 0">
                     <field name="user_id"/>
                     <field name="x_customer_status"/>
                     <field name="x_channel"/>
