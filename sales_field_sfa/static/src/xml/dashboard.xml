@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="sales_field_sfa.Dashboard" owl="1">
-        <div class="o_sales_field_dashboard container-fluid p-3">
+        <!-- o_content: clase estandar de Odoo para client actions; habilita el scroll
+             vertical cuando el contenido excede el viewport. h-100 + overflow-auto son
+             refuerzo defensivo para asegurar comportamiento consistente en celular. -->
+        <div class="o_sales_field_dashboard o_content h-100" style="overflow-y: auto;">
+        <div class="container-fluid p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="mb-0">
                     <t t-if="state.managerOnly">Panel Gerencial</t>
@@ -283,6 +287,7 @@
                 </div>
                 </t>
             </t>
+        </div>
         </div>
     </t>
 </templates>
