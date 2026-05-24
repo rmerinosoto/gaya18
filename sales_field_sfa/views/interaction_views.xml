@@ -23,11 +23,16 @@
         <field name="arch" type="xml">
             <form string="Interacción" create="1" edit="1">
                 <header>
+                    <!-- S-01: nueva interaccion sobre el mismo cliente. Visible cuando el record ya
+                         existe (id) y hay partner. Esto encadena interacciones de forma natural
+                         sin necesidad de un campo parent_interaction_id. -->
+                    <button name="action_register_next_interaction" type="object" string="Registrar siguiente interacción" class="btn-primary"
+                            invisible="not partner_id or not id"/>
                     <!-- why: la cotizacion solo tiene sentido cuando el resultado es positivo
                          (interested/quotation_sent/order_taken). Tambien necesitamos partner
                          y que la interaccion ya este guardada (id != False) para que el sale.order
                          pueda apuntar al origin con el folio. -->
-                    <button name="action_create_quotation" type="object" string="Crear Cotización" class="btn-primary"
+                    <button name="action_create_quotation" type="object" string="Crear Cotización" class="btn-secondary"
                             invisible="result not in ('interested','quotation_sent','order_taken') or not partner_id or not id"/>
                     <!-- why: ya solicitada o ya tuya = ocultar boton para evitar UserError post-click. -->
                     <button name="action_request_partner_assignment" type="object" string="Solicitar Asignación de Cliente" class="btn-secondary"

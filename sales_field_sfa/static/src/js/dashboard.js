@@ -154,20 +154,26 @@ class SalesFieldDashboard extends Component {
     }
 
     /**
-     * D-01: true cuando el mes filtrado no tiene actividad y conviene mostrar
-     * el empty state contextual ("registra tu primer contacto") en vez de 9
-     * ceros mudos. Suma todos los contadores (no incluye monto pagado porque
-     * el monto puede ser 0 con interacciones presentes).
+     * D-01: true cuando el mes filtrado no tiene actividad ni pendientes y
+     * conviene mostrar el empty state contextual ("registra tu primer
+     * contacto") en vez de 9 ceros mudos. Si hay algo pendiente (hoy/semana/
+     * atrasado) NO mostramos el CTA porque el vendedor ya tiene trabajo
+     * cargado de meses anteriores.
      */
     isMonthEmpty() {
         const k = (this.state.data && this.state.data.kpis) || {};
+        const l = (this.state.data && this.state.data.lists) || {};
         const counters = [
             k.total_interactions,
             k.quotations_month,
             k.prospect_contacted,
             k.customer_contacted,
         ];
-        return counters.every((v) => !v);
+        const noActivity = counters.every((v) => !v);
+        const noPending = !(l.due_today || []).length
+            && !(l.due_this_week || []).length
+            && !(l.overdue || []).length;
+        return noActivity && noPending;
     }
 
     onCreateInteraction() {

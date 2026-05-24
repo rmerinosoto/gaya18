@@ -202,6 +202,25 @@ class SalesInteraction(models.Model):
                     )
                 )
 
+    def action_register_next_interaction(self):
+        """S-01: abre el form de una NUEVA interaccion con el mismo cliente y
+        vendedor precargados. La cadena queda implicita (mismo partner_id, orden
+        por fecha) — sin campo parent_interaction_id en el schema."""
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Siguiente interacción"),
+            "res_model": "sales.interaction",
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "current",
+            "context": {
+                "default_partner_id": self.partner_id.id,
+                "default_user_id": self.user_id.id,
+                "default_company_id": self.company_id.id,
+            },
+        }
+
     def action_create_quotation(self):
         self.ensure_one()
         order = self.sale_order_id

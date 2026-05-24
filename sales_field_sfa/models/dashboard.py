@@ -206,14 +206,55 @@ class SalesFieldDashboard(models.AbstractModel):
             limit=15,
         )
 
+        # S-02: "ultima interaccion por cliente" via DISTINCT ON. Una interaccion solo
+        # cuenta como "pendiente/atrasada" si es la mas reciente del cliente con ese
+        # vendedor. Las interacciones viejas con next_action_date pasado quedan saldadas
+        # automaticamente cuando el vendedor registra una nueva del mismo cliente.
+        self.env.cr.execute(
+            """
+            SELECT DISTINCT ON (partner_id) id
+            FROM sales_interaction
+            WHERE user_id = %s
+              AND partner_id IS NOT NULL
+            ORDER BY partner_id, interaction_datetime DESC, id DESC
+            """,
+            (dashboard_user.id,),
+        )
+        latest_ids = [row[0] for row in self.env.cr.fetchall()]
+
+        # S-02: "atrasadas" = ultima del cliente con next_action_date < hoy.
+        # Las anteriores quedan saldadas implicitamente porque ya existe una mas nueva.
         overdue_interactions = interaction_model.search_read(
             [
-                ("user_id", "=", dashboard_user.id),
+                ("id", "in", latest_ids),
                 ("next_action_date", "<", today),
             ],
             ["name", "partner_id", "interaction_type", "interaction_datetime", "result", "next_action_date"],
             order="next_action_date asc",
             limit=15,
+        )
+
+        # S-03: pendientes para HOY y para los proximos 7 dias. Mismo criterio
+        # (solo la ultima del cliente cuenta) para no inflar las listas.
+        week_end = today + timedelta(days=7)
+        due_today_interactions = interaction_model.search_read(
+            [
+                ("id", "in", latest_ids),
+                ("next_action_date", "=", today),
+            ],
+            ["name", "partner_id", "interaction_type", "interaction_datetime", "result", "next_action_date"],
+            order="partner_id",
+            limit=20,
+        )
+        due_week_interactions = interaction_model.search_read(
+            [
+                ("id", "in", latest_ids),
+                ("next_action_date", ">", today),
+                ("next_action_date", "<=", week_end),
+            ],
+            ["name", "partner_id", "interaction_type", "interaction_datetime", "result", "next_action_date"],
+            order="next_action_date asc",
+            limit=20,
         )
 
         assigned_partners = partner_model.search(
@@ -329,6 +370,7 @@ class SalesFieldDashboard(models.AbstractModel):
                     ("interaction_datetime", "<=", fields.Datetime.to_string(today_end_dt)),
                 ],
             },
+            # S-02: action_overdue usa latest_ids para coincidir con la lista del dashboard.
             "overdue": {
                 "type": "ir.actions.act_window",
                 "name": "Interacciones Atrasadas",
@@ -336,7 +378,30 @@ class SalesFieldDashboard(models.AbstractModel):
                 "view_mode": "list,kanban,form,calendar",
                 "views": _views_from_mode("list,kanban,form,calendar"),
                 "target": "current",
-                "domain": [("user_id", "=", dashboard_user.id), ("next_action_date", "<", today)],
+                "domain": [("id", "in", latest_ids), ("next_action_date", "<", today)],
+            },
+            # S-03: pendientes hoy / esta semana — mismo criterio (ultima del cliente).
+            "due_today": {
+                "type": "ir.actions.act_window",
+                "name": "Pendientes para Hoy",
+                "res_model": "sales.interaction",
+                "view_mode": "list,kanban,form,calendar",
+                "views": _views_from_mode("list,kanban,form,calendar"),
+                "target": "current",
+                "domain": [("id", "in", latest_ids), ("next_action_date", "=", today)],
+            },
+            "due_this_week": {
+                "type": "ir.actions.act_window",
+                "name": "Pendientes Esta Semana",
+                "res_model": "sales.interaction",
+                "view_mode": "list,kanban,form,calendar",
+                "views": _views_from_mode("list,kanban,form,calendar"),
+                "target": "current",
+                "domain": [
+                    ("id", "in", latest_ids),
+                    ("next_action_date", ">", today),
+                    ("next_action_date", "<=", week_end),
+                ],
             },
             "inactive_partners": {
                 "type": "ir.actions.act_window",
@@ -535,6 +600,8 @@ class SalesFieldDashboard(models.AbstractModel):
             "lists": {
                 "interactions_today": interactions_today,
                 "overdue": overdue_interactions,
+                "due_today": due_today_interactions,
+                "due_this_week": due_week_interactions,
                 "inactive_partners": no_interaction_30,
             },
             "actions": actions,

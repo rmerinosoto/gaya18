@@ -1,3 +1,6 @@
+from datetime import date, datetime, time, timedelta
+
+from odoo import fields
 from odoo.tests import tagged
 
 from .common import SFACommon
@@ -60,6 +63,95 @@ class TestDashboard(SFACommon):
         seller_ids = {row["seller_id"] for row in data["manager"]["sellers_summary"]}
         self.assertIn(self.seller_a.id, seller_ids)
         self.assertIn(self.seller_b.id, seller_ids)
+
+    def test_dashboard_lists_due_today_and_week(self):
+        """S-03: el dashboard expone due_today y due_this_week con la ultima interaccion
+        de cada cliente que tenga next_action_date dentro del rango."""
+        self.partner_orphan.user_id = self.seller_a
+        today = fields.Date.context_today(self.env["sales.field.dashboard"])
+        in_3_days = today + timedelta(days=3)
+        # Crear interaccion con seguimiento programado en 3 dias
+        self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "visit",
+            "interaction_datetime": datetime.combine(today, time(10, 0)),
+            "result": "interested",
+            "next_action_date": in_3_days,
+        })
+        data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data(
+            date_ref=today.isoformat()
+        )
+        self.assertIn("due_today", data["lists"])
+        self.assertIn("due_this_week", data["lists"])
+        due_week_ids = {item["id"] for item in data["lists"]["due_this_week"]}
+        # La interaccion debe aparecer en la semana
+        all_for_partner = self.Interaction.search([
+            ("user_id", "=", self.seller_a.id),
+            ("partner_id", "=", self.partner_orphan.id),
+        ])
+        self.assertTrue(any(i.id in due_week_ids for i in all_for_partner),
+                        "La interaccion con next_action_date en 3 dias debe aparecer en due_this_week.")
+
+    def test_dashboard_overdue_excludes_partner_with_recent_followup(self):
+        """S-02: una interaccion con next_action_date pasado QUEDA SALDADA si existe
+        una interaccion posterior del mismo cliente. No debe aparecer como atrasada."""
+        self.partner_orphan.user_id = self.seller_a
+        today = fields.Date.context_today(self.env["sales.field.dashboard"])
+        # Interaccion vieja con next_action_date ya vencido
+        old = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "call",
+            "interaction_datetime": datetime.combine(today - timedelta(days=10), time(10, 0)),
+            "result": "interested",
+            "next_action_date": today - timedelta(days=5),
+        })
+        # Vendedor "le da seguimiento": registra nueva interaccion mas reciente
+        recent = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "visit",
+            "interaction_datetime": datetime.combine(today, time(10, 0)),
+            "result": "order_taken",
+        })
+        data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data(
+            date_ref=today.isoformat()
+        )
+        overdue_ids = {item["id"] for item in data["lists"]["overdue"]}
+        self.assertNotIn(old.id, overdue_ids,
+                         "La interaccion antigua debe quedar saldada por la nueva.")
+
+    def test_dashboard_overdue_includes_unfollowed(self):
+        """S-02: si NO hay interaccion posterior del cliente, la antigua SI aparece atrasada."""
+        self.partner_orphan.user_id = self.seller_a
+        today = fields.Date.context_today(self.env["sales.field.dashboard"])
+        old = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "call",
+            "interaction_datetime": datetime.combine(today - timedelta(days=10), time(10, 0)),
+            "result": "interested",
+            "next_action_date": today - timedelta(days=5),
+        })
+        data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data(
+            date_ref=today.isoformat()
+        )
+        overdue_ids = {item["id"] for item in data["lists"]["overdue"]}
+        self.assertIn(old.id, overdue_ids,
+                      "Sin seguimiento posterior, la interaccion vencida debe aparecer atrasada.")
+
+    def test_action_register_next_interaction_returns_form_with_defaults(self):
+        """S-01: el action devuelve form con default_partner_id y default_user_id precargados."""
+        self.partner_orphan.user_id = self.seller_a
+        interaction = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "call",
+            "result": "interested",
+            "next_action_date": "2026-12-31",
+        })
+        action = interaction.with_user(self.seller_a).action_register_next_interaction()
+        self.assertEqual(action["res_model"], "sales.interaction")
+        self.assertEqual(action["view_mode"], "form")
+        ctx = action.get("context") or {}
+        self.assertEqual(ctx.get("default_partner_id"), self.partner_orphan.id)
+        self.assertEqual(ctx.get("default_user_id"), self.seller_a.id)
 
     def test_paid_date_simple_invoice(self):
         """_get_paid_date_by_invoice devuelve la fecha del move contraparte."""

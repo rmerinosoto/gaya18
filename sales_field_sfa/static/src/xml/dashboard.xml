@@ -161,11 +161,82 @@
                 </t>
 
                 <t t-if="!state.managerOnly">
+                    <!-- S-03: bloque prioritario "Qué hacer ahora" — visible antes de la historia.
+                         Solo aparece si hay algo pendiente, para no hacer ruido al inicio del mes. -->
+                    <t t-if="(state.data.lists.due_today || []).length || (state.data.lists.due_this_week || []).length || (state.data.lists.overdue || []).length">
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-4">
+                            <div class="card h-100 o_sfa_list_due_today border-primary">
+                                <div class="card-header d-flex justify-content-between bg-primary text-white">
+                                    <span><i class="fa fa-bell me-1"/>Para hoy</span>
+                                    <button class="btn btn-sm btn-link text-white" data-action-key="due_today" t-on-click="onActionClick">Ver todas</button>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <t t-foreach="state.data.lists.due_today || []" t-as="item" t-key="item.id">
+                                        <li class="list-group-item o_sfa_list_item border-start border-primary border-3" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
+                                            <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
+                                            <small class="text-muted">Última: <t t-esc="labelType(item.interaction_type)"/> · <t t-esc="labelResult(item.result)"/></small>
+                                        </li>
+                                    </t>
+                                    <t t-if="!(state.data.lists.due_today || []).length">
+                                        <li class="list-group-item text-center text-muted py-3">
+                                            <small>Nada para hoy.</small>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class="card h-100 o_sfa_list_due_week">
+                                <div class="card-header d-flex justify-content-between">
+                                    <span><i class="fa fa-calendar me-1 text-info"/>Esta semana</span>
+                                    <button class="btn btn-sm btn-link" data-action-key="due_this_week" t-on-click="onActionClick">Ver todas</button>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <t t-foreach="state.data.lists.due_this_week || []" t-as="item" t-key="item.id">
+                                        <li class="list-group-item o_sfa_list_item border-start border-info border-3" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
+                                            <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
+                                            <small class="text-info"><i class="fa fa-calendar-o me-1"/>Volver el <t t-esc="item.next_action_date"/></small>
+                                        </li>
+                                    </t>
+                                    <t t-if="!(state.data.lists.due_this_week || []).length">
+                                        <li class="list-group-item text-center text-muted py-3">
+                                            <small>Sin pendientes esta semana.</small>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class="card h-100 o_sfa_list_overdue_priority">
+                                <div class="card-header d-flex justify-content-between">
+                                    <span><i class="fa fa-exclamation-triangle text-danger me-1"/>Atrasados</span>
+                                    <button class="btn btn-sm btn-link" data-action-key="overdue" t-on-click="onActionClick">Ver todos</button>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <t t-foreach="state.data.lists.overdue || []" t-as="item" t-key="item.id">
+                                        <li class="list-group-item o_sfa_list_item border-start border-danger border-3" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
+                                            <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
+                                            <small class="text-danger"><i class="fa fa-clock-o me-1"/>Debiste contactar el <t t-esc="item.next_action_date"/></small>
+                                        </li>
+                                    </t>
+                                    <t t-if="!(state.data.lists.overdue || []).length">
+                                        <li class="list-group-item text-center text-muted py-3">
+                                            <small>Sin atrasados.</small>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </t>
                     <div class="row g-3">
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-6">
                         <div class="card h-100 o_sfa_list_today">
                             <div class="card-header d-flex justify-content-between">
-                                <span><i class="fa fa-calendar-check-o text-success me-1"/>Interacciones de hoy</span>
+                                <span><i class="fa fa-calendar-check-o text-success me-1"/>Interacciones registradas hoy</span>
                                 <button class="btn btn-sm btn-link" data-action-key="interactions_today" t-on-click="onActionClick">Ver todas</button>
                             </div>
                             <ul class="list-group list-group-flush">
@@ -186,31 +257,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-4">
-                        <div class="card h-100 o_sfa_list_overdue">
-                            <div class="card-header d-flex justify-content-between">
-                                <span><i class="fa fa-exclamation-triangle text-danger me-1"/>Interacciones atrasadas</span>
-                                <button class="btn btn-sm btn-link" data-action-key="overdue" t-on-click="onActionClick">Ver todas</button>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <t t-foreach="state.data.lists.overdue || []" t-as="item" t-key="item.id">
-                                    <li class="list-group-item o_sfa_list_item border-start border-danger border-3" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
-                                        <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
-                                        <small class="text-danger"><i class="fa fa-clock-o me-1"/>Pendiente desde: <t t-esc="item.next_action_date"/></small>
-                                    </li>
-                                </t>
-                                <t t-if="!(state.data.lists.overdue || []).length">
-                                    <li class="list-group-item text-center text-muted py-4">
-                                        <div><i class="fa fa-check-circle fa-2x mb-2 text-success"/></div>
-                                        <div class="fw-bold">Todo al día</div>
-                                        <small>No tienes contactos atrasados.</small>
-                                    </li>
-                                </t>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-6">
                         <div class="card h-100 o_sfa_list_inactive">
                             <div class="card-header d-flex justify-content-between">
                                 <span><i class="fa fa-bell-o text-warning me-1"/>Sin contacto desde hace 30 días</span>
