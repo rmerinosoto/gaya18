@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
@@ -48,9 +50,10 @@ class SalesInteraction(models.Model):
             ("whatsapp", "WhatsApp"),
             ("followup", "Seguimiento"),
         ],
-        string="Tipo de Interacción",
+        string="¿Cómo lo contactaste?",
         required=True,
         tracking=True,
+        help="Forma en que contactaste al cliente: visita en persona, llamada, mensaje de WhatsApp o seguimiento general.",
     )
     interaction_datetime = fields.Datetime(
         string="Fecha y Hora",
@@ -58,6 +61,7 @@ class SalesInteraction(models.Model):
         default=fields.Datetime.now,
         tracking=True,
         index=True,
+        help="Cuándo ocurrió el contacto. Se llena con la fecha y hora actual por defecto.",
     )
     result = fields.Selection(
         [
@@ -69,27 +73,42 @@ class SalesInteraction(models.Model):
             ("quotation_sent", "Cotización enviada"),
             ("order_taken", "Pedido tomado"),
         ],
-        string="Resultado",
+        string="¿Cómo terminó?",
         required=True,
         tracking=True,
+        help="Resultado del contacto. Si seleccionas Interesado, Cotización enviada o Pedido tomado, podrás generar una cotización.",
     )
-    next_action_date = fields.Date(string="Próxima Acción", index=True)
-    sale_order_id = fields.Many2one("sale.order", string="Cotización", check_company=True)
-    notes = fields.Text(string="Notas")
+    next_action_date = fields.Date(
+        string="¿Cuándo vuelvo a contactar?",
+        index=True,
+        help="Fecha en la que volverás a buscar a este cliente. Obligatoria salvo que el resultado sea 'No interesado' o 'Pedido tomado'.",
+    )
+    sale_order_id = fields.Many2one(
+        "sale.order",
+        string="Cotización",
+        check_company=True,
+        help="Cotización generada desde esta interacción. Se llena automáticamente al pulsar 'Crear Cotización'.",
+    )
+    notes = fields.Text(
+        string="¿Qué pasó? (notas)",
+        help="Detalles del contacto: lo que dijo el cliente, productos que pidió, observaciones que quieras recordar.",
+    )
     partner_channel = fields.Selection(
         related="partner_id.x_channel",
         string="Canal",
         readonly=False,
+        help="Canal comercial del cliente (Tienda, Restaurante, Distribuidor). Editar aquí actualiza la ficha del cliente.",
     )
     partner_visit_frequency = fields.Selection(
         related="partner_id.x_visit_frequency",
         string="Frecuencia de Visita",
         readonly=False,
+        help="Cada cuánto se visita a este cliente. Editar aquí actualiza la ficha del cliente.",
     )
     assignment_request_state = fields.Selection(
         [
-            ("not_requested", "No solicitada"),
-            ("requested", "Solicitada"),
+            ("not_requested", "Sin solicitud"),
+            ("requested", "Esperando a Gerencia"),
             ("approved", "Aprobada"),
             ("rejected", "Rechazada"),
         ],
@@ -98,6 +117,7 @@ class SalesInteraction(models.Model):
         readonly=True,
         tracking=True,
         copy=False,
+        help="Estado de la solicitud cuando este cliente ya pertenece a otro vendedor y pides reasignarlo.",
     )
     assignment_request_date = fields.Datetime(
         string="Fecha Solicitud Asignación",
@@ -110,6 +130,45 @@ class SalesInteraction(models.Model):
         readonly=True,
         copy=False,
     )
+    # W-02: contexto visible para el gerente al evaluar una solicitud de reasignacion.
+    # Cuenta de interacciones recientes del partner (excluye la actual). Compute
+    # sin store, barato — solo se evalua al abrir el form.
+    partner_recent_interaction_count = fields.Integer(
+        string="Interacciones recientes del cliente",
+        compute="_compute_partner_recent_interactions",
+        help="Cantidad de interacciones registradas con este cliente en los últimos 90 días (excluyendo la actual).",
+    )
+
+    @api.depends("partner_id")
+    def _compute_partner_recent_interactions(self):
+        threshold = fields.Datetime.now() - timedelta(days=90)
+        for rec in self:
+            if not rec.partner_id:
+                rec.partner_recent_interaction_count = 0
+                continue
+            rec.partner_recent_interaction_count = self.search_count([
+                ("partner_id", "=", rec.partner_id.id),
+                ("id", "!=", rec.id or 0),
+                ("interaction_datetime", ">=", fields.Datetime.to_string(threshold)),
+            ])
+
+    def action_view_partner_recent_interactions(self):
+        """W-02: abre las ultimas 5 interacciones del partner (excluyendo la actual),
+        ordenadas por fecha desc. Util al gerente para decidir una reasignacion con contexto."""
+        self.ensure_one()
+        recent = self.search([
+            ("partner_id", "=", self.partner_id.id),
+            ("id", "!=", self.id),
+        ], order="interaction_datetime desc", limit=5)
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Últimas interacciones de %(partner)s") % {"partner": self.partner_id.display_name},
+            "res_model": "sales.interaction",
+            "view_mode": "list,form",
+            "views": [(False, "list"), (False, "form")],
+            "target": "current",
+            "domain": [("id", "in", recent.ids)],
+        }
 
     _sql_constraints = [
         (
@@ -207,6 +266,21 @@ class SalesInteraction(models.Model):
             },
             subtype_xmlid="mail.mt_note",
         )
+        # W-01: notificar al solicitante en su propia interaccion con un mensaje dirigido.
+        # message_post sobre cada interaction pendiente con partner_ids al solicitante
+        # crea una notificacion explicita en su inbox/correo, no solo nota en chatter.
+        for rec in pending:
+            requester = rec.assignment_requested_by_id or rec.user_id
+            if requester and requester.partner_id:
+                rec.message_post(
+                    body=_("Tu solicitud de reasignación fue %(decision)s por %(mgr)s. El cliente %(partner)s ahora es tuyo.") % {
+                        "decision": _("aprobada"),
+                        "mgr": self.env.user.display_name,
+                        "partner": rec.partner_id.display_name,
+                    },
+                    partner_ids=[requester.partner_id.id],
+                    subtype_xmlid="mail.mt_comment",
+                )
         return True
 
     def action_reject_assignment(self):
@@ -216,10 +290,22 @@ class SalesInteraction(models.Model):
         if self.assignment_request_state != "requested":
             raise UserError(_("Esta interacción no tiene una solicitud pendiente."))
         self.write({"assignment_request_state": "rejected"})
-        self.message_post(
-            body=_("Solicitud de reasignación rechazada por %(mgr)s.") % {"mgr": self.env.user.display_name},
-            subtype_xmlid="mail.mt_note",
-        )
+        # W-01: notificacion dirigida al solicitante (inbox/correo), no solo nota en chatter.
+        requester = self.assignment_requested_by_id or self.user_id
+        if requester and requester.partner_id:
+            self.message_post(
+                body=_("Tu solicitud de reasignación fue rechazada por %(mgr)s. El cliente %(partner)s sigue con su vendedor actual.") % {
+                    "mgr": self.env.user.display_name,
+                    "partner": self.partner_id.display_name,
+                },
+                partner_ids=[requester.partner_id.id],
+                subtype_xmlid="mail.mt_comment",
+            )
+        else:
+            self.message_post(
+                body=_("Solicitud de reasignación rechazada por %(mgr)s.") % {"mgr": self.env.user.display_name},
+                subtype_xmlid="mail.mt_note",
+            )
         return True
 
     def _process_partner_assignment(self):

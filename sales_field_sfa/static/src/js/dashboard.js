@@ -67,6 +67,34 @@ class SalesFieldDashboard extends Component {
         return labels[key] || key;
     }
 
+    /**
+     * D-03: opciones del select de mes. Mes actual + 5 meses hacia atras.
+     * Label en formato "Mayo 2026" para lectura natural; value en YYYY-MM
+     * para compatibilidad con la lectura del backend.
+     */
+    monthOptions() {
+        const months = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+        ];
+        const opts = [];
+        const now = new Date();
+        for (let i = 0; i < 6; i++) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+            let label = `${months[d.getMonth()]} ${d.getFullYear()}`;
+            if (i === 0) label = `Este mes (${label})`;
+            else if (i === 1) label = `Mes anterior (${label})`;
+            opts.push({ value, label });
+        }
+        // Si el filtro actual es un mes mas antiguo que el rango, agregarlo para no perderlo.
+        if (this.state.filters.month && !opts.some((o) => o.value === this.state.filters.month)) {
+            const [y, m] = this.state.filters.month.split("-").map((x) => parseInt(x, 10));
+            opts.push({ value: this.state.filters.month, label: `${months[m - 1]} ${y}` });
+        }
+        return opts;
+    }
+
     formatMoney(value) {
         const amount = Number(value || 0).toLocaleString(undefined, {
             minimumFractionDigits: 2,
@@ -123,6 +151,33 @@ class SalesFieldDashboard extends Component {
         if (recordId) {
             this.openPartner(recordId);
         }
+    }
+
+    /**
+     * D-01: true cuando el mes filtrado no tiene actividad y conviene mostrar
+     * el empty state contextual ("registra tu primer contacto") en vez de 9
+     * ceros mudos. Suma todos los contadores (no incluye monto pagado porque
+     * el monto puede ser 0 con interacciones presentes).
+     */
+    isMonthEmpty() {
+        const k = (this.state.data && this.state.data.kpis) || {};
+        const counters = [
+            k.total_interactions,
+            k.quotations_month,
+            k.prospect_contacted,
+            k.customer_contacted,
+        ];
+        return counters.every((v) => !v);
+    }
+
+    onCreateInteraction() {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "sales.interaction",
+            views: [[false, "form"]],
+            target: "current",
+            context: { default_user_id: this.state.data.selected_user && this.state.data.selected_user.id },
+        });
     }
 
     openInteraction(recordId) {

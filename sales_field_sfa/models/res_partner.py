@@ -12,6 +12,7 @@ class ResPartner(models.Model):
         ],
         string="Estado Cliente",
         tracking=True,
+        help="Etapa comercial: Prospecto (todavía no compra), Cliente (ya compró), Inactivo (dejó de comprar).",
         # why: sin default. Antes era "prospect" y ensuciaba 12,505 partners
         # no comerciales (proveedores, contactos internos, sucursales).
     )
@@ -23,6 +24,7 @@ class ResPartner(models.Model):
         ],
         string="Canal",
         tracking=True,
+        help="Tipo de negocio del cliente: Tienda, Restaurante o Distribuidor.",
     )
     x_visit_frequency = fields.Selection(
         [
@@ -32,4 +34,5 @@ class ResPartner(models.Model):
         ],
         string="Frecuencia de Visita",
         tracking=True,
+        help="Cada cuánto debes visitar a este cliente: cada semana, cada dos semanas, o cada mes.",
     )

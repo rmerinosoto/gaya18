@@ -23,35 +23,61 @@
         <field name="arch" type="xml">
             <form string="Interacción" create="1" edit="1">
                 <header>
-                    <button name="action_create_quotation" type="object" string="Crear Cotización" class="btn-primary"/>
-                    <button name="action_request_partner_assignment" type="object" string="Solicitar Asignación de Cliente" class="btn-secondary"/>
+                    <!-- why: la cotizacion solo tiene sentido cuando el resultado es positivo
+                         (interested/quotation_sent/order_taken). Tambien necesitamos partner
+                         y que la interaccion ya este guardada (id != False) para que el sale.order
+                         pueda apuntar al origin con el folio. -->
+                    <button name="action_create_quotation" type="object" string="Crear Cotización" class="btn-primary"
+                            invisible="result not in ('interested','quotation_sent','order_taken') or not partner_id or not id"/>
+                    <!-- why: ya solicitada o ya tuya = ocultar boton para evitar UserError post-click. -->
+                    <button name="action_request_partner_assignment" type="object" string="Solicitar Asignación de Cliente" class="btn-secondary"
+                            invisible="not partner_id or assignment_request_state == 'requested' or not id"/>
                     <button name="action_approve_assignment" type="object" string="Aprobar Reasignación" class="btn-success"
                             invisible="assignment_request_state != 'requested'"
                             groups="sales_field_sfa.group_sales_field_manager"/>
                     <button name="action_reject_assignment" type="object" string="Rechazar"
                             invisible="assignment_request_state != 'requested'"
                             groups="sales_field_sfa.group_sales_field_manager"/>
+                    <!-- F-06: estado de la solicitud visible como statusbar -->
+                    <field name="assignment_request_state" widget="statusbar" statusbar_visible="not_requested,requested,approved,rejected"/>
                 </header>
                 <sheet>
-                    <group>
-                        <group>
+                    <!-- W-02: smart-button con contexto historico solo visible al gerente cuando hay una solicitud pendiente. -->
+                    <div class="oe_button_box" name="button_box" invisible="assignment_request_state != 'requested'" groups="sales_field_sfa.group_sales_field_manager">
+                        <button name="action_view_partner_recent_interactions" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="partner_recent_interaction_count" widget="statinfo" string="Recientes (90 días)"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
                             <field name="name" readonly="1"/>
-                            <field name="partner_id"/>
-                            <field name="partner_channel"/>
-                            <field name="partner_visit_frequency"/>
+                        </h1>
+                    </div>
+                    <!-- F-01: lo importante arriba ("¿que paso?"), lo opcional abajo ("ficha del cliente"). -->
+                    <group string="¿Qué pasó?" name="que_paso">
+                        <group>
+                            <field name="partner_id" placeholder="¿A qué cliente contactaste?"/>
                             <field name="interaction_type"/>
                             <field name="interaction_datetime"/>
                         </group>
                         <group>
-                            <field name="user_id"/>
-                            <field name="result"/>
-                            <field name="next_action_date"/>
-                            <field name="sale_order_id" readonly="1"/>
-                            <field name="assignment_request_state" readonly="1"/>
+                            <field name="result" placeholder="¿Cómo terminó el contacto?"/>
+                            <!-- F-02: required/visible dinamico segun resultado. La constraint Python sigue
+                                 como red de seguridad pero el usuario ve la obligacion ANTES de guardar. -->
+                            <field name="next_action_date"
+                                   required="result not in ('not_interested','order_taken') and result != False"
+                                   invisible="result in ('not_interested','order_taken')"/>
+                            <field name="sale_order_id" readonly="1" invisible="not sale_order_id"/>
                         </group>
                     </group>
-                    <group>
-                        <field name="notes" placeholder="Notas de la interacción..."/>
+                    <group string="Notas">
+                        <field name="notes" nolabel="1" placeholder="¿Qué te dijo el cliente? ¿Qué productos pidió? Anota lo importante..."/>
+                    </group>
+                    <!-- F-01: ficha del cliente colapsable. Datos secundarios para el ojo del vendedor. -->
+                    <group string="Ficha del cliente (opcional)" name="ficha_cliente" col="2">
+                        <field name="partner_channel"/>
+                        <field name="partner_visit_frequency"/>
+                        <field name="user_id" readonly="1"/>
                     </group>
                 </sheet>
                 <chatter/>

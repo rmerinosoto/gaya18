@@ -115,6 +115,75 @@ class TestWorkflow(SFACommon):
         })
         self.assertEqual(p.x_customer_status, "prospect")
 
+    def test_reject_notifies_requester(self):
+        """W-01: al rechazar, el mensaje del chatter incluye al solicitante como partner notificado."""
+        interaction = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_owned_by_b.id,
+            "interaction_type": "call",
+            "result": "interested",
+            "next_action_date": "2026-12-31",
+        })
+        interaction.with_user(self.manager).action_reject_assignment()
+        # buscamos el mensaje mas reciente del chatter de la interaccion
+        msgs = self.env["mail.message"].search([
+            ("model", "=", "sales.interaction"),
+            ("res_id", "=", interaction.id),
+        ], order="id desc", limit=5)
+        self.assertTrue(msgs, "Se esperaba al menos un mensaje en el chatter.")
+        # alguno de los mensajes debe tener al solicitante como partner notificado
+        seller_a_partner = self.seller_a.partner_id
+        notified_anywhere = any(seller_a_partner in m.partner_ids for m in msgs)
+        self.assertTrue(notified_anywhere, "El solicitante debe ser notificado en el chatter al rechazar.")
+
+    def test_approve_notifies_requester(self):
+        """W-01: al aprobar, el solicitante recibe notificacion dirigida en su interaccion."""
+        interaction = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_owned_by_b.id,
+            "interaction_type": "call",
+            "result": "interested",
+            "next_action_date": "2026-12-31",
+        })
+        interaction.with_user(self.manager).action_approve_assignment()
+        msgs = self.env["mail.message"].search([
+            ("model", "=", "sales.interaction"),
+            ("res_id", "=", interaction.id),
+        ], order="id desc", limit=10)
+        seller_a_partner = self.seller_a.partner_id
+        self.assertTrue(any(seller_a_partner in m.partner_ids for m in msgs),
+                        "El solicitante debe ser notificado al aprobar.")
+
+    def test_partner_recent_interaction_count_excludes_current(self):
+        """W-02: el compute cuenta interacciones recientes del partner sin contar la actual."""
+        # Crear varias interacciones para el mismo partner
+        first = self.Interaction.with_user(self.seller_b).create({
+            "partner_id": self.partner_owned_by_b.id,
+            "interaction_type": "call",
+            "result": "interested",
+            "next_action_date": "2026-12-31",
+        })
+        second = self.Interaction.with_user(self.seller_b).create({
+            "partner_id": self.partner_owned_by_b.id,
+            "interaction_type": "whatsapp",
+            "result": "interested",
+            "next_action_date": "2026-12-31",
+        })
+        third = self.Interaction.with_user(self.seller_b).create({
+            "partner_id": self.partner_owned_by_b.id,
+            "interaction_type": "visit",
+            "result": "order_taken",
+        })
+        # Desde "third" deben verse las otras 2 (no a si misma)
+        third.invalidate_recordset(["partner_recent_interaction_count"])
+        self.assertEqual(third.partner_recent_interaction_count, 2)
+        # action_view_partner_recent_interactions devuelve action con domain a las 5 mas recientes
+        action = third.action_view_partner_recent_interactions()
+        self.assertEqual(action["res_model"], "sales.interaction")
+        # debe incluir first y second
+        domain_ids = action["domain"][0][2]
+        self.assertIn(first.id, domain_ids)
+        self.assertIn(second.id, domain_ids)
+        self.assertNotIn(third.id, domain_ids)
+
     def test_lock_serializes_concurrent_orphan_assignment(self):
         """SELECT FOR UPDATE evita que dos vendedores reasignen el mismo
         partner huerfano en paralelo con resultado inconsistente."""

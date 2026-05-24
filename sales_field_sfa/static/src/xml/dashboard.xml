@@ -7,8 +7,14 @@
                     <t t-if="state.managerOnly">Panel Gerencial</t>
                     <t t-else="">Mi Panel Comercial</t>
                 </h2>
-                <div class="d-flex align-items-center gap-2">
-                    <input type="month" class="form-control" t-att-value="state.filters.month" t-on-change="onMonthChange"/>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <!-- D-03: reemplazo input month por select de meses recientes. Mas natural en
+                         celular y elimina el picker nativo confuso. -->
+                    <select class="form-select" t-att-value="state.filters.month" t-on-change="onMonthChange">
+                        <t t-foreach="monthOptions()" t-as="opt" t-key="opt.value">
+                            <option t-att-value="opt.value"><t t-esc="opt.label"/></option>
+                        </t>
+                    </select>
                     <t t-if="state.data.is_manager &amp;&amp; !state.managerOnly">
                         <select class="form-select" t-att-value="state.filters.userId" t-on-change="onUserChange">
                             <t t-foreach="state.data.user_options || []" t-as="opt" t-key="opt.id">
@@ -18,36 +24,49 @@
                             </t>
                         </select>
                     </t>
-                    <button class="btn btn-outline-primary" t-on-click="loadData">Actualizar</button>
+                    <button class="btn btn-outline-primary" t-on-click="loadData"><i class="fa fa-refresh me-1"/>Actualizar</button>
                 </div>
             </div>
 
             <t t-if="state.loading">
-                <div class="alert alert-info">Cargando panel...</div>
+                <div class="alert alert-info"><i class="fa fa-spinner fa-pulse me-1"/>Cargando panel...</div>
             </t>
             <t t-else="">
                 <t t-if="!state.managerOnly">
-                    <div class="row g-3 mb-3">
+                    <!-- D-01: empty state contextual cuando todos los KPI son 0 -->
+                    <t t-if="isMonthEmpty()">
+                        <div class="card mb-3 border-info o_sfa_empty_month">
+                            <div class="card-body text-center py-4">
+                                <div><i class="fa fa-rocket fa-3x text-info mb-2"/></div>
+                                <h4>Sin actividad este mes todavía</h4>
+                                <p class="text-muted mb-3">Empieza registrando tu primer contacto del mes — visita, llamada o WhatsApp.</p>
+                                <button class="btn btn-primary" t-on-click="onCreateInteraction">
+                                    <i class="fa fa-plus me-1"/>Registrar nueva interacción
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                    <div class="row g-2 g-md-3 mb-3">
                     <div class="col-6 col-md-3">
-                        <div class="card h-100" data-action-key="total_interactions" t-on-click="onKpiClick">
-                            <div class="card-body">
-                                <small class="text-muted">Total Interacciones</small>
-                                <h3><t t-esc="state.data.kpis.total_interactions || 0"/></h3>
+                        <div class="card h-100 o_sfa_kpi" data-action-key="total_interactions" t-on-click="onKpiClick">
+                            <div class="card-body p-2 p-md-3">
+                                <small class="text-muted"><i class="fa fa-list me-1"/>Total Interacciones</small>
+                                <h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.total_interactions || 0"/></h4>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="visit" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">Visitas</small><h3><t t-esc="state.data.kpis.visit || 0"/></h3></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="call" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">Llamadas</small><h3><t t-esc="state.data.kpis.call || 0"/></h3></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="whatsapp" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">WhatsApp</small><h3><t t-esc="state.data.kpis.whatsapp || 0"/></h3></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="followup" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">Seguimientos</small><h3><t t-esc="state.data.kpis.followup || 0"/></h3></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="prospect_contacted" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">Prospectos Contactados</small><h3><t t-esc="state.data.kpis.prospect_contacted || 0"/></h3></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="customer_contacted" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">Clientes Contactados</small><h3><t t-esc="state.data.kpis.customer_contacted || 0"/></h3></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100" data-action-key="quotations_month" t-on-click="onKpiClick"><div class="card-body"><small class="text-muted">Cotizaciones del Mes</small><h3><t t-esc="state.data.kpis.quotations_month || 0"/></h3></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="visit" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-map-marker me-1"/>Visitas</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.visit || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="call" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-phone me-1"/>Llamadas</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.call || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="whatsapp" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-whatsapp me-1"/>WhatsApp</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.whatsapp || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="followup" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-repeat me-1"/>Seguimientos</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.followup || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="prospect_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-user-plus me-1"/>Prospectos Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.prospect_contacted || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="customer_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-handshake-o me-1"/>Clientes Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.customer_contacted || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="quotations_month" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-file-text-o me-1"/>Cotizaciones del Mes</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.quotations_month || 0"/></h4></div></div></div>
                     <div class="col-12 col-md-6">
-                        <div class="card h-100 border-success" data-action-key="paid_invoices_month_amount" t-on-click="onKpiClick">
-                            <div class="card-body">
-                                <small class="text-muted">Facturado Pagado del Mes</small>
-                                <h3 class="text-success"><t t-esc="formatMoney(state.data.kpis.paid_invoices_month_amount)"/></h3>
+                        <div class="card h-100 o_sfa_kpi border-success" data-action-key="paid_invoices_month_amount" t-on-click="onKpiClick">
+                            <div class="card-body p-2 p-md-3">
+                                <small class="text-muted"><i class="fa fa-money me-1"/>Facturado Pagado del Mes</small>
+                                <h4 class="mt-1 mb-0 text-success"><t t-esc="formatMoney(state.data.kpis.paid_invoices_month_amount)"/></h4>
                             </div>
                         </div>
                     </div>
@@ -137,67 +156,79 @@
                 </t>
                 <t t-if="state.managerOnly &amp;&amp; !(state.data.manager &amp;&amp; state.data.manager.enabled)">
                     <div class="alert alert-warning">
-                        Este panel requiere permisos de gerente de seguimiento comercial.
+                        <i class="fa fa-lock me-1"/>Este panel requiere permisos de Gerente de Seguimiento Comercial.
                     </div>
                 </t>
 
                 <t t-if="!state.managerOnly">
                     <div class="row g-3">
                     <div class="col-12 col-lg-4">
-                        <div class="card h-100">
+                        <div class="card h-100 o_sfa_list_today">
                             <div class="card-header d-flex justify-content-between">
-                                <span>Interacciones de hoy</span>
+                                <span><i class="fa fa-calendar-check-o text-success me-1"/>Interacciones de hoy</span>
                                 <button class="btn btn-sm btn-link" data-action-key="interactions_today" t-on-click="onActionClick">Ver todas</button>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <t t-foreach="state.data.lists.interactions_today || []" t-as="item" t-key="item.id">
-                                    <li class="list-group-item" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
+                                    <li class="list-group-item o_sfa_list_item" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
                                         <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
-                                        <small class="text-muted"><t t-esc="labelType(item.interaction_type)"/> - <t t-esc="labelResult(item.result)"/></small>
+                                        <small class="text-muted"><t t-esc="labelType(item.interaction_type)"/> · <t t-esc="labelResult(item.result)"/></small>
                                     </li>
                                 </t>
                                 <t t-if="!(state.data.lists.interactions_today || []).length">
-                                    <li class="list-group-item text-muted">Sin registros hoy.</li>
+                                    <li class="list-group-item text-center text-muted py-4">
+                                        <div><i class="fa fa-coffee fa-2x mb-2 text-secondary"/></div>
+                                        <div class="fw-bold">Sin contactos hoy</div>
+                                        <small>Cuando registres una interacción aparecerá aquí.</small>
+                                    </li>
                                 </t>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-4">
-                        <div class="card h-100">
+                        <div class="card h-100 o_sfa_list_overdue">
                             <div class="card-header d-flex justify-content-between">
-                                <span>Interacciones atrasadas</span>
+                                <span><i class="fa fa-exclamation-triangle text-danger me-1"/>Interacciones atrasadas</span>
                                 <button class="btn btn-sm btn-link" data-action-key="overdue" t-on-click="onActionClick">Ver todas</button>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <t t-foreach="state.data.lists.overdue || []" t-as="item" t-key="item.id">
-                                    <li class="list-group-item" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
+                                    <li class="list-group-item o_sfa_list_item border-start border-danger border-3" t-att-data-record-id="item.id" t-on-click="onInteractionClick">
                                         <div class="fw-bold"><t t-esc="item.partner_id ? item.partner_id[1] : ''"/></div>
-                                        <small class="text-danger">Próxima acción: <t t-esc="item.next_action_date"/></small>
+                                        <small class="text-danger"><i class="fa fa-clock-o me-1"/>Pendiente desde: <t t-esc="item.next_action_date"/></small>
                                     </li>
                                 </t>
                                 <t t-if="!(state.data.lists.overdue || []).length">
-                                    <li class="list-group-item text-muted">Sin atrasadas.</li>
+                                    <li class="list-group-item text-center text-muted py-4">
+                                        <div><i class="fa fa-check-circle fa-2x mb-2 text-success"/></div>
+                                        <div class="fw-bold">Todo al día</div>
+                                        <small>No tienes contactos atrasados.</small>
+                                    </li>
                                 </t>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-4">
-                        <div class="card h-100">
+                        <div class="card h-100 o_sfa_list_inactive">
                             <div class="card-header d-flex justify-content-between">
-                                <span>Clientes sin interacción 30 días</span>
+                                <span><i class="fa fa-bell-o text-warning me-1"/>Sin contacto desde hace 30 días</span>
                                 <button class="btn btn-sm btn-link" data-action-key="inactive_partners" t-on-click="onActionClick">Ver todos</button>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <t t-foreach="state.data.lists.inactive_partners || []" t-as="item" t-key="item.id">
-                                    <li class="list-group-item" t-att-data-record-id="item.id" t-on-click="onPartnerClick">
+                                    <li class="list-group-item o_sfa_list_item border-start border-warning border-3" t-att-data-record-id="item.id" t-on-click="onPartnerClick">
                                         <div class="fw-bold"><t t-esc="item.name"/></div>
-                                        <small class="text-muted">Última interacción: <t t-esc="item.last_interaction || 'Sin interacciones'"/></small>
+                                        <small class="text-muted">Último contacto: <t t-esc="item.last_interaction || 'Nunca'"/></small>
                                     </li>
                                 </t>
                                 <t t-if="!(state.data.lists.inactive_partners || []).length">
-                                    <li class="list-group-item text-muted">Sin clientes en riesgo.</li>
+                                    <li class="list-group-item text-center text-muted py-4">
+                                        <div><i class="fa fa-thumbs-up fa-2x mb-2 text-success"/></div>
+                                        <div class="fw-bold">Ningún cliente abandonado</div>
+                                        <small>Todos tus clientes tuvieron contacto reciente.</small>
+                                    </li>
                                 </t>
                             </ul>
                         </div>
