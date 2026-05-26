@@ -202,6 +202,21 @@ class SalesInteraction(models.Model):
                     )
                 )
 
+    @api.constrains("partner_id")
+    def _check_partner_not_excluded(self):
+        """No permitir registrar interacciones a clientes que Gerencia marco
+        como excluidos del seguimiento (Mercado Libre, empresas internas, etc).
+        El control evita que el vendedor evada la regla por inercia."""
+        for rec in self:
+            if rec.partner_id and rec.partner_id.x_sfa_excluded:
+                raise ValidationError(
+                    _(
+                        "El cliente '%(partner)s' está excluido del Seguimiento Comercial. "
+                        "Si necesitas registrar una interacción, contacta a Gerencia para "
+                        "que revise la exclusión."
+                    ) % {"partner": rec.partner_id.display_name}
+                )
+
     def action_register_next_interaction(self):
         """S-01: abre el form de una NUEVA interaccion con el mismo cliente y
         vendedor precargados. La cadena queda implicita (mismo partner_id, orden

@@ -17,6 +17,14 @@
                     <field name="x_customer_status"/>
                     <field name="x_channel"/>
                     <field name="x_visit_frequency"/>
+                    <!-- Exclusion del seguimiento: solo Gerencia ve y modifica.
+                         Vendedores ni siquiera saben que el campo existe (groups
+                         lo elimina del DOM, no solo lo deshabilita). -->
+                    <field name="x_sfa_excluded" groups="sales_field_sfa.group_sales_field_manager"/>
+                    <field name="x_sfa_exclusion_reason"
+                           groups="sales_field_sfa.group_sales_field_manager"
+                           invisible="not x_sfa_excluded"
+                           required="x_sfa_excluded"/>
                 </group>
             </xpath>
         </field>

@@ -215,13 +215,19 @@ class SalesFieldDashboard(models.AbstractModel):
         # cuenta como "pendiente/atrasada" si es la mas reciente del cliente con ese
         # vendedor. Las interacciones viejas con next_action_date pasado quedan saldadas
         # automaticamente cuando el vendedor registra una nueva del mismo cliente.
+        #
+        # JOIN res_partner para excluir clientes marcados x_sfa_excluded — no deben
+        # aparecer en las listas operativas Hoy/Semana/Atrasados aunque tengan
+        # interacciones historicas con next_action_date pendiente.
         self.env.cr.execute(
             """
-            SELECT DISTINCT ON (partner_id) id
-            FROM sales_interaction
-            WHERE user_id = %s
-              AND partner_id IS NOT NULL
-            ORDER BY partner_id, interaction_datetime DESC, id DESC
+            SELECT DISTINCT ON (si.partner_id) si.id
+            FROM sales_interaction si
+            JOIN res_partner p ON p.id = si.partner_id
+            WHERE si.user_id = %s
+              AND si.partner_id IS NOT NULL
+              AND COALESCE(p.x_sfa_excluded, FALSE) = FALSE
+            ORDER BY si.partner_id, si.interaction_datetime DESC, si.id DESC
             """,
             (dashboard_user.id,),
         )
@@ -265,6 +271,7 @@ class SalesFieldDashboard(models.AbstractModel):
         assigned_partners = partner_model.search(
             [
                 ("user_id", "=", dashboard_user.id),
+                ("x_sfa_excluded", "=", False),
                 "|",
                 ("company_id", "=", False),
                 ("company_id", "in", allowed_company_ids),

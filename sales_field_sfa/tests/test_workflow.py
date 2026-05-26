@@ -184,6 +184,52 @@ class TestWorkflow(SFACommon):
         self.assertIn(second.id, domain_ids)
         self.assertNotIn(third.id, domain_ids)
 
+    def test_excluded_partner_blocks_interaction_create(self):
+        """Cliente marcado x_sfa_excluded no permite crear nuevas interacciones."""
+        self.partner_orphan.user_id = self.seller_a
+        self.partner_orphan.sudo().write({
+            "x_sfa_excluded": True,
+            "x_sfa_exclusion_reason": "mercado_libre",
+        })
+        with self.assertRaises(ValidationError):
+            self.Interaction.with_user(self.seller_a).create({
+                "partner_id": self.partner_orphan.id,
+                "interaction_type": "visit",
+                "result": "order_taken",
+            })
+
+    def test_excluded_partner_allows_writes_to_historical_interactions(self):
+        """Las interacciones historicas no se rompen si despues se excluye al cliente."""
+        # Crear interaccion ANTES de excluir
+        self.partner_orphan.user_id = self.seller_a
+        interaction = self.Interaction.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "visit",
+            "result": "order_taken",
+        })
+        # Gerencia excluye al cliente despues
+        self.partner_orphan.sudo().write({
+            "x_sfa_excluded": True,
+            "x_sfa_exclusion_reason": "empresa_interna",
+        })
+        # Cargar la interaccion historica no debe fallar (no se re-evalua el constraint)
+        # — el constraint es @api.constrains de partner_id, no se dispara en read
+        loaded = self.Interaction.browse(interaction.id)
+        self.assertEqual(loaded.partner_id, self.partner_orphan)
+
+    def test_excluded_partner_not_in_inactive_dashboard_list(self):
+        """Un partner excluido NO debe aparecer en 'Sin contacto 30 dias'."""
+        self.partner_orphan.user_id = self.seller_a
+        # Sin interacciones recientes — el partner calificaria normalmente como inactive
+        self.partner_orphan.sudo().write({
+            "x_sfa_excluded": True,
+            "x_sfa_exclusion_reason": "mercado_libre",
+        })
+        data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
+        inactive_ids = {p["id"] for p in data["lists"]["inactive_partners"]}
+        self.assertNotIn(self.partner_orphan.id, inactive_ids,
+                         "Cliente excluido no debe aparecer en lista de inactivos.")
+
     def test_lock_serializes_concurrent_orphan_assignment(self):
         """SELECT FOR UPDATE evita que dos vendedores reasignen el mismo
         partner huerfano en paralelo con resultado inconsistente."""

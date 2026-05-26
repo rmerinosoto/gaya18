@@ -10,7 +10,7 @@
         <field name="name">Mis Clientes</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,form,kanban</field>
-        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="domain">[('user_id', '=', uid), ('x_sfa_excluded', '=', False)]</field>
         <field name="context">{'default_user_id': uid}</field>
     </record>
 
@@ -41,7 +41,7 @@
         <field name="name">Clientes del Equipo</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,form,kanban</field>
-        <field name="domain">[('user_id', '!=', False)]</field>
+        <field name="domain">[('user_id', '!=', False), ('x_sfa_excluded', '=', False)]</field>
     </record>
     <menuitem id="menu_sales_field_team_customers" name="Clientes del Equipo" parent="menu_sales_field_root" sequence="45" action="sales_field_sfa.action_sales_field_team_customers" groups="sales_field_sfa.group_sales_field_manager"/>
 
