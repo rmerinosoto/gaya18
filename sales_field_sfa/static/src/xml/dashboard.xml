@@ -269,9 +269,14 @@
                             </div>
                             <ul class="list-group list-group-flush">
                                 <t t-foreach="state.data.lists.inactive_partners || []" t-as="item" t-key="item.id">
-                                    <li class="list-group-item o_sfa_list_item border-start border-warning border-3" t-att-data-record-id="item.id" t-on-click="onPartnerClick">
-                                        <div class="fw-bold"><t t-esc="item.name"/></div>
-                                        <small class="text-muted">Último contacto: <t t-esc="item.last_interaction || 'Nunca'"/></small>
+                                    <li class="list-group-item o_sfa_list_item border-start border-warning border-3" t-att-data-record-id="item.id" t-on-click="onInactivePartnerClick">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="fw-bold"><t t-esc="item.name"/></div>
+                                                <small class="text-muted">Último contacto: <t t-esc="item.last_interaction || 'Nunca'"/></small>
+                                            </div>
+                                            <span class="badge bg-warning text-dark"><i class="fa fa-plus me-1"/>Contactar</span>
+                                        </div>
                                     </li>
                                 </t>
                                 <t t-if="!(state.data.lists.inactive_partners || []).length">

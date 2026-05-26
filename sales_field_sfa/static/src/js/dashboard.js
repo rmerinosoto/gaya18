@@ -146,11 +146,24 @@ class SalesFieldDashboard extends Component {
         }
     }
 
-    onPartnerClick(ev) {
-        const recordId = parseInt(ev.currentTarget.dataset.recordId, 10);
-        if (recordId) {
-            this.openPartner(recordId);
-        }
+    /**
+     * Click en cliente del bloque "Sin contacto 30 dias" abre el form de una
+     * NUEVA interaccion con ese cliente precargado. La logica: si esta ahi es
+     * porque hay que contactarlo, no porque haya que mirarle la ficha.
+     */
+    onInactivePartnerClick(ev) {
+        const partnerId = parseInt(ev.currentTarget.dataset.recordId, 10);
+        if (!partnerId) return;
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "sales.interaction",
+            views: [[false, "form"]],
+            target: "current",
+            context: {
+                default_partner_id: partnerId,
+                default_user_id: this.state.data.selected_user && this.state.data.selected_user.id,
+            },
+        });
     }
 
     /**
@@ -190,16 +203,6 @@ class SalesFieldDashboard extends Component {
         this.action.doAction({
             type: "ir.actions.act_window",
             res_model: "sales.interaction",
-            res_id: recordId,
-            views: [[false, "form"]],
-            target: "current",
-        });
-    }
-
-    openPartner(recordId) {
-        this.action.doAction({
-            type: "ir.actions.act_window",
-            res_model: "res.partner",
             res_id: recordId,
             views: [[false, "form"]],
             target: "current",
