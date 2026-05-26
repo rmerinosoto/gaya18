@@ -112,8 +112,13 @@ class SalesFieldDashboard(models.AbstractModel):
             ):
                 dashboard_user = candidate_user
 
-        today = fields.Date.to_date(date_ref) if date_ref else fields.Date.context_today(self)
-        month_start, month_end = self._get_month_range(today)
+        # Bug fix 2026-05-26: el mes filtrado y "hoy" son independientes.
+        # Antes: today = date_ref → cuando el frontend pasaba "2026-05-01" para
+        # filtrar el mes, las listas Hoy/Atrasadas/Pendientes calculaban contra
+        # 2026-05-01 en vez de la fecha real → "para hoy" siempre vacio.
+        month_ref = fields.Date.to_date(date_ref) if date_ref else fields.Date.context_today(self)
+        month_start, month_end = self._get_month_range(month_ref)
+        today = fields.Date.context_today(self)
 
         month_start_dt = datetime.combine(month_start, time.min)
         month_end_dt = datetime.combine(month_end, time.max)
