@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Filtros SFA en el search global de Contactos. Solo gerencia los ve. Permite al
+         gerente abrir el menu standard de Contactos y filtrar por estado de exclusion
+         SFA o agrupar por motivo de exclusion para revisar la lista completa. -->
+    <record id="view_partner_search_sales_field_sfa" model="ir.ui.view">
+        <field name="name">res.partner.search.sales.field.sfa</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter name="sfa_excluded" string="Excluidos del Seguimiento Comercial"
+                        domain="[('x_sfa_excluded', '=', True)]"
+                        groups="sales_field_sfa.group_sales_field_manager"/>
+                <filter name="sfa_active" string="Activos en Seguimiento Comercial"
+                        domain="[('x_sfa_excluded', '=', False), ('customer_rank', '>', 0)]"
+                        groups="sales_field_sfa.group_sales_field_manager"/>
+                <group expand="0" string="Agrupar SFA" groups="sales_field_sfa.group_sales_field_manager">
+                    <filter name="group_sfa_exclusion_reason" string="Motivo de Exclusión"
+                            context="{'group_by': 'x_sfa_exclusion_reason'}"/>
+                    <filter name="group_sfa_channel" string="Canal SFA"
+                            context="{'group_by': 'x_channel'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
     <record id="view_partner_form_sales_field_sfa" model="ir.ui.view">
         <field name="name">res.partner.form.sales.field.sfa</field>
         <field name="model">res.partner</field>
