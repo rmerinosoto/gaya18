@@ -180,6 +180,10 @@ class SalesFieldDashboard(models.AbstractModel):
             ("payment_state", "=", "paid"),
             ("company_id", "in", allowed_company_ids),
             ("invoice_date", ">=", invoice_date_floor),
+            # Clientes excluidos del seguimiento (Mercado Libre, empresas internas,
+            # autoservicio) NO cuentan en el KPI "Facturado Pagado del Mes" — su
+            # operacion no la atiende el vendedor de campo y distorsiona el indicador.
+            ("partner_id.x_sfa_excluded", "=", False),
             "|",
             ("invoice_user_id", "=", dashboard_user.id),
             "&",
@@ -494,6 +498,10 @@ class SalesFieldDashboard(models.AbstractModel):
                     ("payment_state", "=", "paid"),
                     ("company_id", "in", allowed_company_ids),
                     ("invoice_date", ">=", invoice_date_floor),
+                    # Mismo criterio que en la vista del vendedor: las facturas de
+                    # clientes excluidos del seguimiento no cuentan en el "Facturado
+                    # Pagado del Equipo" ni en el desglose por vendedor.
+                    ("partner_id.x_sfa_excluded", "=", False),
                     "|",
                     ("invoice_user_id", "in", seller_ids),
                     "&",

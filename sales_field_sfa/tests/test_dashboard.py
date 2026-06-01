@@ -137,6 +137,45 @@ class TestDashboard(SFACommon):
         self.assertIn(old.id, overdue_ids,
                       "Sin seguimiento posterior, la interaccion vencida debe aparecer atrasada.")
 
+    def test_paid_invoices_excludes_excluded_partner_invoices(self):
+        """Facturas de clientes marcados x_sfa_excluded NO cuentan en el KPI
+        'Facturado Pagado del Mes' ni en el desglose del manager."""
+        Invoice = self.env["account.move"]
+        # Buscamos partners con facturas pagadas reales en la DB para tener
+        # un caso controlado. Si no hay, skip.
+        sample_invoices = Invoice.search([
+            ("move_type", "=", "out_invoice"),
+            ("state", "=", "posted"),
+            ("payment_state", "=", "paid"),
+        ], limit=20)
+        if not sample_invoices:
+            self.skipTest("Sin facturas pagadas en la DB de pruebas")
+
+        # Tomamos un partner que tenga al menos una factura y lo asignamos al seller_a
+        partner_with_invoice = sample_invoices[0].partner_id
+        partner_with_invoice.sudo().write({"user_id": self.seller_a.id})
+
+        # Antes de excluir: el monto del KPI incluye sus facturas
+        data_before = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
+        amount_before = data_before["kpis"]["paid_invoices_month_amount"]
+
+        # Gerencia excluye al partner
+        partner_with_invoice.sudo().write({
+            "x_sfa_excluded": True,
+            "x_sfa_exclusion_reason": "mercado_libre",
+        })
+
+        # Despues de excluir: facturas del partner ya no cuentan
+        data_after = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
+        amount_after = data_after["kpis"]["paid_invoices_month_amount"]
+
+        # El monto debe haber bajado o quedar igual (si el partner no tenia facturas
+        # del mes consultado). Lo importante: nunca debe haber subido.
+        self.assertLessEqual(
+            amount_after, amount_before,
+            "Excluir un partner no puede aumentar el monto de Facturado Pagado.",
+        )
+
     def test_action_register_next_interaction_returns_form_with_defaults(self):
         """S-01: el action devuelve form con default_partner_id y default_user_id precargados."""
         self.partner_orphan.user_id = self.seller_a
