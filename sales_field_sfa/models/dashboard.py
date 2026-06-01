@@ -161,12 +161,16 @@ class SalesFieldDashboard(models.AbstractModel):
             ]
         )
 
+        # Coherencia con Facturado Pagado: cotizaciones de clientes excluidos
+        # (Mercado Libre, empresas internas, autoservicio) no cuentan como
+        # productividad del vendedor.
         quotations_month = sale_order_model.search_count(
             [
                 ("user_id", "=", dashboard_user.id),
                 ("state", "in", ["draft", "sent"]),
                 ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                 ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
+                ("partner_id.x_sfa_excluded", "=", False),
             ]
         )
 
@@ -362,6 +366,9 @@ class SalesFieldDashboard(models.AbstractModel):
                     ("state", "in", ["draft", "sent"]),
                     ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                     ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
+                    # Coherente con el KPI: la lista abierta desde la card
+                    # tampoco muestra cotizaciones de clientes excluidos.
+                    ("partner_id.x_sfa_excluded", "=", False),
                 ],
             },
             "paid_invoices_month_amount": {
@@ -481,6 +488,8 @@ class SalesFieldDashboard(models.AbstractModel):
                         ("state", "in", ["draft", "sent"]),
                         ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                         ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
+                        # Mismo criterio que en la vista del vendedor.
+                        ("partner_id.x_sfa_excluded", "=", False),
                     ],
                     ["user_id"],
                     ["user_id"],
@@ -558,6 +567,7 @@ class SalesFieldDashboard(models.AbstractModel):
                             ("state", "in", ["draft", "sent"]),
                             ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                             ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
+                            ("partner_id.x_sfa_excluded", "=", False),
                         ],
                     }
                     actions[paid_action_key] = {

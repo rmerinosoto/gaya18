@@ -20,7 +20,7 @@
         <field name="name">Mis Cotizaciones</field>
         <field name="res_model">sale.order</field>
         <field name="view_mode">list,form,kanban</field>
-        <field name="domain">[('user_id', '=', uid), ('state', 'in', ['draft','sent'])]</field>
+        <field name="domain">[('user_id', '=', uid), ('state', 'in', ['draft','sent']), ('partner_id.x_sfa_excluded', '=', False)]</field>
     </record>
 
     <menuitem id="menu_sales_field_quotes" name="Mis Cotizaciones" parent="menu_sales_field_root" sequence="30" action="sales_field_sfa.action_sales_field_my_quotes" groups="sales_field_sfa.group_sales_field_user,sales_field_sfa.group_sales_field_manager"/>
@@ -49,7 +49,7 @@
         <field name="name">Cotizaciones del Equipo</field>
         <field name="res_model">sale.order</field>
         <field name="view_mode">list,form,kanban</field>
-        <field name="domain">[('state', 'in', ['draft','sent'])]</field>
+        <field name="domain">[('state', 'in', ['draft','sent']), ('partner_id.x_sfa_excluded', '=', False)]</field>
     </record>
     <menuitem id="menu_sales_field_team_quotes" name="Cotizaciones del Equipo" parent="menu_sales_field_root" sequence="50" action="sales_field_sfa.action_sales_field_team_quotes" groups="sales_field_sfa.group_sales_field_manager"/>
 

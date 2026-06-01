@@ -137,6 +137,35 @@ class TestDashboard(SFACommon):
         self.assertIn(old.id, overdue_ids,
                       "Sin seguimiento posterior, la interaccion vencida debe aparecer atrasada.")
 
+    def test_quotations_month_excludes_excluded_partner_quotes(self):
+        """Cotizaciones de clientes excluidos NO cuentan en quotations_month."""
+        self.partner_orphan.user_id = self.seller_a
+        # Crear 2 cotizaciones del seller_a para el partner_orphan, en el mes actual
+        SaleOrder = self.env["sale.order"]
+        SaleOrder.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "user_id": self.seller_a.id,
+        })
+        SaleOrder.with_user(self.seller_a).create({
+            "partner_id": self.partner_orphan.id,
+            "user_id": self.seller_a.id,
+        })
+        # Antes de excluir: el KPI cuenta esas 2 (mas las que ya pudieran existir)
+        data_before = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
+        count_before = data_before["kpis"]["quotations_month"]
+        # Gerencia excluye al partner
+        self.partner_orphan.sudo().write({
+            "x_sfa_excluded": True,
+            "x_sfa_exclusion_reason": "mercado_libre",
+        })
+        data_after = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
+        count_after = data_after["kpis"]["quotations_month"]
+        # Despues debe ser menor (las 2 cotizaciones del excluido salen)
+        self.assertLess(count_after, count_before,
+                        "Las cotizaciones del partner excluido deben dejar de contar.")
+        self.assertEqual(count_before - count_after, 2,
+                         "Exactamente 2 cotizaciones del excluido deben salir.")
+
     def test_paid_invoices_excludes_excluded_partner_invoices(self):
         """Facturas de clientes marcados x_sfa_excluded NO cuentan en el KPI
         'Facturado Pagado del Mes' ni en el desglose del manager."""
