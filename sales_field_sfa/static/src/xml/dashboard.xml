@@ -12,13 +12,30 @@
                     <t t-else="">Mi Panel Comercial</t>
                 </h2>
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <!-- D-03: reemplazo input month por select de meses recientes. Mas natural en
-                         celular y elimina el picker nativo confuso. -->
-                    <select class="form-select" t-att-value="state.filters.month" t-on-change="onMonthChange">
-                        <t t-foreach="monthOptions()" t-as="opt" t-key="opt.value">
-                            <option t-att-value="opt.value"><t t-esc="opt.label"/></option>
-                        </t>
-                    </select>
+                    <!-- Toggle Mes/Año: solo en el Panel Gerencial (managerOnly=true).
+                         El vendedor sigue viendo solo el select de mes para no confundirlo. -->
+                    <t t-if="state.managerOnly">
+                        <select class="form-select" t-att-value="state.filters.period" t-on-change="onPeriodChange" style="max-width: 130px;">
+                            <option value="month">Por Mes</option>
+                            <option value="year">Por Año</option>
+                        </select>
+                    </t>
+                    <!-- Select de mes (visible cuando period=month, o siempre en panel del vendedor). -->
+                    <t t-if="!state.managerOnly or state.filters.period === 'month'">
+                        <select class="form-select" t-att-value="state.filters.month" t-on-change="onMonthChange">
+                            <t t-foreach="monthOptions()" t-as="opt" t-key="opt.value">
+                                <option t-att-value="opt.value"><t t-esc="opt.label"/></option>
+                            </t>
+                        </select>
+                    </t>
+                    <!-- Select de año (solo cuando period=year en panel gerencial). -->
+                    <t t-if="state.managerOnly and state.filters.period === 'year'">
+                        <select class="form-select" t-att-value="state.filters.year" t-on-change="onYearChange" style="max-width: 130px;">
+                            <t t-foreach="yearOptions()" t-as="opt" t-key="opt.value">
+                                <option t-att-value="opt.value"><t t-esc="opt.label"/></option>
+                            </t>
+                        </select>
+                    </t>
                     <t t-if="state.data.is_manager &amp;&amp; !state.managerOnly">
                         <select class="form-select" t-att-value="state.filters.userId" t-on-change="onUserChange">
                             <t t-foreach="state.data.user_options || []" t-as="opt" t-key="opt.id">
@@ -65,11 +82,11 @@
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="followup" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-repeat me-1"/>Seguimientos</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.followup || 0"/></h4></div></div></div>
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="prospect_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-user-plus me-1"/>Prospectos Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.prospect_contacted || 0"/></h4></div></div></div>
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="customer_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-handshake-o me-1"/>Clientes Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.customer_contacted || 0"/></h4></div></div></div>
-                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="quotations_month" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-file-text-o me-1"/>Cotizaciones del Mes</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.quotations_month || 0"/></h4></div></div></div>
+                    <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="quotations_month" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-file-text-o me-1"/>Cotizaciones <t t-esc="state.data.period_suffix || 'del Mes'"/></small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.quotations_month || 0"/></h4></div></div></div>
                     <div class="col-12 col-md-6">
                         <div class="card h-100 o_sfa_kpi border-success" data-action-key="paid_invoices_month_amount" t-on-click="onKpiClick">
                             <div class="card-body p-2 p-md-3">
-                                <small class="text-muted"><i class="fa fa-money me-1"/>Facturado Pagado del Mes</small>
+                                <small class="text-muted"><i class="fa fa-money me-1"/>Facturado Pagado <t t-esc="state.data.period_suffix || 'del Mes'"/></small>
                                 <h4 class="mt-1 mb-0 text-success"><t t-esc="formatMoney(state.data.kpis.paid_invoices_month_amount)"/></h4>
                             </div>
                         </div>

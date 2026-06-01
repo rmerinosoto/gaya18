@@ -15,6 +15,7 @@ class TestDashboard(SFACommon):
             date_ref="2026-05-01"
         )
         expected_keys = {
+            "period", "period_suffix",
             "month_start", "month_end", "is_manager", "selected_user",
             "user_options", "labels", "kpis", "lists", "actions",
             "currency", "manager",
@@ -136,6 +137,58 @@ class TestDashboard(SFACommon):
         overdue_ids = {item["id"] for item in data["lists"]["overdue"]}
         self.assertIn(old.id, overdue_ids,
                       "Sin seguimiento posterior, la interaccion vencida debe aparecer atrasada.")
+
+    def test_dashboard_period_year_uses_year_range(self):
+        """period='year' devuelve rango 1-enero a 31-diciembre del año del date_ref."""
+        Dashboard = self.env["sales.field.dashboard"]
+        data = Dashboard.with_user(self.seller_a).get_dashboard_data(
+            date_ref="2026-05-15", period="year"
+        )
+        self.assertEqual(data["period"], "year")
+        self.assertEqual(data["month_start"], "2026-01-01")
+        self.assertEqual(data["month_end"], "2026-12-31")
+        self.assertEqual(data["period_suffix"], "del Año")
+
+    def test_dashboard_period_month_default(self):
+        """Sin parametro o con period='month' devuelve el mes."""
+        Dashboard = self.env["sales.field.dashboard"]
+        data = Dashboard.with_user(self.seller_a).get_dashboard_data(
+            date_ref="2026-05-15"
+        )
+        self.assertEqual(data["period"], "month")
+        self.assertEqual(data["month_start"], "2026-05-01")
+        self.assertEqual(data["month_end"], "2026-05-31")
+        self.assertEqual(data["period_suffix"], "del Mes")
+
+    def test_dashboard_period_year_aggregates_more_than_month(self):
+        """Crear interacciones en distintos meses; period='year' suma todas, period='month' solo del mes."""
+        from datetime import datetime, time
+        self.partner_orphan.user_id = self.seller_a
+        # 2 interacciones en marzo, 3 en mayo
+        for dt in ("2026-03-10 10:00:00", "2026-03-20 10:00:00"):
+            self.Interaction.with_user(self.seller_a).create({
+                "partner_id": self.partner_orphan.id,
+                "interaction_type": "visit",
+                "interaction_datetime": dt,
+                "result": "order_taken",
+            })
+        for dt in ("2026-05-05 10:00:00", "2026-05-15 10:00:00", "2026-05-25 10:00:00"):
+            self.Interaction.with_user(self.seller_a).create({
+                "partner_id": self.partner_orphan.id,
+                "interaction_type": "call",
+                "interaction_datetime": dt,
+                "result": "order_taken",
+            })
+        Dashboard = self.env["sales.field.dashboard"]
+        data_month = Dashboard.with_user(self.seller_a).get_dashboard_data(
+            date_ref="2026-05-15", period="month"
+        )
+        data_year = Dashboard.with_user(self.seller_a).get_dashboard_data(
+            date_ref="2026-05-15", period="year"
+        )
+        # Mes mayo: 3 interacciones; Año 2026: 5 (2 marzo + 3 mayo)
+        self.assertEqual(data_month["kpis"]["total_interactions"], 3)
+        self.assertEqual(data_year["kpis"]["total_interactions"], 5)
 
     def test_quotations_month_excludes_excluded_partner_quotes(self):
         """Cotizaciones de clientes excluidos NO cuentan en quotations_month."""

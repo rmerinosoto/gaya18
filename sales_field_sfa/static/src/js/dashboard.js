@@ -13,11 +13,14 @@ class SalesFieldDashboard extends Component {
         const managerOnly = Boolean(actionContext.manager_only);
         const now = new Date();
         const defaultMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+        const defaultYear = String(now.getFullYear());
         this.state = useState({
             loading: true,
             managerOnly,
             filters: {
+                period: "month", // "month" | "year" — solo afecta KPIs, no listas operativas
                 month: defaultMonth,
+                year: defaultYear,
                 userId: "",
             },
             data: {
@@ -36,8 +39,13 @@ class SalesFieldDashboard extends Component {
     async loadData() {
         this.state.loading = true;
         try {
-            const kwargs = {};
-            if (this.state.filters.month) {
+            const kwargs = { period: this.state.filters.period };
+            // Si periodo es "year", el backend interpreta date_ref como el año.
+            // Pasamos 1-enero del año seleccionado para que el backend resuelva
+            // el rango correctamente.
+            if (this.state.filters.period === "year") {
+                kwargs.date_ref = `${this.state.filters.year}-01-01`;
+            } else if (this.state.filters.month) {
                 kwargs.date_ref = `${this.state.filters.month}-01`;
             }
             if (this.state.filters.userId) {
@@ -55,6 +63,30 @@ class SalesFieldDashboard extends Component {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    yearOptions() {
+        // Año actual + 4 hacia atras. Si el filtro tiene un año mas viejo, lo conserva.
+        const current = new Date().getFullYear();
+        const opts = [];
+        for (let i = 0; i < 5; i++) {
+            const y = current - i;
+            opts.push({ value: String(y), label: String(y) });
+        }
+        if (this.state.filters.year && !opts.some((o) => o.value === this.state.filters.year)) {
+            opts.push({ value: this.state.filters.year, label: this.state.filters.year });
+        }
+        return opts;
+    }
+
+    async onPeriodChange(ev) {
+        this.state.filters.period = ev.target.value || "month";
+        await this.loadData();
+    }
+
+    async onYearChange(ev) {
+        this.state.filters.year = ev.target.value || this.state.filters.year;
+        await this.loadData();
     }
 
     labelType(key) {

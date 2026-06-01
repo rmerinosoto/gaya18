@@ -24,6 +24,17 @@ class SalesFieldDashboard(models.AbstractModel):
         return month_start, month_end
 
     @api.model
+    def _get_year_range(self, date_ref):
+        """Rango del año completo del date_ref (1-enero a 31-diciembre)."""
+        if isinstance(date_ref, datetime):
+            date_ref = date_ref.date()
+        if not isinstance(date_ref, date):
+            date_ref = fields.Date.to_date(date_ref)
+        year_start = date(date_ref.year, 1, 1)
+        year_end = date(date_ref.year, 12, 31)
+        return year_start, year_end
+
+    @api.model
     def _get_paid_date_by_invoice(self, invoices):
         paid_dates = {invoice.id: False for invoice in invoices}
         if not invoices:
@@ -96,7 +107,7 @@ class SalesFieldDashboard(models.AbstractModel):
         return paid_dates
 
     @api.model
-    def get_dashboard_data(self, date_ref=False, target_user_id=False):
+    def get_dashboard_data(self, date_ref=False, target_user_id=False, period="month"):
         user = self.env.user
         is_manager = user.has_group("sales_field_sfa.group_sales_field_manager")
         allowed_company_ids = self.env.companies.ids
@@ -112,12 +123,20 @@ class SalesFieldDashboard(models.AbstractModel):
             ):
                 dashboard_user = candidate_user
 
-        # Bug fix 2026-05-26: el mes filtrado y "hoy" son independientes.
+        # Bug fix 2026-05-26: el periodo filtrado y "hoy" son independientes.
         # Antes: today = date_ref → cuando el frontend pasaba "2026-05-01" para
         # filtrar el mes, las listas Hoy/Atrasadas/Pendientes calculaban contra
         # 2026-05-01 en vez de la fecha real → "para hoy" siempre vacio.
-        month_ref = fields.Date.to_date(date_ref) if date_ref else fields.Date.context_today(self)
-        month_start, month_end = self._get_month_range(month_ref)
+        #
+        # period='month' (default): KPIs muestran metricas del mes elegido.
+        # period='year': KPIs muestran metricas del año completo elegido.
+        # En ambos casos las listas operativas Hoy/Semana/Atrasadas usan today real.
+        period_ref = fields.Date.to_date(date_ref) if date_ref else fields.Date.context_today(self)
+        if period == "year":
+            month_start, month_end = self._get_year_range(period_ref)
+        else:
+            period = "month"  # defensive: cualquier valor desconocido cae a month
+            month_start, month_end = self._get_month_range(period_ref)
         today = fields.Date.context_today(self)
 
         month_start_dt = datetime.combine(month_start, time.min)
@@ -334,12 +353,16 @@ class SalesFieldDashboard(models.AbstractModel):
                 "domain": domain,
             }
 
+        # Sufijo dinamico segun periodo: "del Mes" para month, "del Año" para year.
+        # Aparece en los titulos de las pantallas de detalle (al tocar una card).
+        period_suffix = "del Año" if period == "year" else "del Mes"
+
         actions = {
-            "total_interactions": _interaction_action(name="Interacciones del Mes"),
-            "visit": _interaction_action([("interaction_type", "=", "visit")], "Visitas del Mes"),
-            "call": _interaction_action([("interaction_type", "=", "call")], "Llamadas del Mes"),
-            "whatsapp": _interaction_action([("interaction_type", "=", "whatsapp")], "WhatsApp del Mes"),
-            "followup": _interaction_action([("interaction_type", "=", "followup")], "Seguimientos del Mes"),
+            "total_interactions": _interaction_action(name=f"Interacciones {period_suffix}"),
+            "visit": _interaction_action([("interaction_type", "=", "visit")], f"Visitas {period_suffix}"),
+            "call": _interaction_action([("interaction_type", "=", "call")], f"Llamadas {period_suffix}"),
+            "whatsapp": _interaction_action([("interaction_type", "=", "whatsapp")], f"WhatsApp {period_suffix}"),
+            "followup": _interaction_action([("interaction_type", "=", "followup")], f"Seguimientos {period_suffix}"),
             "prospect_contacted": _interaction_action(
                 [
                     ("partner_id.x_customer_status", "=", "prospect"),
@@ -356,7 +379,7 @@ class SalesFieldDashboard(models.AbstractModel):
             ),
             "quotations_month": {
                 "type": "ir.actions.act_window",
-                "name": "Mis Cotizaciones del Mes",
+                "name": f"Mis Cotizaciones {period_suffix}",
                 "res_model": "sale.order",
                 "view_mode": "list,form,kanban",
                 "views": _views_from_mode("list,form,kanban"),
@@ -373,12 +396,20 @@ class SalesFieldDashboard(models.AbstractModel):
             },
             "paid_invoices_month_amount": {
                 "type": "ir.actions.act_window",
-                "name": "Facturas Pagadas del Mes",
+                "name": f"Facturas Pagadas {period_suffix}",
                 "res_model": "account.move",
                 "view_mode": "list,form",
                 "views": _views_from_mode("list,form"),
                 "target": "current",
-                "domain": [("id", "in", paid_invoice_ids_in_month)],
+                # Agregar move_type al domain hace que Odoo elija la vista de
+                # "Facturas de Cliente" (que incluye partner_id como columna)
+                # en lugar de la vista generica de account.move (sin partner).
+                # default_move_type en el context refuerza el comportamiento.
+                "domain": [
+                    ("id", "in", paid_invoice_ids_in_month),
+                    ("move_type", "=", "out_invoice"),
+                ],
+                "context": {"default_move_type": "out_invoice"},
             },
             "interactions_today": {
                 "type": "ir.actions.act_window",
@@ -544,7 +575,7 @@ class SalesFieldDashboard(models.AbstractModel):
 
                     actions[interaction_action_key] = {
                         "type": "ir.actions.act_window",
-                        "name": f"Interacciones del Mes - {seller.name}",
+                        "name": f"Interacciones {period_suffix} - {seller.name}",
                         "res_model": "sales.interaction",
                         "view_mode": "kanban,list,calendar,form",
                         "views": _views_from_mode("kanban,list,calendar,form"),
@@ -557,7 +588,7 @@ class SalesFieldDashboard(models.AbstractModel):
                     }
                     actions[quotation_action_key] = {
                         "type": "ir.actions.act_window",
-                        "name": f"Cotizaciones del Mes - {seller.name}",
+                        "name": f"Cotizaciones {period_suffix} - {seller.name}",
                         "res_model": "sale.order",
                         "view_mode": "list,form,kanban",
                         "views": _views_from_mode("list,form,kanban"),
@@ -572,12 +603,16 @@ class SalesFieldDashboard(models.AbstractModel):
                     }
                     actions[paid_action_key] = {
                         "type": "ir.actions.act_window",
-                        "name": f"Facturas Pagadas del Mes - {seller.name}",
+                        "name": f"Facturas Pagadas {period_suffix} - {seller.name}",
                         "res_model": "account.move",
                         "view_mode": "list,form",
                         "views": _views_from_mode("list,form"),
                         "target": "current",
-                        "domain": [("id", "in", paid_invoice_ids_by_user.get(seller.id, []))],
+                        "domain": [
+                            ("id", "in", paid_invoice_ids_by_user.get(seller.id, [])),
+                            ("move_type", "=", "out_invoice"),
+                        ],
+                        "context": {"default_move_type": "out_invoice"},
                     }
 
                     sellers_summary.append(
@@ -607,6 +642,8 @@ class SalesFieldDashboard(models.AbstractModel):
 
         interaction_field = self.env["sales.interaction"]._fields
         return {
+            "period": period,
+            "period_suffix": period_suffix,
             "month_start": month_start.isoformat(),
             "month_end": month_end.isoformat(),
             "is_manager": is_manager,
