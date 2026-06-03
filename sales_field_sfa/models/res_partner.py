@@ -4,37 +4,29 @@ from odoo import fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    x_customer_status = fields.Selection(
-        [
-            ("prospect", "Prospecto"),
-            ("customer", "Cliente"),
-            ("inactive", "Inactivo"),
-        ],
+    # Los 4 campos pasaron de Selection a Many2one en 18.0.1.0.2 — el admin (gerencia SFA)
+    # gestiona los valores desde Seguimiento Comercial → Configuración. La migración
+    # 18.0.1.0.2/pre-migrate.py + post-migrate.py preserva los valores existentes.
+    x_customer_status = fields.Many2one(
+        "sales.field.customer.status",
         string="Estado Cliente",
         tracking=True,
-        help="Etapa comercial: Prospecto (todavía no compra), Cliente (ya compró), Inactivo (dejó de comprar).",
-        # why: sin default. Antes era "prospect" y ensuciaba 12,505 partners
-        # no comerciales (proveedores, contactos internos, sucursales).
+        ondelete="restrict",
+        help="Etapa comercial del cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Estados de Cliente.",
     )
-    x_channel = fields.Selection(
-        [
-            ("store", "Tienda"),
-            ("restaurant", "Restaurante"),
-            ("distributor", "Distribuidor"),
-        ],
+    x_channel = fields.Many2one(
+        "sales.field.channel",
         string="Canal",
         tracking=True,
-        help="Tipo de negocio del cliente: Tienda, Restaurante o Distribuidor.",
+        ondelete="restrict",
+        help="Tipo de negocio del cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Canales.",
     )
-    x_visit_frequency = fields.Selection(
-        [
-            ("weekly", "Semanal"),
-            ("biweekly", "Quincenal"),
-            ("monthly", "Mensual"),
-        ],
+    x_visit_frequency = fields.Many2one(
+        "sales.field.visit.frequency",
         string="Frecuencia de Visita",
         tracking=True,
-        help="Cada cuánto debes visitar a este cliente: cada semana, cada dos semanas, o cada mes.",
+        ondelete="restrict",
+        help="Cada cuánto se visita a este cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Frecuencias de Visita.",
     )
     # Exclusion del seguimiento comercial: solo Gerencia puede activarlo. El vendedor
     # ni siquiera ve el campo en la vista (groups en partner_views.xml). tracking=True
@@ -44,14 +36,10 @@ class ResPartner(models.Model):
         tracking=True,
         help="Si está activado, este cliente no aparece en las listas operativas del módulo de Seguimiento Comercial (Mis Clientes, Clientes del Equipo, Sin contacto 30 días) y los vendedores no pueden registrar interacciones. Solo Gerencia puede modificar este campo.",
     )
-    x_sfa_exclusion_reason = fields.Selection(
-        [
-            ("mercado_libre", "Mercado Libre / Marketplace"),
-            ("empresa_interna", "Empresa interna o filial"),
-            ("auto_atencion", "Cliente con autoservicio (no requiere seguimiento)"),
-            ("otro", "Otro motivo"),
-        ],
+    x_sfa_exclusion_reason = fields.Many2one(
+        "sales.field.exclusion.reason",
         string="Motivo de Exclusión",
         tracking=True,
-        help="Razón por la que el cliente no requiere seguimiento comercial. Útil para auditoría y para entender por qué un cliente quedó fuera del módulo.",
+        ondelete="restrict",
+        help="Razón por la que el cliente no requiere seguimiento comercial. Útil para auditoría. Las opciones se gestionan en Seguimiento Comercial → Configuración → Motivos de Exclusión.",
     )

@@ -209,7 +209,7 @@ class TestDashboard(SFACommon):
         # Gerencia excluye al partner
         self.partner_orphan.sudo().write({
             "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": "mercado_libre",
+            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
         })
         data_after = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
         count_after = data_after["kpis"]["quotations_month"]
@@ -244,7 +244,7 @@ class TestDashboard(SFACommon):
         # Gerencia excluye al partner
         partner_with_invoice.sudo().write({
             "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": "mercado_libre",
+            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
         })
 
         # Despues de excluir: facturas del partner ya no cuentan

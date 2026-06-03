@@ -107,13 +107,15 @@ class TestWorkflow(SFACommon):
         self.assertFalse(p.x_customer_status)
 
     def test_partner_x_customer_status_still_writable(self):
-        """Si el usuario marca explicitamente 'prospect', se persiste."""
+        """Asignar un estado de cliente desde catalogo funciona y se persiste."""
+        prospect = self.env.ref("sales_field_sfa.customer_status_prospect")
         p = self.Partner.create({
             "name": "Prospecto SFA",
             "customer_rank": 1,
-            "x_customer_status": "prospect",
+            "x_customer_status": prospect.id,
         })
-        self.assertEqual(p.x_customer_status, "prospect")
+        self.assertEqual(p.x_customer_status, prospect)
+        self.assertEqual(p.x_customer_status.code, "prospect")
 
     def test_reject_notifies_requester(self):
         """W-01: al rechazar, el mensaje del chatter incluye al solicitante como partner notificado."""
@@ -189,7 +191,7 @@ class TestWorkflow(SFACommon):
         self.partner_orphan.user_id = self.seller_a
         self.partner_orphan.sudo().write({
             "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": "mercado_libre",
+            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
         })
         with self.assertRaises(ValidationError):
             self.Interaction.with_user(self.seller_a).create({
@@ -210,7 +212,7 @@ class TestWorkflow(SFACommon):
         # Gerencia excluye al cliente despues
         self.partner_orphan.sudo().write({
             "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": "empresa_interna",
+            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_empresa_interna").id,
         })
         # Cargar la interaccion historica no debe fallar (no se re-evalua el constraint)
         # — el constraint es @api.constrains de partner_id, no se dispara en read
@@ -223,7 +225,7 @@ class TestWorkflow(SFACommon):
         # Sin interacciones recientes — el partner calificaria normalmente como inactive
         self.partner_orphan.sudo().write({
             "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": "mercado_libre",
+            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
         })
         data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
         inactive_ids = {p["id"] for p in data["lists"]["inactive_partners"]}

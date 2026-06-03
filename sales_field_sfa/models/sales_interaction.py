@@ -93,13 +93,15 @@ class SalesInteraction(models.Model):
         string="¿Qué pasó? (notas)",
         help="Detalles del contacto: lo que dijo el cliente, productos que pidió, observaciones que quieras recordar.",
     )
-    partner_channel = fields.Selection(
+    partner_channel = fields.Many2one(
+        "sales.field.channel",
         related="partner_id.x_channel",
         string="Canal",
         readonly=False,
-        help="Canal comercial del cliente (Tienda, Restaurante, Distribuidor). Editar aquí actualiza la ficha del cliente.",
+        help="Canal comercial del cliente. Editar aquí actualiza la ficha del cliente.",
     )
-    partner_visit_frequency = fields.Selection(
+    partner_visit_frequency = fields.Many2one(
+        "sales.field.visit.frequency",
         related="partner_id.x_visit_frequency",
         string="Frecuencia de Visita",
         readonly=False,

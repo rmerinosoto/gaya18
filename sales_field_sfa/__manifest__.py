@@ -1,7 +1,7 @@
 {
     "name": "Sales Field SFA",
     "summary": "Seguimiento comercial de campo con panel OWL",
-    "version": "18.0.1.0.1",
+    "version": "18.0.1.0.2",
     "category": "Sales",
     "author": "ANFEPI: Rodrigo Merino",
     "license": "LGPL-3",
@@ -17,6 +17,8 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "data/sequence.xml",
+        "data/catalogs.xml",
+        "views/catalog_views.xml",
         "views/partner_views.xml",
         "views/interaction_views.xml",
         "views/dashboard_action.xml",

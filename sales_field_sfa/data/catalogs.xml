@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Registros iniciales de los catalogos configurables.
+
+  data noupdate="1": una vez cargado al instalar/actualizar, el admin
+  puede modificarlo (renombrar, cambiar sequence, desactivar) sin que el siguiente
+  -u del modulo lo sobreescriba.
+
+  Los `code` deben permanecer estables — son la clave que migrations y codigo
+  del dashboard usan para mapear. Para cambiar nombres user-facing, editar
+  `name`. Para retirar un valor, marcar `active=False` (no borrar).
+-->
+<odoo>
+    <data noupdate="1">
+
+        <!-- Canales -->
+        <record id="channel_store" model="sales.field.channel">
+            <field name="name">Tienda</field>
+            <field name="code">store</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="channel_restaurant" model="sales.field.channel">
+            <field name="name">Restaurante</field>
+            <field name="code">restaurant</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="channel_distributor" model="sales.field.channel">
+            <field name="name">Distribuidor</field>
+            <field name="code">distributor</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- Frecuencias de visita -->
+        <record id="visit_frequency_weekly" model="sales.field.visit.frequency">
+            <field name="name">Semanal</field>
+            <field name="code">weekly</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="visit_frequency_biweekly" model="sales.field.visit.frequency">
+            <field name="name">Quincenal</field>
+            <field name="code">biweekly</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="visit_frequency_monthly" model="sales.field.visit.frequency">
+            <field name="name">Mensual</field>
+            <field name="code">monthly</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- Estados de cliente -->
+        <record id="customer_status_prospect" model="sales.field.customer.status">
+            <field name="name">Prospecto</field>
+            <field name="code">prospect</field>
+            <field name="is_customer" eval="False"/>
+            <field name="sequence">10</field>
+        </record>
+        <record id="customer_status_customer" model="sales.field.customer.status">
+            <field name="name">Cliente</field>
+            <field name="code">customer</field>
+            <field name="is_customer" eval="True"/>
+            <field name="sequence">20</field>
+        </record>
+        <record id="customer_status_inactive" model="sales.field.customer.status">
+            <field name="name">Inactivo</field>
+            <field name="code">inactive</field>
+            <field name="is_customer" eval="False"/>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- Motivos de exclusion -->
+        <record id="exclusion_reason_mercado_libre" model="sales.field.exclusion.reason">
+            <field name="name">Mercado Libre / Marketplace</field>
+            <field name="code">mercado_libre</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="exclusion_reason_empresa_interna" model="sales.field.exclusion.reason">
+            <field name="name">Empresa interna o filial</field>
+            <field name="code">empresa_interna</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="exclusion_reason_auto_atencion" model="sales.field.exclusion.reason">
+            <field name="name">Cliente con autoservicio (no requiere seguimiento)</field>
+            <field name="code">auto_atencion</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="exclusion_reason_otro" model="sales.field.exclusion.reason">
+            <field name="name">Otro motivo</field>
+            <field name="code">otro</field>
+            <field name="sequence">40</field>
+        </record>
+
+    </data>
+</odoo>

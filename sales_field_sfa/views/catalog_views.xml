@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =================== Canales =================== -->
+    <record id="view_sales_field_channel_tree" model="ir.ui.view">
+        <field name="name">sales.field.channel.tree</field>
+        <field name="model">sales.field.channel</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sales_field_channel_form" model="ir.ui.view">
+        <field name="name">sales.field.channel.form</field>
+        <field name="model">sales.field.channel</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sales_field_channel" model="ir.actions.act_window">
+        <field name="name">Canales</field>
+        <field name="res_model">sales.field.channel</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- =================== Frecuencias de Visita =================== -->
+    <record id="view_sales_field_visit_frequency_tree" model="ir.ui.view">
+        <field name="name">sales.field.visit.frequency.tree</field>
+        <field name="model">sales.field.visit.frequency</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sales_field_visit_frequency_form" model="ir.ui.view">
+        <field name="name">sales.field.visit.frequency.form</field>
+        <field name="model">sales.field.visit.frequency</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sales_field_visit_frequency" model="ir.actions.act_window">
+        <field name="name">Frecuencias de Visita</field>
+        <field name="res_model">sales.field.visit.frequency</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- =================== Estados de Cliente =================== -->
+    <record id="view_sales_field_customer_status_tree" model="ir.ui.view">
+        <field name="name">sales.field.customer.status.tree</field>
+        <field name="model">sales.field.customer.status</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_customer" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sales_field_customer_status_form" model="ir.ui.view">
+        <field name="name">sales.field.customer.status.form</field>
+        <field name="model">sales.field.customer.status</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="is_customer"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sales_field_customer_status" model="ir.actions.act_window">
+        <field name="name">Estados de Cliente</field>
+        <field name="res_model">sales.field.customer.status</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- =================== Motivos de Exclusion =================== -->
+    <record id="view_sales_field_exclusion_reason_tree" model="ir.ui.view">
+        <field name="name">sales.field.exclusion.reason.tree</field>
+        <field name="model">sales.field.exclusion.reason</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sales_field_exclusion_reason_form" model="ir.ui.view">
+        <field name="name">sales.field.exclusion.reason.form</field>
+        <field name="model">sales.field.exclusion.reason</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sales_field_exclusion_reason" model="ir.actions.act_window">
+        <field name="name">Motivos de Exclusión</field>
+        <field name="res_model">sales.field.exclusion.reason</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+</odoo>

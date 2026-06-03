@@ -168,14 +168,14 @@ class SalesFieldDashboard(models.AbstractModel):
         prospect_contacted = interaction_model.search_count(
             interaction_month_domain
             + [
-                ("partner_id.x_customer_status", "=", "prospect"),
+                ("partner_id.x_customer_status.code", "=", "prospect"),
                 ("result", "in", valid_results),
             ]
         )
         customer_contacted = interaction_model.search_count(
             interaction_month_domain
             + [
-                ("partner_id.x_customer_status", "=", "customer"),
+                ("partner_id.x_customer_status.code", "=", "customer"),
                 ("result", "in", valid_results),
             ]
         )
@@ -365,14 +365,14 @@ class SalesFieldDashboard(models.AbstractModel):
             "followup": _interaction_action([("interaction_type", "=", "followup")], f"Seguimientos {period_suffix}"),
             "prospect_contacted": _interaction_action(
                 [
-                    ("partner_id.x_customer_status", "=", "prospect"),
+                    ("partner_id.x_customer_status.code", "=", "prospect"),
                     ("result", "in", valid_results),
                 ],
                 "Prospectos Contactados",
             ),
             "customer_contacted": _interaction_action(
                 [
-                    ("partner_id.x_customer_status", "=", "customer"),
+                    ("partner_id.x_customer_status.code", "=", "customer"),
                     ("result", "in", valid_results),
                 ],
                 "Clientes Contactados",

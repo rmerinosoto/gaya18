@@ -1,3 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sales_interaction_user,sales.interaction user,model_sales_interaction,sales_field_sfa.group_sales_field_user,1,1,1,0
 access_sales_interaction_manager,sales.interaction manager,model_sales_interaction,sales_field_sfa.group_sales_field_manager,1,1,1,1
+access_sales_field_channel_user,sales.field.channel read user,model_sales_field_channel,sales_field_sfa.group_sales_field_user,1,0,0,0
+access_sales_field_channel_manager,sales.field.channel manage,model_sales_field_channel,sales_field_sfa.group_sales_field_manager,1,1,1,1
+access_sales_field_visit_frequency_user,sales.field.visit.frequency read user,model_sales_field_visit_frequency,sales_field_sfa.group_sales_field_user,1,0,0,0
+access_sales_field_visit_frequency_manager,sales.field.visit.frequency manage,model_sales_field_visit_frequency,sales_field_sfa.group_sales_field_manager,1,1,1,1
+access_sales_field_customer_status_user,sales.field.customer.status read user,model_sales_field_customer_status,sales_field_sfa.group_sales_field_user,1,0,0,0
+access_sales_field_customer_status_manager,sales.field.customer.status manage,model_sales_field_customer_status,sales_field_sfa.group_sales_field_manager,1,1,1,1
+access_sales_field_exclusion_reason_user,sales.field.exclusion.reason read user,model_sales_field_exclusion_reason,sales_field_sfa.group_sales_field_user,1,0,0,0
+access_sales_field_exclusion_reason_manager,sales.field.exclusion.reason manage,model_sales_field_exclusion_reason,sales_field_sfa.group_sales_field_manager,1,1,1,1
