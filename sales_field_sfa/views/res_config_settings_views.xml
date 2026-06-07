@@ -43,11 +43,14 @@
     </record>
 
     <!-- Settings es área de administración: el menú se restringe al grupo Settings
-         (base.group_system). Los gerentes que además sean administradores lo ven. -->
+         (base.group_system). El prefijo "-" QUITA el grupo de Gerencia que tenía en
+         versiones previas: en menuitem el atributo `groups` SUMA (4,id), no
+         reemplaza, así que sin el "-" un gerente no-admin seguiría viendo el menú y
+         toparía con el panel de Ajustes vacío (res.config.settings es admin-only). -->
     <menuitem id="menu_sales_field_config_settings"
               name="Ajustes"
               parent="menu_sales_field_config"
               sequence="5"
               action="action_sales_field_config_settings"
-              groups="base.group_system"/>
+              groups="base.group_system,-sales_field_sfa.group_sales_field_manager"/>
 </odoo>
