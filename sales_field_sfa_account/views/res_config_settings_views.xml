@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Agrega el ajuste contable al asistente de Ajustes del core. -->
-    <record id="view_sales_field_config_form_account" model="ir.ui.view">
-        <field name="name">sales.field.config.form.account</field>
-        <field name="model">sales.field.config</field>
-        <field name="inherit_id" ref="sales_field_sfa.view_sales_field_config_form"/>
+    <!-- Agrega el ajuste contable al bloque <app> de Seguimiento Comercial dentro
+         de la página de Ajustes nativa. -->
+    <record id="res_config_settings_view_form_sfa_account" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sales.field.sfa.account</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sales_field_sfa.res_config_settings_view_form_sfa"/>
         <field name="arch" type="xml">
-            <xpath expr="//sheet" position="inside">
-                <group string="Facturación (KPI Facturado Pagado)">
-                    <field name="sfa_invoice_lookback_days"/>
-                </group>
+            <xpath expr="//app[@name='sales_field_sfa']" position="inside">
+                <block title="Facturación (KPI Facturado Pagado)" name="sfa_account_block">
+                    <setting string="Antigüedad máxima de factura" help="Las facturas más viejas que este umbral no se consideran para el KPI.">
+                        <field name="sfa_invoice_lookback_days"/>
+                    </setting>
+                </block>
             </xpath>
         </field>
     </record>

@@ -1,42 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Asistente de Ajustes propio (sales.field.config), no res.config.settings:
-         se abre como diálogo y es accesible al Gerente SFA (no requiere ser admin
-         del sistema). Ver models/config.py. -->
-    <record id="view_sales_field_config_form" model="ir.ui.view">
-        <field name="name">sales.field.config.form</field>
-        <field name="model">sales.field.config</field>
+    <!-- Integra los ajustes SFA en la página de Ajustes nativa de Odoo. Herencia
+         NO-primary: añade el bloque <app> directamente a la vista estándar de
+         res.config.settings, así aparece con la barra lateral y la barra Guardar
+         propias del panel de Ajustes. -->
+    <record id="res_config_settings_view_form_sfa" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sales.field.sfa</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <form string="Ajustes de Seguimiento Comercial">
-                <sheet>
-                    <group string="Listas operativas del panel">
-                        <field name="sfa_inactivity_days"/>
-                        <field name="sfa_week_horizon_days"/>
-                        <field name="sfa_recent_interaction_days"/>
-                    </group>
-                    <group string="Integración con CRM">
-                        <field name="sfa_hide_crm_for_users"/>
-                    </group>
-                </sheet>
-                <footer>
-                    <button string="Guardar" type="object" name="action_save" class="btn-primary"/>
-                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
-                </footer>
-            </form>
+            <xpath expr="//form" position="inside">
+                <app string="Seguimiento Comercial" name="sales_field_sfa" logo="/sales_field_sfa/static/description/icon.png">
+                    <block title="Listas operativas del panel" name="sfa_lists_block">
+                        <setting string="Cliente sin contacto" help="Días sin interacción para que un cliente aparezca como 'sin contacto'.">
+                            <field name="sfa_inactivity_days"/>
+                        </setting>
+                        <setting string="Pendientes esta semana" help="Horizonte (días) de la lista 'pendientes esta semana'.">
+                            <field name="sfa_week_horizon_days"/>
+                        </setting>
+                        <setting string="Interacciones recientes" help="Ventana (días) para el contexto de reasignación que ve Gerencia.">
+                            <field name="sfa_recent_interaction_days"/>
+                        </setting>
+                    </block>
+                    <block title="Integración con CRM" name="sfa_crm_block">
+                        <setting string="Ocultar CRM a los vendedores" help="Los Usuarios de Seguimiento Comercial no verán el menú CRM.">
+                            <field name="sfa_hide_crm_for_users"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
         </field>
     </record>
 
+    <!-- Acción estándar de Ajustes filtrada a nuestra app (module en el contexto).
+         Abre la página de Ajustes nativa posicionada en "Seguimiento Comercial". -->
     <record id="action_sales_field_config_settings" model="ir.actions.act_window">
-        <field name="name">Ajustes de Seguimiento Comercial</field>
-        <field name="res_model">sales.field.config</field>
+        <field name="name">Ajustes</field>
+        <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="target">new</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'sales_field_sfa'}</field>
     </record>
 
+    <!-- Settings es área de administración: el menú se restringe al grupo Settings
+         (base.group_system). Los gerentes que además sean administradores lo ven. -->
     <menuitem id="menu_sales_field_config_settings"
               name="Ajustes"
               parent="menu_sales_field_config"
               sequence="5"
               action="action_sales_field_config_settings"
-              groups="sales_field_sfa.group_sales_field_manager"/>
+              groups="base.group_system"/>
 </odoo>
