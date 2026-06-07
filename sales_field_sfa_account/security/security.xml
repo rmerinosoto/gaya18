@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- El KPI "Facturado Pagado" lee account.move. El acceso de facturación lo
+         agrega ESTE puente (no el core, que no depende de account): reabrimos el
+         grupo de Usuario de Seguimiento Comercial y le sumamos el grupo de
+         facturación. Sin esto el KPI quedaría en 0 por AccessError silencioso. -->
+    <record id="sales_field_sfa.group_sales_field_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('account.group_account_invoice'))]"/>
+    </record>
+</odoo>

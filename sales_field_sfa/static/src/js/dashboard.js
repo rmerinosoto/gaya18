@@ -3,6 +3,7 @@
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { _t } from "@web/core/l10n/translation";
 
 class SalesFieldDashboard extends Component {
     setup() {
@@ -106,8 +107,8 @@ class SalesFieldDashboard extends Component {
      */
     monthOptions() {
         const months = [
-            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+            _t("Enero"), _t("Febrero"), _t("Marzo"), _t("Abril"), _t("Mayo"), _t("Junio"),
+            _t("Julio"), _t("Agosto"), _t("Septiembre"), _t("Octubre"), _t("Noviembre"), _t("Diciembre"),
         ];
         const opts = [];
         const now = new Date();
@@ -115,8 +116,8 @@ class SalesFieldDashboard extends Component {
             const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
             const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
             let label = `${months[d.getMonth()]} ${d.getFullYear()}`;
-            if (i === 0) label = `Este mes (${label})`;
-            else if (i === 1) label = `Mes anterior (${label})`;
+            if (i === 0) label = _t("Este mes (%s)", label);
+            else if (i === 1) label = _t("Mes anterior (%s)", label);
             opts.push({ value, label });
         }
         // Si el filtro actual es un mes mas antiguo que el rango, agregarlo para no perderlo.

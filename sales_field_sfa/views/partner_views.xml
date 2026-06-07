@@ -11,16 +11,16 @@
             <xpath expr="//search" position="inside">
                 <separator/>
                 <filter name="sfa_excluded" string="Excluidos del Seguimiento Comercial"
-                        domain="[('x_sfa_excluded', '=', True)]"
+                        domain="[('sfa_excluded', '=', True)]"
                         groups="sales_field_sfa.group_sales_field_manager"/>
                 <filter name="sfa_active" string="Activos en Seguimiento Comercial"
-                        domain="[('x_sfa_excluded', '=', False), ('customer_rank', '>', 0)]"
+                        domain="[('sfa_excluded', '=', False), ('customer_rank', '>', 0)]"
                         groups="sales_field_sfa.group_sales_field_manager"/>
                 <group expand="0" string="Agrupar SFA" groups="sales_field_sfa.group_sales_field_manager">
                     <filter name="group_sfa_exclusion_reason" string="Motivo de Exclusión"
-                            context="{'group_by': 'x_sfa_exclusion_reason'}"/>
+                            context="{'group_by': 'sfa_exclusion_reason'}"/>
                     <filter name="group_sfa_channel" string="Canal SFA"
-                            context="{'group_by': 'x_channel'}"/>
+                            context="{'group_by': 'sfa_channel'}"/>
                 </group>
             </xpath>
         </field>
@@ -40,17 +40,17 @@
                      con campos que no les corresponden. -->
                 <group string="Seguimiento Comercial" invisible="customer_rank == 0">
                     <field name="user_id"/>
-                    <field name="x_customer_status"/>
-                    <field name="x_channel"/>
-                    <field name="x_visit_frequency"/>
+                    <field name="sfa_customer_status"/>
+                    <field name="sfa_channel"/>
+                    <field name="sfa_visit_frequency"/>
                     <!-- Exclusion del seguimiento: solo Gerencia ve y modifica.
                          Vendedores ni siquiera saben que el campo existe (groups
                          lo elimina del DOM, no solo lo deshabilita). -->
-                    <field name="x_sfa_excluded" groups="sales_field_sfa.group_sales_field_manager"/>
-                    <field name="x_sfa_exclusion_reason"
+                    <field name="sfa_excluded" groups="sales_field_sfa.group_sales_field_manager"/>
+                    <field name="sfa_exclusion_reason"
                            groups="sales_field_sfa.group_sales_field_manager"
-                           invisible="not x_sfa_excluded"
-                           required="x_sfa_excluded"/>
+                           invisible="not sfa_excluded"
+                           required="sfa_excluded"/>
                 </group>
             </xpath>
         </field>

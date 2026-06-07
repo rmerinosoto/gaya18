@@ -1,6 +1,6 @@
 from datetime import date, datetime, time, timedelta
 
-from odoo import fields
+from odoo import _, fields
 from odoo.tests import tagged
 
 from .common import SFACommon
@@ -18,21 +18,26 @@ class TestDashboard(SFACommon):
             "period", "period_suffix",
             "month_start", "month_end", "is_manager", "selected_user",
             "user_options", "labels", "kpis", "lists", "actions",
-            "currency", "manager",
+            "currency", "manager", "has_account",
         }
         self.assertEqual(set(data.keys()), expected_keys)
         self.assertFalse(data["is_manager"])
         self.assertFalse(data["manager"]["enabled"])
 
     def test_dashboard_labels_populated(self):
-        """labels expone los strings humanos de interaction_type y result."""
+        """labels expone los strings humanos de interaction_type y result.
+
+        Comparamos contra la propia selección del modelo (no contra un literal
+        en español) para que el test sea agnóstico del idioma de la base."""
         data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data(
             date_ref="2026-05-01"
         )
         self.assertIn("interaction_type", data["labels"])
         self.assertIn("result", data["labels"])
-        self.assertEqual(data["labels"]["interaction_type"]["visit"], "Visita")
-        self.assertEqual(data["labels"]["result"]["contacted"], "Contactado")
+        model_types = dict(self.Interaction._fields["interaction_type"]._description_selection(self.env))
+        model_results = dict(self.Interaction._fields["result"]._description_selection(self.env))
+        self.assertEqual(data["labels"]["interaction_type"]["visit"], model_types["visit"])
+        self.assertEqual(data["labels"]["result"]["contacted"], model_results["contacted"])
 
     def test_dashboard_kpi_sum_matches_total(self):
         """visit + call + whatsapp + followup == total_interactions."""
@@ -147,7 +152,7 @@ class TestDashboard(SFACommon):
         self.assertEqual(data["period"], "year")
         self.assertEqual(data["month_start"], "2026-01-01")
         self.assertEqual(data["month_end"], "2026-12-31")
-        self.assertEqual(data["period_suffix"], "del Año")
+        self.assertEqual(data["period_suffix"], _("del Año"))
 
     def test_dashboard_period_month_default(self):
         """Sin parametro o con period='month' devuelve el mes."""
@@ -158,7 +163,7 @@ class TestDashboard(SFACommon):
         self.assertEqual(data["period"], "month")
         self.assertEqual(data["month_start"], "2026-05-01")
         self.assertEqual(data["month_end"], "2026-05-31")
-        self.assertEqual(data["period_suffix"], "del Mes")
+        self.assertEqual(data["period_suffix"], _("del Mes"))
 
     def test_dashboard_period_year_aggregates_more_than_month(self):
         """Crear interacciones en distintos meses; period='year' suma todas, period='month' solo del mes."""
@@ -208,8 +213,8 @@ class TestDashboard(SFACommon):
         count_before = data_before["kpis"]["quotations_month"]
         # Gerencia excluye al partner
         self.partner_orphan.sudo().write({
-            "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
+            "sfa_excluded": True,
+            "sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_otro").id,
         })
         data_after = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
         count_after = data_after["kpis"]["quotations_month"]
@@ -218,45 +223,6 @@ class TestDashboard(SFACommon):
                         "Las cotizaciones del partner excluido deben dejar de contar.")
         self.assertEqual(count_before - count_after, 2,
                          "Exactamente 2 cotizaciones del excluido deben salir.")
-
-    def test_paid_invoices_excludes_excluded_partner_invoices(self):
-        """Facturas de clientes marcados x_sfa_excluded NO cuentan en el KPI
-        'Facturado Pagado del Mes' ni en el desglose del manager."""
-        Invoice = self.env["account.move"]
-        # Buscamos partners con facturas pagadas reales en la DB para tener
-        # un caso controlado. Si no hay, skip.
-        sample_invoices = Invoice.search([
-            ("move_type", "=", "out_invoice"),
-            ("state", "=", "posted"),
-            ("payment_state", "=", "paid"),
-        ], limit=20)
-        if not sample_invoices:
-            self.skipTest("Sin facturas pagadas en la DB de pruebas")
-
-        # Tomamos un partner que tenga al menos una factura y lo asignamos al seller_a
-        partner_with_invoice = sample_invoices[0].partner_id
-        partner_with_invoice.sudo().write({"user_id": self.seller_a.id})
-
-        # Antes de excluir: el monto del KPI incluye sus facturas
-        data_before = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
-        amount_before = data_before["kpis"]["paid_invoices_month_amount"]
-
-        # Gerencia excluye al partner
-        partner_with_invoice.sudo().write({
-            "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
-        })
-
-        # Despues de excluir: facturas del partner ya no cuentan
-        data_after = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
-        amount_after = data_after["kpis"]["paid_invoices_month_amount"]
-
-        # El monto debe haber bajado o quedar igual (si el partner no tenia facturas
-        # del mes consultado). Lo importante: nunca debe haber subido.
-        self.assertLessEqual(
-            amount_after, amount_before,
-            "Excluir un partner no puede aumentar el monto de Facturado Pagado.",
-        )
 
     def test_action_register_next_interaction_returns_form_with_defaults(self):
         """S-01: el action devuelve form con default_partner_id y default_user_id precargados."""
@@ -273,21 +239,3 @@ class TestDashboard(SFACommon):
         ctx = action.get("context") or {}
         self.assertEqual(ctx.get("default_partner_id"), self.partner_orphan.id)
         self.assertEqual(ctx.get("default_user_id"), self.seller_a.id)
-
-    def test_paid_date_simple_invoice(self):
-        """_get_paid_date_by_invoice devuelve la fecha del move contraparte."""
-        # Caso simplificado: tomar facturas ya pagadas en la DB y verificar
-        # que la funcion no rompe y devuelve un dict con todas las ids.
-        Invoice = self.env["account.move"]
-        sample = Invoice.search([
-            ("move_type", "=", "out_invoice"),
-            ("state", "=", "posted"),
-            ("payment_state", "=", "paid"),
-        ], limit=5)
-        if not sample:
-            self.skipTest("Sin facturas pagadas en la DB de pruebas")
-        result = self.env["sales.field.dashboard"]._get_paid_date_by_invoice(sample)
-        self.assertEqual(set(result.keys()), set(sample.ids))
-        # Cada invoice debe tener una fecha (real o fallback a invoice_date).
-        for inv in sample:
-            self.assertTrue(result[inv.id], f"Invoice {inv.id} sin paid_date ni fallback")

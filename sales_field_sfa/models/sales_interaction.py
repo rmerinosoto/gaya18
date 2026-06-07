@@ -95,14 +95,14 @@ class SalesInteraction(models.Model):
     )
     partner_channel = fields.Many2one(
         "sales.field.channel",
-        related="partner_id.x_channel",
+        related="partner_id.sfa_channel",
         string="Canal",
         readonly=False,
         help="Canal comercial del cliente. Editar aquí actualiza la ficha del cliente.",
     )
     partner_visit_frequency = fields.Many2one(
         "sales.field.visit.frequency",
-        related="partner_id.x_visit_frequency",
+        related="partner_id.sfa_visit_frequency",
         string="Frecuencia de Visita",
         readonly=False,
         help="Cada cuánto se visita a este cliente. Editar aquí actualiza la ficha del cliente.",
@@ -143,7 +143,14 @@ class SalesInteraction(models.Model):
 
     @api.depends("partner_id")
     def _compute_partner_recent_interactions(self):
-        threshold = fields.Datetime.now() - timedelta(days=90)
+        raw = self.env["ir.config_parameter"].sudo().get_param(
+            "sales_field_sfa.recent_interaction_days"
+        )
+        try:
+            recent_days = int(raw) if int(raw) > 0 else 90
+        except (TypeError, ValueError):
+            recent_days = 90
+        threshold = fields.Datetime.now() - timedelta(days=recent_days)
         for rec in self:
             if not rec.partner_id:
                 rec.partner_recent_interaction_count = 0
@@ -210,7 +217,7 @@ class SalesInteraction(models.Model):
         como excluidos del seguimiento (Mercado Libre, empresas internas, etc).
         El control evita que el vendedor evada la regla por inercia."""
         for rec in self:
-            if rec.partner_id and rec.partner_id.x_sfa_excluded:
+            if rec.partner_id and rec.partner_id.sfa_excluded:
                 raise ValidationError(
                     _(
                         "El cliente '%(partner)s' está excluido del Seguimiento Comercial. "

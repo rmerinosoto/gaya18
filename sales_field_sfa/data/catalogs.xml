@@ -13,22 +13,12 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- Canales -->
-        <record id="channel_store" model="sales.field.channel">
-            <field name="name">Tienda</field>
-            <field name="code">store</field>
-            <field name="sequence">10</field>
-        </record>
-        <record id="channel_restaurant" model="sales.field.channel">
-            <field name="name">Restaurante</field>
-            <field name="code">restaurant</field>
-            <field name="sequence">20</field>
-        </record>
-        <record id="channel_distributor" model="sales.field.channel">
-            <field name="name">Distribuidor</field>
-            <field name="code">distributor</field>
-            <field name="sequence">30</field>
-        </record>
+        <!-- NOTA: los Canales y los motivos de exclusión específicos de un negocio
+             (Tienda/Restaurante/Distribuidor, Mercado Libre, etc.) NO se cargan
+             aquí: son ejemplos de Gaya y viven en demo/catalogs_demo.xml. Una
+             instalación nueva arranca con catálogos neutros y el admin crea los
+             suyos desde Seguimiento Comercial → Configuración. Lo que queda aquí
+             son los catálogos universales de cualquier SFA. -->
 
         <!-- Frecuencias de visita -->
         <record id="visit_frequency_weekly" model="sales.field.visit.frequency">
@@ -52,6 +42,7 @@
             <field name="name">Prospecto</field>
             <field name="code">prospect</field>
             <field name="is_customer" eval="False"/>
+            <field name="is_prospect" eval="True"/>
             <field name="sequence">10</field>
         </record>
         <record id="customer_status_customer" model="sales.field.customer.status">
@@ -67,22 +58,9 @@
             <field name="sequence">30</field>
         </record>
 
-        <!-- Motivos de exclusion -->
-        <record id="exclusion_reason_mercado_libre" model="sales.field.exclusion.reason">
-            <field name="name">Mercado Libre / Marketplace</field>
-            <field name="code">mercado_libre</field>
-            <field name="sequence">10</field>
-        </record>
-        <record id="exclusion_reason_empresa_interna" model="sales.field.exclusion.reason">
-            <field name="name">Empresa interna o filial</field>
-            <field name="code">empresa_interna</field>
-            <field name="sequence">20</field>
-        </record>
-        <record id="exclusion_reason_auto_atencion" model="sales.field.exclusion.reason">
-            <field name="name">Cliente con autoservicio (no requiere seguimiento)</field>
-            <field name="code">auto_atencion</field>
-            <field name="sequence">30</field>
-        </record>
+        <!-- Motivos de exclusion: solo el genérico universal. Los motivos
+             específicos de Gaya (Mercado Libre, empresa interna, autoservicio)
+             están en demo/catalogs_demo.xml. -->
         <record id="exclusion_reason_otro" model="sales.field.exclusion.reason">
             <field name="name">Otro motivo</field>
             <field name="code">otro</field>

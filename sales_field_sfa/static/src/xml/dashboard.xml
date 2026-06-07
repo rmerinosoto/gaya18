@@ -83,7 +83,8 @@
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="prospect_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-user-plus me-1"/>Prospectos Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.prospect_contacted || 0"/></h4></div></div></div>
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="customer_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-handshake-o me-1"/>Clientes Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.customer_contacted || 0"/></h4></div></div></div>
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="quotations_month" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-file-text-o me-1"/>Cotizaciones <t t-esc="state.data.period_suffix || 'del Mes'"/></small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.quotations_month || 0"/></h4></div></div></div>
-                    <div class="col-12 col-md-6">
+                    <!-- Solo si el módulo puente de contabilidad está instalado (has_account). -->
+                    <div class="col-12 col-md-6" t-if="state.data.has_account">
                         <div class="card h-100 o_sfa_kpi border-success" data-action-key="paid_invoices_month_amount" t-on-click="onKpiClick">
                             <div class="card-body p-2 p-md-3">
                                 <small class="text-muted"><i class="fa fa-money me-1"/>Facturado Pagado <t t-esc="state.data.period_suffix || 'del Mes'"/></small>
@@ -125,7 +126,7 @@
                                         <h4 class="mb-0"><t t-esc="state.data.manager.kpis.team_quotations || 0"/></h4>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-4" t-if="state.data.has_account">
                                     <div class="border rounded p-2 h-100">
                                         <small class="text-muted">Facturado Pagado Equipo</small>
                                         <h4 class="mb-0 text-success"><t t-esc="formatMoney(state.data.manager.kpis.team_paid_amount)"/></h4>
@@ -140,7 +141,7 @@
                                             <th>Vendedor</th>
                                             <th class="text-end">Interacciones</th>
                                             <th class="text-end">Cotizaciones</th>
-                                            <th class="text-end">Facturado Pagado</th>
+                                            <th class="text-end" t-if="state.data.has_account">Facturado Pagado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -157,7 +158,7 @@
                                                         <t t-esc="row.quotations"/>
                                                     </button>
                                                 </td>
-                                                <td class="text-end">
+                                                <td class="text-end" t-if="state.data.has_account">
                                                     <button class="btn btn-sm btn-link p-0 text-success" t-att-data-action-key="row.paid_action_key" t-on-click="onActionClick">
                                                         <t t-esc="formatMoney(row.paid_amount)"/>
                                                     </button>
