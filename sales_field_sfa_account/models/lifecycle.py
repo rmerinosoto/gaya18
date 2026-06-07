@@ -9,10 +9,11 @@ Banderas semánticas en el catálogo (is_customer / is_new_customer / is_inactiv
 identifican cada estado sin depender del `code`. Un cron diario aplica las reglas.
 """
 import logging
+from collections import defaultdict
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -92,18 +93,27 @@ class ResPartner(models.Model):
             return
         if not self._sfa_bool_param("sales_field_sfa.auto_promote_customer", True):
             return
+        # Eficiencia: solo CANDIDATOS (aún no clientes, no excluidos). Tras la primera
+        # corrida esto es un puñado, así el read_group de facturas se acota a ellos.
+        candidates = self.search([
+            ("sfa_excluded", "=", False),
+            "|",
+            ("sfa_customer_status", "=", False),
+            ("sfa_customer_status.is_customer", "=", False),
+        ])
+        if not candidates:
+            return
         groups = Move.read_group(
             [
                 ("move_type", "=", "out_invoice"),
                 ("state", "=", "posted"),
                 ("payment_state", "in", ("paid", "in_payment")),
-                ("partner_id", "!=", False),
+                ("partner_id", "in", candidates.ids),
             ],
             ["partner_id", "invoice_date:min"],
             ["partner_id"],
         )
-        # En Odoo 18 read_group devuelve el agregado bajo la clave del propio campo
-        # ('invoice_date'), no 'invoice_date_min'.
+        # En Odoo 18 read_group devuelve el agregado bajo la clave del campo ('invoice_date').
         first_paid = {
             g["partner_id"][0]: fields.Date.to_date(g["invoice_date"])
             for g in groups
@@ -111,23 +121,18 @@ class ResPartner(models.Model):
         }
         if not first_paid:
             return
-        partners = self.browse(list(first_paid)).exists()
-        for p in partners:
-            if p.sfa_excluded:
-                continue
-            if p.sfa_customer_status and p.sfa_customer_status.is_customer:
-                if not p.sfa_customer_since and first_paid.get(p.id):
-                    p.sfa_customer_since = first_paid[p.id]
-                continue
-            vals = {"sfa_customer_status": promote_target.id}
-            if not p.sfa_customer_since:
-                vals["sfa_customer_since"] = first_paid.get(p.id) or today
-            p.write(vals)
-            p.message_post(
-                body=_("Promovido a '%(status)s' automáticamente por su primera factura pagada.")
-                % {"status": promote_target.name},
-                subtype_xmlid="mail.mt_note",
-            )
+        # Escritura por LOTES agrupada por fecha (status + 'cliente desde' juntos) y sin
+        # tracking/chatter: cero mail.message, mínimas UPDATE. El audit queda en
+        # 'cliente desde' y en el propio estado.
+        by_date = defaultdict(list)
+        for pid, d in first_paid.items():
+            by_date[d].append(pid)
+        for d, pids in by_date.items():
+            self.browse(pids).with_context(tracking_disable=True).write({
+                "sfa_customer_status": promote_target.id,
+                "sfa_customer_since": d,
+            })
+        _logger.info("sfa lifecycle: %d clientes promovidos a '%s'", len(first_paid), promote_target.name)
 
     @api.model
     def _sfa_graduate_new_customers(self, Move, new_status, regular, mode, new_days, new_invoices, today):
@@ -154,7 +159,7 @@ class ResPartner(models.Model):
             threshold = today - relativedelta(days=new_days)
             to_graduate = new_partners.filtered(lambda p: p.sfa_customer_since and p.sfa_customer_since <= threshold)
         if to_graduate:
-            to_graduate.write({"sfa_customer_status": regular.id})
+            to_graduate.with_context(tracking_disable=True).write({"sfa_customer_status": regular.id})
             _logger.info("sfa lifecycle: %d clientes nuevos graduados a regular", len(to_graduate))
 
     @api.model
@@ -184,5 +189,5 @@ class ResPartner(models.Model):
             lambda p: not last_invoice.get(p.id) or last_invoice[p.id] < cutoff
         )
         if to_inactivate:
-            to_inactivate.write({"sfa_customer_status": inactive.id})
+            to_inactivate.with_context(tracking_disable=True).write({"sfa_customer_status": inactive.id})
             _logger.info("sfa lifecycle: %d clientes marcados inactivos", len(to_inactivate))

@@ -1,5 +1,9 @@
 """Extensión contable de los Ajustes: ventana de búsqueda de facturas."""
+import logging
+
 from odoo import fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class ResConfigSettings(models.TransientModel):
@@ -59,3 +63,12 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="sales_field_sfa.inactive_months",
         default=6,
     )
+
+    def set_values(self):
+        super().set_values()
+        # Al guardar Ajustes, re-aplica el ciclo de vida en SEGUNDO PLANO (no bloquea
+        # el guardado): dispara el cron para que corra en el siguiente latido (~1 min).
+        cron = self.env.ref("sales_field_sfa_account.cron_sfa_status_automation", raise_if_not_found=False)
+        if cron:
+            cron.sudo()._trigger()
+            _logger.info("sfa lifecycle: cron de estado de cliente disparado tras guardar Ajustes")
