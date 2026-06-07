@@ -27,8 +27,9 @@
 
     <!-- Menu contenedor para todas las vistas globales de gerencia. Agrupa lo que
          antes estaba suelto en el primer nivel (Panel Gerencial, vistas del equipo,
-         clientes excluidos) para no saturar el menu raiz. Solo gerencia. -->
-    <menuitem id="menu_sales_field_equipo" name="Equipo" parent="menu_sales_field_root" sequence="40" groups="sales_field_sfa.group_sales_field_manager"/>
+         clientes excluidos, objetivos) para no saturar el menu raiz. Solo gerencia.
+         (xml_id historico 'equipo'; el nombre visible es 'Gerencia'.) -->
+    <menuitem id="menu_sales_field_equipo" name="Gerencia" parent="menu_sales_field_root" sequence="40" groups="sales_field_sfa.group_sales_field_manager"/>
 
     <menuitem id="menu_sales_field_manager_dashboard" name="Panel Gerencial" parent="menu_sales_field_equipo" sequence="10" action="sales_field_sfa.action_sales_field_dashboard_manager" groups="sales_field_sfa.group_sales_field_manager"/>
 

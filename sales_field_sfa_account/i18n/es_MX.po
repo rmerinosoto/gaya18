@@ -6,11 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e-20250909\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 16:15+0000\n"
-"PO-Revision-Date: 2026-06-07 16:15+0000\n"
+"POT-Creation-Date: 2026-06-07 20:12+0000\n"
+"PO-Revision-Date: 2026-06-07 20:12+0000\n"
 "Last-Translator: \n"
-"Language-Team: 
-"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -18,14 +17,31 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Antigüedad máxima de factura"
-msgstr "Antigüedad máxima de factura"
-
-#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_invoice_lookback_days
 msgid "Antigüedad máxima de factura para 'Facturado Pagado' (días)"
 msgstr "Antigüedad máxima de factura para 'Facturado Pagado' (días)"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Buscar Objetivos"
+msgstr "Buscar Objetivos"
+
+#. module: sales_field_sfa_account
+#. odoo-python
+#: code:addons/sales_field_sfa_account/models/dashboard.py:0
+msgid "Cartera Vencida"
+msgstr "Cartera Vencida"
+
+#. module: sales_field_sfa_account
+#. odoo-python
+#: code:addons/sales_field_sfa_account/models/dashboard.py:0
+msgid "Cartera Vencida - %(seller)s"
+msgstr "Cartera Vencida - %(seller)s"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__company_id
+msgid "Compañía"
+msgstr "Compañía"
 
 #. module: sales_field_sfa_account
 #: model:ir.model,name:sales_field_sfa_account.model_res_config_settings
@@ -33,9 +49,34 @@ msgid "Config Settings"
 msgstr "Config Settings"
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__create_uid
+msgid "Created by"
+msgstr "Created by"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__create_date
+msgid "Created on"
+msgstr "Created on"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_target__date_month
+msgid "Cualquier día del mes objetivo; se guarda normalizado al día 1."
+msgstr "Cualquier día del mes objetivo; se guarda normalizado al día 1."
+
+#. module: sales_field_sfa_account
 #: model:ir.model,name:sales_field_sfa_account.model_sales_field_dashboard
 msgid "Dashboard Seguimiento Comercial"
 msgstr "Dashboard Seguimiento Comercial"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
+msgid "Define objetivos de facturación cobrada por vendedor y mes."
+msgstr "Define objetivos de facturación cobrada por vendedor y mes."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__display_name
+msgid "Display Name"
+msgstr "Display Name"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_invoice_lookback_days
@@ -46,9 +87,35 @@ msgid ""
 msgstr "El KPI 'Facturado Pagado' descarta facturas emitidas hace más de estos días: rara vez se pagan dentro del mes consultado, y reconstruir su fecha de pago es costoso. Subir el valor incluye más facturas, a costa de rendimiento."
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Facturación (KPI Facturado Pagado)"
-msgstr "Facturación (KPI Facturado Pagado)"
+#. odoo-python
+#: code:addons/sales_field_sfa_account/models/target.py:0
+msgid "El objetivo no puede ser negativo."
+msgstr "El objetivo no puede ser negativo."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_form
+msgid ""
+"El objetivo se compara contra el <b>Facturado Pagado (cobrado)</b> del\n"
+"                        mes. En la vista anual del panel, se suman los objetivos de los 12 meses."
+msgstr "El objetivo se compara contra el <b>Facturado Pagado (cobrado)</b> del\n                        mes. En la vista anual del panel, se suman los objetivos de los 12 meses."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
+msgid ""
+"El panel mostrará el % de avance del cobrado contra el objetivo del periodo."
+msgstr "El panel mostrará el % de avance del cobrado contra el objetivo del periodo."
+
+#. module: sales_field_sfa_account
+#. odoo-python
+#: code:addons/sales_field_sfa_account/models/dashboard.py:0
+msgid "Facturado %(suffix)s"
+msgstr "Facturado %(suffix)s"
+
+#. module: sales_field_sfa_account
+#. odoo-python
+#: code:addons/sales_field_sfa_account/models/dashboard.py:0
+msgid "Facturado %(suffix)s - %(seller)s"
+msgstr "Facturado %(suffix)s - %(seller)s"
 
 #. module: sales_field_sfa_account
 #. odoo-python
@@ -63,9 +130,84 @@ msgid "Facturas Pagadas %(suffix)s - %(seller)s"
 msgstr "Facturas Pagadas %(suffix)s - %(seller)s"
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Las facturas más viejas que este umbral no se consideran para el KPI."
-msgstr "Las facturas más viejas que este umbral no se consideran para el KPI."
+msgid "Invoices older than this threshold are not considered for the KPI."
+msgstr "Invoices older than this threshold are not considered for the KPI."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Invoicing (Paid Invoiced KPI)"
+msgstr "Invoicing (Paid Invoiced KPI)"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Maximum invoice age"
+msgstr "Maximum invoice age"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__date_month
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Mes"
+msgstr "Mes"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__currency_id
+msgid "Moneda"
+msgstr "Moneda"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_target__target_amount
+msgid ""
+"Monto de Facturado Pagado (cobrado) que se espera del vendedor en el mes."
+msgstr "Monto de Facturado Pagado (cobrado) que se espera del vendedor en el mes."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__target_amount
+msgid "Objetivo (cobrado)"
+msgstr "Objetivo (cobrado)"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_form
+msgid "Objetivo de Facturación"
+msgstr "Objetivo de Facturación"
+
+#. module: sales_field_sfa_account
+#: model:ir.model,name:sales_field_sfa_account.model_sales_field_target
+msgid "Objetivo de Facturación (SFA)"
+msgstr "Objetivo de Facturación (SFA)"
+
+#. module: sales_field_sfa_account
+#: model:ir.actions.act_window,name:sales_field_sfa_account.action_sales_field_target
+#: model:ir.ui.menu,name:sales_field_sfa_account.menu_sales_field_target
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_tree
+msgid "Objetivos"
+msgstr "Objetivos"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__user_id
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Vendedor"
+msgstr "Vendedor"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.constraint,message:sales_field_sfa_account.constraint_sales_field_target_uniq_user_month_company
+msgid "Ya existe un objetivo para ese vendedor y mes."
+msgstr "Ya existe un objetivo para ese vendedor y mes."
 
 #. module: sales_field_sfa_account
 #. odoo-python

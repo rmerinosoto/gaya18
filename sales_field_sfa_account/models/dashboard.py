@@ -12,7 +12,7 @@ pago. Se toma la fecha del asiento de contraparte (la máxima por factura).
 from collections import defaultdict
 from datetime import timedelta
 
-from odoo import _, api, models
+from odoo import _, api, fields, models
 
 
 class SalesFieldDashboard(models.AbstractModel):
@@ -105,6 +105,80 @@ class SalesFieldDashboard(models.AbstractModel):
         return [[False, view.strip()] for view in view_mode.split(",") if view.strip()]
 
     @api.model
+    def _sfa_seller_invoice_domain(self, seller_ids, allowed_company_ids):
+        """Domain base de facturas de cliente atribuibles a los vendedores dados
+        (por vendedor de la factura, o por vendedor del cliente si la factura no
+        lo trae). Excluye clientes marcados sfa_excluded."""
+        return [
+            ("move_type", "=", "out_invoice"),
+            ("state", "=", "posted"),
+            ("company_id", "in", allowed_company_ids),
+            ("partner_id.sfa_excluded", "=", False),
+            "|",
+            ("invoice_user_id", "in", seller_ids),
+            "&",
+            ("invoice_user_id", "=", False),
+            ("partner_id.user_id", "in", seller_ids),
+        ]
+
+    @api.model
+    def _sfa_compute_billing(self, seller_ids, allowed_company_ids, month_start, month_end, today):
+        """Calcula, por vendedor: Facturado del periodo (por invoice_date) y
+        Cartera Vencida a hoy (residual abierto con vencimiento pasado).
+        Devuelve 4 dicts keyed por seller_id."""
+        invoice_model = self.env["account.move"]
+        base = self._sfa_seller_invoice_domain(seller_ids, allowed_company_ids)
+        seller_set = set(seller_ids)
+
+        def _seller_of(inv):
+            s = inv.invoice_user_id or inv.partner_id.user_id
+            return s.id if s and s.id in seller_set else None
+
+        invoiced_by, invoiced_ids = defaultdict(float), defaultdict(list)
+        for inv in invoice_model.search(base + [
+            ("invoice_date", ">=", month_start.isoformat()),
+            ("invoice_date", "<=", month_end.isoformat()),
+        ]):
+            sid = _seller_of(inv)
+            if sid:
+                invoiced_by[sid] += inv.amount_total_signed
+                invoiced_ids[sid].append(inv.id)
+
+        # Cartera vencida total a HOY: facturas no pagadas (o parciales) cuyo
+        # vencimiento ya pasó, sin acotar al periodo del panel.
+        overdue_by, overdue_ids = defaultdict(float), defaultdict(list)
+        for inv in invoice_model.search(base + [
+            ("payment_state", "in", ("not_paid", "partial")),
+            ("invoice_date_due", "!=", False),
+            ("invoice_date_due", "<", today.isoformat()),
+        ]):
+            sid = _seller_of(inv)
+            if sid:
+                overdue_by[sid] += inv.amount_residual
+                overdue_ids[sid].append(inv.id)
+
+        return invoiced_by, invoiced_ids, overdue_by, overdue_ids
+
+    @api.model
+    def _sfa_target_by_user(self, user_ids, month_start, month_end, allowed_company_ids):
+        """Suma de objetivos por vendedor en el rango de meses del periodo.
+        period='month' → 1 mes; period='year' → 12 meses (date_month normalizada a día 1)."""
+        targets = self.env["sales.field.target"].sudo().search([
+            ("user_id", "in", user_ids),
+            ("date_month", ">=", month_start.replace(day=1).isoformat()),
+            ("date_month", "<=", month_end.isoformat()),
+            ("company_id", "in", allowed_company_ids),
+        ])
+        by_user = defaultdict(float)
+        for t in targets:
+            by_user[t.user_id.id] += t.target_amount
+        return by_user
+
+    @staticmethod
+    def _sfa_pct(paid, target):
+        return round(paid / target * 100.0, 1) if target else 0.0
+
+    @api.model
     def _sfa_extend_dashboard(self, result, dashboard_user, month_start, month_end, seller_ids):
         """Inyecta el KPI 'Facturado Pagado' en el dict del dashboard.
 
@@ -165,6 +239,43 @@ class SalesFieldDashboard(models.AbstractModel):
             "context": {"default_move_type": "out_invoice"},
         }
 
+        # ---- Facturado / Vencido / Objetivo del vendedor ----
+        today = fields.Date.context_today(self)
+        inv_by, inv_ids, ovd_by, ovd_ids = self._sfa_compute_billing(
+            [dashboard_user.id], allowed_company_ids, month_start, month_end, today
+        )
+        target_by = self._sfa_target_by_user(
+            [dashboard_user.id], month_start, month_end, allowed_company_ids
+        )
+        invoiced_amount = round(inv_by.get(dashboard_user.id, 0.0), 2)
+        overdue_amount = round(ovd_by.get(dashboard_user.id, 0.0), 2)
+        target_amount = round(target_by.get(dashboard_user.id, 0.0), 2)
+        result["kpis"]["invoiced_month_amount"] = invoiced_amount
+        result["kpis"]["overdue_amount"] = overdue_amount
+        result["kpis"]["target_amount"] = target_amount
+        result["kpis"]["target_pct"] = self._sfa_pct(paid_amount, target_amount)
+
+        result["actions"]["invoiced_month_amount"] = {
+            "type": "ir.actions.act_window",
+            "name": _("Facturado %(suffix)s") % {"suffix": period_suffix},
+            "res_model": "account.move",
+            "view_mode": "list,form",
+            "views": self._views_from_mode("list,form"),
+            "target": "current",
+            "domain": [("id", "in", inv_ids.get(dashboard_user.id, [])), ("move_type", "=", "out_invoice")],
+            "context": {"default_move_type": "out_invoice"},
+        }
+        result["actions"]["overdue_amount"] = {
+            "type": "ir.actions.act_window",
+            "name": _("Cartera Vencida"),
+            "res_model": "account.move",
+            "view_mode": "list,form",
+            "views": self._views_from_mode("list,form"),
+            "target": "current",
+            "domain": [("id", "in", ovd_ids.get(dashboard_user.id, [])), ("move_type", "=", "out_invoice")],
+            "context": {"default_move_type": "out_invoice"},
+        }
+
         # ---- Desglose gerencial por vendedor ----
         manager = result.get("manager") or {}
         if not (result.get("is_manager") and manager.get("enabled") and seller_ids):
@@ -198,29 +309,60 @@ class SalesFieldDashboard(models.AbstractModel):
             paid_amount_by_user[seller.id] += inv.amount_total_signed
             paid_invoice_ids_by_user[seller.id].append(inv.id)
 
-        for row in manager.get("sellers_summary", []):
-            seller_id = row["seller_id"]
-            paid_action_key = f"manager_seller_paid_{seller_id}"
-            row["paid_amount"] = round(paid_amount_by_user.get(seller_id, 0.0), 2)
-            row["paid_action_key"] = paid_action_key
-            result["actions"][paid_action_key] = {
+        # Facturado / Vencido / Objetivo de TODO el equipo, en una pasada.
+        team_inv_by, team_inv_ids, team_ovd_by, team_ovd_ids = self._sfa_compute_billing(
+            seller_ids, allowed_company_ids, month_start, month_end, today
+        )
+        team_target_by = self._sfa_target_by_user(
+            seller_ids, month_start, month_end, allowed_company_ids
+        )
+
+        def _seller_move_action(name, ids):
+            return {
                 "type": "ir.actions.act_window",
-                "name": _("Facturas Pagadas %(suffix)s - %(seller)s") % {
-                    "suffix": period_suffix,
-                    "seller": row.get("seller_name") or "",
-                },
+                "name": name,
                 "res_model": "account.move",
                 "view_mode": "list,form",
                 "views": self._views_from_mode("list,form"),
                 "target": "current",
-                "domain": [
-                    ("id", "in", paid_invoice_ids_by_user.get(seller_id, [])),
-                    ("move_type", "=", "out_invoice"),
-                ],
+                "domain": [("id", "in", ids), ("move_type", "=", "out_invoice")],
                 "context": {"default_move_type": "out_invoice"},
             }
 
-        manager["kpis"]["team_paid_amount"] = round(
-            sum(row.get("paid_amount", 0.0) for row in manager.get("sellers_summary", [])), 2
-        )
+        for row in manager.get("sellers_summary", []):
+            seller_id = row["seller_id"]
+            seller_name = row.get("seller_name") or ""
+            row["paid_amount"] = round(paid_amount_by_user.get(seller_id, 0.0), 2)
+            row["invoiced_amount"] = round(team_inv_by.get(seller_id, 0.0), 2)
+            row["overdue_amount"] = round(team_ovd_by.get(seller_id, 0.0), 2)
+            row["target_amount"] = round(team_target_by.get(seller_id, 0.0), 2)
+            row["target_pct"] = self._sfa_pct(row["paid_amount"], row["target_amount"])
+
+            paid_action_key = f"manager_seller_paid_{seller_id}"
+            invoiced_action_key = f"manager_seller_invoiced_{seller_id}"
+            overdue_action_key = f"manager_seller_overdue_{seller_id}"
+            row["paid_action_key"] = paid_action_key
+            row["invoiced_action_key"] = invoiced_action_key
+            row["overdue_action_key"] = overdue_action_key
+            result["actions"][paid_action_key] = _seller_move_action(
+                _("Facturas Pagadas %(suffix)s - %(seller)s") % {"suffix": period_suffix, "seller": seller_name},
+                paid_invoice_ids_by_user.get(seller_id, []),
+            )
+            result["actions"][invoiced_action_key] = _seller_move_action(
+                _("Facturado %(suffix)s - %(seller)s") % {"suffix": period_suffix, "seller": seller_name},
+                team_inv_ids.get(seller_id, []),
+            )
+            result["actions"][overdue_action_key] = _seller_move_action(
+                _("Cartera Vencida - %(seller)s") % {"seller": seller_name},
+                team_ovd_ids.get(seller_id, []),
+            )
+
+        sellers = manager.get("sellers_summary", [])
+        team_paid = round(sum(r.get("paid_amount", 0.0) for r in sellers), 2)
+        team_target = round(sum(r.get("target_amount", 0.0) for r in sellers), 2)
+        manager["kpis"]["team_paid_amount"] = team_paid
+        manager["kpis"]["team_invoiced_amount"] = round(sum(r.get("invoiced_amount", 0.0) for r in sellers), 2)
+        manager["kpis"]["team_overdue_amount"] = round(sum(r.get("overdue_amount", 0.0) for r in sellers), 2)
+        manager["kpis"]["team_target_amount"] = team_target
+        manager["kpis"]["team_target_pct"] = self._sfa_pct(team_paid, team_target)
         return result

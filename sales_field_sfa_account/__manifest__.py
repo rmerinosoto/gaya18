@@ -15,7 +15,9 @@
     ],
     "data": [
         "security/security.xml",
+        "security/ir.model.access.csv",
         "views/res_config_settings_views.xml",
+        "views/target_views.xml",
     ],
     # auto_install: en cuanto la base tenga sales_field_sfa + account instalados,
     # este puente se instala solo (Gaya mantiene el KPI sin intervención manual).

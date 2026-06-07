@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sales_field_target_tree" model="ir.ui.view">
+        <field name="name">sales.field.target.tree</field>
+        <field name="model">sales.field.target</field>
+        <field name="arch" type="xml">
+            <list string="Objetivos" editable="bottom" default_order="date_month desc, user_id">
+                <field name="date_month" widget="date"/>
+                <field name="user_id"/>
+                <field name="target_amount"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sales_field_target_form" model="ir.ui.view">
+        <field name="name">sales.field.target.form</field>
+        <field name="model">sales.field.target</field>
+        <field name="arch" type="xml">
+            <form string="Objetivo de Facturación">
+                <sheet>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="date_month" widget="date"/>
+                        <field name="target_amount"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <p class="text-muted">
+                        El objetivo se compara contra el <b>Facturado Pagado (cobrado)</b> del
+                        mes. En la vista anual del panel, se suman los objetivos de los 12 meses.
+                    </p>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sales_field_target_search" model="ir.ui.view">
+        <field name="name">sales.field.target.search</field>
+        <field name="model">sales.field.target</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Objetivos">
+                <field name="user_id"/>
+                <field name="date_month"/>
+                <filter name="group_user" string="Vendedor" context="{'group_by': 'user_id'}"/>
+                <filter name="group_month" string="Mes" context="{'group_by': 'date_month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sales_field_target" model="ir.actions.act_window">
+        <field name="name">Objetivos</field>
+        <field name="res_model">sales.field.target</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_sales_field_target_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define objetivos de facturación cobrada por vendedor y mes.</p>
+            <p>El panel mostrará el % de avance del cobrado contra el objetivo del periodo.</p>
+        </field>
+    </record>
+
+    <!-- Menú bajo "Gerencia" (definido en el core). -->
+    <menuitem id="menu_sales_field_target"
+              name="Objetivos"
+              parent="sales_field_sfa.menu_sales_field_equipo"
+              sequence="60"
+              action="action_sales_field_target"
+              groups="sales_field_sfa.group_sales_field_manager"/>
+</odoo>
