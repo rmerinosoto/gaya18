@@ -25,7 +25,12 @@
 
     <menuitem id="menu_sales_field_quotes" name="Mis Cotizaciones" parent="menu_sales_field_root" sequence="30" action="sales_field_sfa.action_sales_field_my_quotes" groups="sales_field_sfa.group_sales_field_user,sales_field_sfa.group_sales_field_manager"/>
 
-    <menuitem id="menu_sales_field_manager_dashboard" name="Panel Gerencial" parent="menu_sales_field_root" sequence="35" action="sales_field_sfa.action_sales_field_dashboard_manager" groups="sales_field_sfa.group_sales_field_manager"/>
+    <!-- Menu contenedor para todas las vistas globales de gerencia. Agrupa lo que
+         antes estaba suelto en el primer nivel (Panel Gerencial, vistas del equipo,
+         clientes excluidos) para no saturar el menu raiz. Solo gerencia. -->
+    <menuitem id="menu_sales_field_equipo" name="Equipo" parent="menu_sales_field_root" sequence="40" groups="sales_field_sfa.group_sales_field_manager"/>
+
+    <menuitem id="menu_sales_field_manager_dashboard" name="Panel Gerencial" parent="menu_sales_field_equipo" sequence="10" action="sales_field_sfa.action_sales_field_dashboard_manager" groups="sales_field_sfa.group_sales_field_manager"/>
 
     <!-- G-01: Vistas globales del equipo (solo gerencia). Sin filtro user_id=uid:
          la record rule de manager (1=1) ya permite ver todo a nivel ORM. -->
@@ -35,7 +40,7 @@
         <field name="view_mode">list,kanban,calendar,form</field>
         <field name="search_view_id" ref="view_sales_interaction_search"/>
     </record>
-    <menuitem id="menu_sales_field_team_interactions" name="Interacciones del Equipo" parent="menu_sales_field_root" sequence="40" action="sales_field_sfa.action_sales_field_team_interactions" groups="sales_field_sfa.group_sales_field_manager"/>
+    <menuitem id="menu_sales_field_team_interactions" name="Interacciones del Equipo" parent="menu_sales_field_equipo" sequence="20" action="sales_field_sfa.action_sales_field_team_interactions" groups="sales_field_sfa.group_sales_field_manager"/>
 
     <record id="action_sales_field_team_customers" model="ir.actions.act_window">
         <field name="name">Clientes del Equipo</field>
@@ -43,7 +48,7 @@
         <field name="view_mode">list,form,kanban</field>
         <field name="domain">[('user_id', '!=', False), ('sfa_excluded', '=', False)]</field>
     </record>
-    <menuitem id="menu_sales_field_team_customers" name="Clientes del Equipo" parent="menu_sales_field_root" sequence="45" action="sales_field_sfa.action_sales_field_team_customers" groups="sales_field_sfa.group_sales_field_manager"/>
+    <menuitem id="menu_sales_field_team_customers" name="Clientes del Equipo" parent="menu_sales_field_equipo" sequence="30" action="sales_field_sfa.action_sales_field_team_customers" groups="sales_field_sfa.group_sales_field_manager"/>
 
     <record id="action_sales_field_team_quotes" model="ir.actions.act_window">
         <field name="name">Cotizaciones del Equipo</field>
@@ -51,7 +56,7 @@
         <field name="view_mode">list,form,kanban</field>
         <field name="domain">[('state', 'in', ['draft','sent']), ('partner_id.sfa_excluded', '=', False)]</field>
     </record>
-    <menuitem id="menu_sales_field_team_quotes" name="Cotizaciones del Equipo" parent="menu_sales_field_root" sequence="50" action="sales_field_sfa.action_sales_field_team_quotes" groups="sales_field_sfa.group_sales_field_manager"/>
+    <menuitem id="menu_sales_field_team_quotes" name="Cotizaciones del Equipo" parent="menu_sales_field_equipo" sequence="40" action="sales_field_sfa.action_sales_field_team_quotes" groups="sales_field_sfa.group_sales_field_manager"/>
 
     <!-- Acceso directo de gerencia a clientes excluidos. Pre-agrupado por motivo
          para revisar la cartera de exclusiones de un vistazo. -->
@@ -63,7 +68,7 @@
         <field name="context">{'search_default_group_sfa_exclusion_reason': 1}</field>
         <field name="search_view_id" ref="sales_field_sfa.view_partner_search_sales_field_sfa"/>
     </record>
-    <menuitem id="menu_sales_field_excluded_customers" name="Clientes Excluidos" parent="menu_sales_field_root" sequence="60" action="sales_field_sfa.action_sales_field_excluded_customers" groups="sales_field_sfa.group_sales_field_manager"/>
+    <menuitem id="menu_sales_field_excluded_customers" name="Clientes Excluidos" parent="menu_sales_field_equipo" sequence="50" action="sales_field_sfa.action_sales_field_excluded_customers" groups="sales_field_sfa.group_sales_field_manager"/>
 
     <!-- Submenu de Configuracion: solo gerencia. Los catalogos (Canales, Estados,
          Frecuencias, Motivos) que antes eran Selection hardcodeados ahora se
