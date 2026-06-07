@@ -14,3 +14,48 @@ class ResConfigSettings(models.TransientModel):
         "fecha de pago es costoso. Subir el valor incluye más facturas, a costa de "
         "rendimiento.",
     )
+
+    # ---- Ciclo de vida automático del estado de cliente ----
+    sfa_auto_promote_customer = fields.Boolean(
+        string="Promover a 'Cliente' con la primera factura pagada",
+        config_parameter="sales_field_sfa.auto_promote_customer",
+        default=True,
+        help="Un cron diario marca como Cliente a quien tenga al menos una factura "
+        "de cliente pagada (y aún no sea cliente).",
+    )
+    sfa_distinguish_new_customer = fields.Boolean(
+        string="Distinguir 'Cliente Nuevo' de 'Cliente regular'",
+        config_parameter="sales_field_sfa.distinguish_new_customer",
+        default=False,
+        help="Al promover, el cliente queda como 'Cliente Nuevo' y luego se gradúa a "
+        "'Cliente regular' según el criterio elegido abajo.",
+    )
+    sfa_new_customer_mode = fields.Selection(
+        selection=[("days", "Por tiempo (días)"), ("invoices", "Por nº de facturas pagadas")],
+        string="Graduar 'Cliente Nuevo' a regular",
+        config_parameter="sales_field_sfa.new_customer_mode",
+        default="days",
+    )
+    sfa_new_customer_days = fields.Integer(
+        string="Días como 'Cliente Nuevo'",
+        config_parameter="sales_field_sfa.new_customer_days",
+        default=90,
+        help="Días desde la primera factura pagada antes de pasar a 'Cliente regular'.",
+    )
+    sfa_new_customer_invoices = fields.Integer(
+        string="Facturas pagadas para ser regular",
+        config_parameter="sales_field_sfa.new_customer_invoices",
+        default=3,
+        help="Nº de facturas pagadas a partir del cual deja de ser 'Cliente Nuevo'.",
+    )
+    sfa_auto_inactivate = fields.Boolean(
+        string="Marcar 'Inactivo' por falta de facturas",
+        config_parameter="sales_field_sfa.auto_inactivate",
+        default=False,
+        help="Un cron diario marca Inactivo a los clientes sin facturas en los últimos N meses.",
+    )
+    sfa_inactive_months = fields.Integer(
+        string="Meses sin facturas para 'Inactivo'",
+        config_parameter="sales_field_sfa.inactive_months",
+        default=6,
+    )

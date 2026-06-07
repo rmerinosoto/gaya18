@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e-20250909\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 20:12+0000\n"
-"PO-Revision-Date: 2026-06-07 20:12+0000\n"
+"POT-Creation-Date: 2026-06-07 20:48+0000\n"
+"PO-Revision-Date: 2026-06-07 20:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,11 +47,6 @@ msgid "Active"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
-msgid "Active in Sales Follow-up"
-msgstr ""
-
-#. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_ids
 msgid "Activities"
 msgstr ""
@@ -78,6 +73,11 @@ msgid "Activos"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Activos en Seguimiento Comercial"
+msgstr ""
+
+#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
 msgid "Actualizar"
@@ -90,19 +90,28 @@ msgid "Agosto"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_config_settings
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_settings
-msgid "Ajustes"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Agrupar Por"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Approve Reassignment"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Agrupar SFA"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__approved
-msgid "Aprobada"
+msgid "Approved"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Aprobar Reasignación"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Atrasadas"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -117,8 +126,8 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "CRM Integration"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Buscar Interacciones"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -137,10 +146,13 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__call
+msgid "Call"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_channel
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_channel
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__name
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_channel
 msgid "Canal"
 msgstr ""
 
@@ -150,15 +162,14 @@ msgid "Canal Comercial (SFA)"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__partner_channel
-msgid ""
-"Canal comercial del cliente. Editar aquí actualiza la ficha del cliente."
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Canal SFA"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_channel
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_channel
-msgid "Canales"
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__partner_channel
+msgid ""
+"Canal comercial del cliente. Editar aquí actualiza la ficha del cliente."
 msgstr ""
 
 #. module: sales_field_sfa
@@ -187,6 +198,18 @@ msgid "Cartera Vencida Equipo"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__name
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_channel
+msgid "Channel"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_channel
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_channel
+msgid "Channels"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:ir.model.fields,help:sales_field_sfa.field_sales_field_channel__code
 #: model:ir.model.fields,help:sales_field_sfa.field_sales_field_customer_status__code
 #: model:ir.model.fields,help:sales_field_sfa.field_sales_field_exclusion_reason__code
@@ -197,8 +220,8 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_id
 #: model:sales.field.customer.status,name:sales_field_sfa.customer_status_customer
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
 msgid "Cliente"
 msgstr ""
 
@@ -210,27 +233,16 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Cliente sin contacto"
+msgstr ""
+
+#. module: sales_field_sfa
 #. odoo-javascript
 #. odoo-python
 #: code:addons/sales_field_sfa/models/dashboard.py:0
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
 msgid "Clientes Contactados"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_excluded_customers
-msgid "Clientes Excluidos"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_excluded_customers
-msgid "Clientes Excluidos del Seguimiento"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_customers
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_customers
-msgid "Clientes del Equipo"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -241,7 +253,7 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__company_id
-msgid "Compañía"
+msgid "Company"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -251,7 +263,7 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config
-msgid "Configuración"
+msgid "Configuration"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -260,14 +272,14 @@ msgid "Contact"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__contacted
-msgid "Contactado"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
 msgid "Contactar"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__contacted
+msgid "Contacted"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -283,21 +295,9 @@ msgid "Cotizaciones %(suffix)s - %(seller)s"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_quotes
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_quotes
-msgid "Cotizaciones del Equipo"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-python
 #: code:addons/sales_field_sfa/models/sales_interaction.py:0
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__sale_order_id
 msgid "Cotización"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__quotation_sent
-msgid "Cotización enviada"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -309,7 +309,7 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Create Quotation"
+msgid "Crear Cotización"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -337,18 +337,19 @@ msgid "Cuando registres una interacción aparecerá aquí."
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_id
 msgid "Customer"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Customer details (optional)"
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_customer_status
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_customer_status
+msgid "Customer Statuses"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Customer without contact"
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_excluded_customers
+msgid "Customers Excluded from Follow-up"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -371,14 +372,8 @@ msgid "Dashboard Seguimiento Comercial"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Dashboard operational lists"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid ""
-"Days without interaction for a customer to appear as 'without contact'."
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__interaction_datetime
+msgid "Date and Time"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -412,6 +407,11 @@ msgstr ""
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_config_settings__sfa_inactivity_days
 msgid "Días para 'cliente sin contacto'"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Días sin interacción para que un cliente aparezca como 'sin contacto'."
 msgstr ""
 
 #. module: sales_field_sfa
@@ -470,8 +470,8 @@ msgid "Es Prospecto"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__requested
-msgid "Esperando a Gerencia"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Esta Semana"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -510,9 +510,8 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_customer_status
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_customer_status
-msgid "Estados de Cliente"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Este Mes"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -542,8 +541,8 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
-msgid "Excluded from Sales Follow-up"
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_excluded_customers
+msgid "Excluded Customers"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -554,7 +553,13 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
-msgid "Exclusion Reason"
+msgid "Excluidos del Seguimiento Comercial"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_exclusion_reason
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_exclusion_reason
+msgid "Exclusion Reasons"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -600,8 +605,13 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__interaction_datetime
-msgid "Fecha y Hora"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Ficha del cliente (opcional)"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__followup
+msgid "Follow-up"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -634,7 +644,6 @@ msgstr ""
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_visit_frequency
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_visit_frequency
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_visit_frequency
 msgid "Frecuencia de Visita"
 msgstr ""
 
@@ -644,44 +653,13 @@ msgid "Frecuencia de Visita (SFA)"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_visit_frequency
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_visit_frequency
-msgid "Frecuencias de Visita"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_equipo
-msgid "Gerencia"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:res.groups,name:sales_field_sfa.group_sales_field_manager
-msgid "Gerente Seguimiento Comercial"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "Group By"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
-msgid "Group SFA"
-msgstr ""
-
-#. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__has_message
 msgid "Has Message"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Hide CRM from salespeople"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Horizon (days) for the 'pending this week' list."
+msgid "Horizonte (días) de la lista 'pendientes esta semana'."
 msgstr ""
 
 #. module: sales_field_sfa
@@ -690,8 +668,18 @@ msgid "Horizonte de 'pendientes esta semana' (días)"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "How did the contact end?"
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__result
+msgid "How did it end?"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__interaction_type
+msgid "How did you contact them?"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Hoy"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -730,10 +718,15 @@ msgid "Inactivo"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Integración con CRM"
+msgstr ""
+
+#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_interaction
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_interactions
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_calendar
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_tree
 msgid "Interacciones"
 msgstr ""
 
@@ -762,9 +755,8 @@ msgid "Interacciones de Hoy"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_interactions
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_interactions
-msgid "Interacciones del Equipo"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Interacciones recientes"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -779,24 +771,24 @@ msgid "Interacciones registradas hoy"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Interacción"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:ir.model,name:sales_field_sfa.model_sales_interaction
 msgid "Interacción Comercial"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Interaction"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_calendar
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_tree
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_interaction
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_interactions
 msgid "Interactions"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__interested
-msgid "Interesado"
+msgid "Interested"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -848,8 +840,8 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__call
-msgid "Llamada"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Listas operativas del panel"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -865,8 +857,19 @@ msgid "Llamadas %(suffix)s"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Log next interaction"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Los Usuarios de Seguimiento Comercial no verán el menú CRM."
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_equipo
+msgid "Management"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.client,name:sales_field_sfa.action_sales_field_dashboard_manager
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_manager_dashboard
+msgid "Management Dashboard"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -917,27 +920,9 @@ msgid "Messages"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.client,name:sales_field_sfa.action_sales_field_dashboard
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_dashboard
-msgid "Mi Panel"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
 msgid "Mi Panel Comercial"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_my_customers
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_customers
-msgid "Mis Clientes"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_my_quotes
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_quotes
-msgid "Mis Cotizaciones"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -954,6 +939,7 @@ msgstr ""
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_exclusion_reason
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_exclusion_reason
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
 msgid "Motivo de Exclusión"
 msgstr ""
 
@@ -963,14 +949,26 @@ msgid "Motivo de Exclusión del Seguimiento (SFA)"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_exclusion_reason
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_exclusion_reason
-msgid "Motivos de Exclusión"
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__my_activity_date_deadline
+msgid "My Activity Deadline"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__my_activity_date_deadline
-msgid "My Activity Deadline"
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_my_customers
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_customers
+msgid "My Customers"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.client,name:sales_field_sfa.action_sales_field_dashboard
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_dashboard
+msgid "My Dashboard"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_my_quotes
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_quotes
+msgid "My Quotations"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1000,19 +998,14 @@ msgid "Next Activity Type"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_kanban
-msgid "Next:"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
 msgid "Ningún cliente abandonado"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__not_available
-msgid "No disponible"
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__no_answer
+msgid "No answer"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1022,23 +1015,23 @@ msgid "No hay vendedores para mostrar."
 msgstr ""
 
 #. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__not_requested
+msgid "No request"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__not_available
+msgid "Not available"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__not_interested
-msgid "No interesado"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "No next action"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__no_answer
-msgid "No respondió"
+msgid "Not interested"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Notes"
+msgid "Notas"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1092,8 +1085,18 @@ msgid "Octubre"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Ocultar CRM a los vendedores"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_res_config_settings__sfa_hide_crm_for_users
 msgid "Ocultar el menú CRM a los vendedores de campo"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__order_taken
+msgid "Order taken"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1102,15 +1105,8 @@ msgid "Otro motivo"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "Overdue"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
-#: model:ir.actions.client,name:sales_field_sfa.action_sales_field_dashboard_manager
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_manager_dashboard
 msgid "Panel Gerencial"
 msgstr ""
 
@@ -1127,25 +1123,20 @@ msgid "Para hoy"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__order_taken
-msgid "Pedido tomado"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-python
 #: code:addons/sales_field_sfa/models/dashboard.py:0
 msgid "Pendientes Esta Semana"
 msgstr ""
 
 #. module: sales_field_sfa
-#. odoo-python
-#: code:addons/sales_field_sfa/models/dashboard.py:0
-msgid "Pendientes para Hoy"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Pendientes esta semana"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Pending this week"
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Pendientes para Hoy"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1174,8 +1165,23 @@ msgid "Prospectos Contactados"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_kanban
+msgid "Próxima:"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:sales.field.visit.frequency,name:sales_field_sfa.visit_frequency_biweekly
 msgid "Quincenal"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__sale_order_id
+msgid "Quotation"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__quotation_sent
+msgid "Quotation sent"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1206,22 +1212,17 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Recent (90 days)"
+msgid "Rechazar"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Recent interactions"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__rejected
-msgid "Rechazada"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Recientes (90 días)"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__name
-msgid "Referencia"
+msgid "Reference"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1232,12 +1233,12 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Reject"
+msgid "Registrar siguiente interacción"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Request Customer Assignment"
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__rejected
+msgid "Rejected"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1247,12 +1248,7 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "Result"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_kanban
-msgid "Result:"
+msgid "Resultado"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1263,8 +1259,8 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
-msgid "SFA Channel"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_kanban
+msgid "Resultado:"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1273,28 +1269,28 @@ msgid "SMS Delivery error"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_form_sales_field_sfa
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_root
 msgid "Sales Follow-up"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model:res.groups,name:sales_field_sfa.group_sales_field_manager
+msgid "Sales Follow-up Manager"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:res.groups,name:sales_field_sfa.group_sales_field_user
+msgid "Sales Follow-up User"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__user_id
+msgid "Salesperson"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Sales Follow-up Users will not see the CRM menu."
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "Search Interactions"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__followup
-msgid "Seguimiento"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_root
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_form_sales_field_sfa
 msgid "Seguimiento Comercial"
 msgstr ""
 
@@ -1327,6 +1323,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__sequence
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__sequence
 msgid "Sequence"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_config_settings
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_settings
+msgid "Settings"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1389,13 +1391,18 @@ msgid "Sin pendientes esta semana."
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__not_requested
-msgid "Sin solicitud"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Sin próxima acción"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__assignment_requested_by_id
 msgid "Solicitada Por"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Solicitar Asignación de Cliente"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1443,13 +1450,26 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "This Month"
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_customers
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_customers
+msgid "Team Customers"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_interactions
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_interactions
+msgid "Team Interactions"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_quotes
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_quotes
+msgid "Team Quotations"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "This Week"
+msgid "Tipo"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1458,11 +1478,6 @@ msgstr ""
 msgid ""
 "Tipo de negocio del cliente. Las opciones se gestionan en Seguimiento "
 "Comercial → Configuración → Canales."
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "Today"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1494,11 +1509,6 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
-msgid "Type"
-msgstr ""
-
-#. module: sales_field_sfa
 #: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
@@ -1511,14 +1521,8 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:res.groups,name:sales_field_sfa.group_sales_field_user
-msgid "Usuario Seguimiento Comercial"
-msgstr ""
-
-#. module: sales_field_sfa
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__user_id
 msgid "Vendedor"
 msgstr ""
 
@@ -1526,6 +1530,11 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
 msgid "Vendedores"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Ventana (días) para el contexto de reasignación que ve Gerencia."
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1554,7 +1563,18 @@ msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__visit
-msgid "Visita"
+msgid "Visit"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_visit_frequency
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_visit_frequency
+msgid "Visit Frequencies"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_visit_frequency
+msgid "Visit Frequency"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1576,6 +1596,11 @@ msgid "Volver el"
 msgstr ""
 
 #. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__requested
+msgid "Waiting for Management"
+msgstr ""
+
+#. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__website_message_ids
 msgid "Website Messages"
 msgstr ""
@@ -1583,18 +1608,6 @@ msgstr ""
 #. module: sales_field_sfa
 #: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__website_message_ids
 msgid "Website communication history"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid ""
-"What did the customer say? What products did they ask for? Note what's "
-"important..."
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "What happened?"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1611,13 +1624,8 @@ msgid "WhatsApp %(suffix)s"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
-msgid "Which customer did you contact?"
-msgstr ""
-
-#. module: sales_field_sfa
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
-msgid "Window (days) for the reassignment context seen by Management."
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__next_action_date
+msgid "When do I contact again?"
 msgstr ""
 
 #. module: sales_field_sfa
@@ -1641,23 +1649,28 @@ msgid "del Mes"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__next_action_date
-msgid "¿Cuándo vuelvo a contactar?"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿A qué cliente contactaste?"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__interaction_type
-msgid "¿Cómo lo contactaste?"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿Cómo terminó el contacto?"
 msgstr ""
 
 #. module: sales_field_sfa
-#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__result
-msgid "¿Cómo terminó?"
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿Qué pasó?"
 msgstr ""
 
 #. module: sales_field_sfa
 #: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__notes
 msgid "¿Qué pasó? (notas)"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿Qué te dijo el cliente? ¿Qué productos pidió? Anota lo importante..."
 msgstr ""
 
 #. module: sales_field_sfa

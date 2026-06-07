@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e-20250909\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 20:12+0000\n"
-"PO-Revision-Date: 2026-06-07 20:12+0000\n"
+"POT-Creation-Date: 2026-06-07 20:48+0000\n"
+"PO-Revision-Date: 2026-06-07 20:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,14 +17,26 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Al promover queda como 'Cliente Nuevo' y luego se gradúa."
+msgstr "Al promover queda como 'Cliente Nuevo' y luego se gradúa."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_distinguish_new_customer
+msgid ""
+"Al promover, el cliente queda como 'Cliente Nuevo' y luego se gradúa a "
+"'Cliente regular' según el criterio elegido abajo."
+msgstr "Al promover, el cliente queda como 'Cliente Nuevo' y luego se gradúa a 'Cliente regular' según el criterio elegido abajo."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Antigüedad máxima de factura"
+msgstr "Antigüedad máxima de factura"
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_invoice_lookback_days
 msgid "Antigüedad máxima de factura para 'Facturado Pagado' (días)"
 msgstr "Antigüedad máxima de factura para 'Facturado Pagado' (días)"
-
-#. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
-msgid "Buscar Objetivos"
-msgstr "Buscar Objetivos"
 
 #. module: sales_field_sfa_account
 #. odoo-python
@@ -39,6 +51,34 @@ msgid "Cartera Vencida - %(seller)s"
 msgstr "Cartera Vencida - %(seller)s"
 
 #. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Ciclo de vida del estado de cliente"
+msgstr "Ciclo de vida del estado de cliente"
+
+#. module: sales_field_sfa_account
+#: model:sales.field.customer.status,name:sales_field_sfa_account.customer_status_new
+msgid "Cliente Nuevo"
+msgstr "Cliente Nuevo"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_partner__sfa_customer_since
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_users__sfa_customer_since
+msgid "Cliente desde"
+msgstr "Cliente desde"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_customer_status__is_new_customer
+msgid ""
+"Cliente recién convertido. Cuenta como cliente en los KPIs, pero se "
+"distingue del regular. La automatización lo gradúa a 'Cliente regular'."
+msgstr "Cliente recién convertido. Cuenta como cliente en los KPIs, pero se distingue del regular. La automatización lo gradúa a 'Cliente regular'."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Clientes sin facturas en los últimos N meses pasan a Inactivo."
+msgstr "Clientes sin facturas en los últimos N meses pasan a Inactivo."
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__company_id
 msgid "Compañía"
 msgstr "Compañía"
@@ -47,6 +87,11 @@ msgstr "Compañía"
 #: model:ir.model,name:sales_field_sfa_account.model_res_config_settings
 msgid "Config Settings"
 msgstr "Config Settings"
+
+#. module: sales_field_sfa_account
+#: model:ir.model,name:sales_field_sfa_account.model_res_partner
+msgid "Contact"
+msgstr "Contact"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__create_uid
@@ -70,13 +115,39 @@ msgstr "Dashboard Seguimiento Comercial"
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
-msgid "Define objetivos de facturación cobrada por vendedor y mes."
-msgstr "Define objetivos de facturación cobrada por vendedor y mes."
+msgid "Define collected-invoicing targets per salesperson and month."
+msgstr "Define collected-invoicing targets per salesperson and month."
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__display_name
 msgid "Display Name"
 msgstr "Display Name"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_distinguish_new_customer
+msgid "Distinguir 'Cliente Nuevo' de 'Cliente regular'"
+msgstr "Distinguir 'Cliente Nuevo' de 'Cliente regular'"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Distinguir Cliente Nuevo de Cliente regular"
+msgstr "Distinguir Cliente Nuevo de Cliente regular"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_days
+msgid "Días como 'Cliente Nuevo'"
+msgstr "Días como 'Cliente Nuevo'"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Días como Cliente Nuevo"
+msgstr "Días como Cliente Nuevo"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_days
+msgid ""
+"Días desde la primera factura pagada antes de pasar a 'Cliente regular'."
+msgstr "Días desde la primera factura pagada antes de pasar a 'Cliente regular'."
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_invoice_lookback_days
@@ -100,10 +171,29 @@ msgid ""
 msgstr "El objetivo se compara contra el <b>Facturado Pagado (cobrado)</b> del\n                        mes. En la vista anual del panel, se suman los objetivos de los 12 meses."
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
-msgid ""
-"El panel mostrará el % de avance del cobrado contra el objetivo del periodo."
-msgstr "El panel mostrará el % de avance del cobrado contra el objetivo del periodo."
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_customer_status__is_new_customer
+msgid "Es Cliente Nuevo"
+msgstr "Es Cliente Nuevo"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_customer_status__is_inactive
+msgid "Es Inactivo"
+msgstr "Es Inactivo"
+
+#. module: sales_field_sfa_account
+#: model:ir.model,name:sales_field_sfa_account.model_sales_field_customer_status
+msgid "Estado de Cliente (SFA)"
+msgstr "Estado de Cliente (SFA)"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_customer_status__is_inactive
+msgid "Estado que la automatización asigna a clientes sin facturas recientes."
+msgstr "Estado que la automatización asigna a clientes sin facturas recientes."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Facturación (KPI Facturado Pagado)"
+msgstr "Facturación (KPI Facturado Pagado)"
 
 #. module: sales_field_sfa_account
 #. odoo-python
@@ -130,19 +220,43 @@ msgid "Facturas Pagadas %(suffix)s - %(seller)s"
 msgstr "Facturas Pagadas %(suffix)s - %(seller)s"
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_invoices
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Facturas pagadas para ser regular"
+msgstr "Facturas pagadas para ser regular"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_partner__sfa_customer_since
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_users__sfa_customer_since
+msgid ""
+"Fecha de la primera factura pagada del cliente. La asigna la automatización "
+"de estado y sirve para graduar 'Cliente Nuevo' por tiempo."
+msgstr "Fecha de la primera factura pagada del cliente. La asigna la automatización de estado y sirve para graduar 'Cliente Nuevo' por tiempo."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_mode
+msgid "Graduar 'Cliente Nuevo' a regular"
+msgstr "Graduar 'Cliente Nuevo' a regular"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Graduar por"
+msgstr "Graduar por"
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__id
 msgid "ID"
 msgstr "ID"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Invoices older than this threshold are not considered for the KPI."
-msgstr "Invoices older than this threshold are not considered for the KPI."
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_form
+msgid "Invoicing Target"
+msgstr "Invoicing Target"
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Invoicing (Paid Invoiced KPI)"
-msgstr "Invoicing (Paid Invoiced KPI)"
+msgid "Las facturas más viejas que este umbral no se consideran para el KPI."
+msgstr "Las facturas más viejas que este umbral no se consideran para el KPI."
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__write_uid
@@ -155,20 +269,39 @@ msgid "Last Updated on"
 msgstr "Last Updated on"
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_auto_inactivate
+msgid "Marcar 'Inactivo' por falta de facturas"
+msgstr "Marcar 'Inactivo' por falta de facturas"
+
+#. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Maximum invoice age"
-msgstr "Maximum invoice age"
+msgid "Marcar Inactivo por falta de facturas"
+msgstr "Marcar Inactivo por falta de facturas"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__date_month
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
 msgid "Mes"
 msgstr "Mes"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Meses sin facturas"
+msgstr "Meses sin facturas"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_inactive_months
+msgid "Meses sin facturas para 'Inactivo'"
+msgstr "Meses sin facturas para 'Inactivo'"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__currency_id
 msgid "Moneda"
 msgstr "Moneda"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Month"
+msgstr "Month"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_target__target_amount
@@ -177,14 +310,14 @@ msgid ""
 msgstr "Monto de Facturado Pagado (cobrado) que se espera del vendedor en el mes."
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_invoices
+msgid "Nº de facturas pagadas a partir del cual deja de ser 'Cliente Nuevo'."
+msgstr "Nº de facturas pagadas a partir del cual deja de ser 'Cliente Nuevo'."
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__target_amount
 msgid "Objetivo (cobrado)"
 msgstr "Objetivo (cobrado)"
-
-#. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_form
-msgid "Objetivo de Facturación"
-msgstr "Objetivo de Facturación"
 
 #. module: sales_field_sfa_account
 #: model:ir.model,name:sales_field_sfa_account.model_sales_field_target
@@ -194,13 +327,83 @@ msgstr "Objetivo de Facturación (SFA)"
 #. module: sales_field_sfa_account
 #: model:ir.actions.act_window,name:sales_field_sfa_account.action_sales_field_target
 #: model:ir.ui.menu,name:sales_field_sfa_account.menu_sales_field_target
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_tree
 msgid "Objetivos"
 msgstr "Objetivos"
 
 #. module: sales_field_sfa_account
-#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__user_id
+#: model:ir.model.fields.selection,name:sales_field_sfa_account.selection__res_config_settings__sfa_new_customer_mode__invoices
+msgid "Por nº de facturas pagadas"
+msgstr "Por nº de facturas pagadas"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields.selection,name:sales_field_sfa_account.selection__res_config_settings__sfa_new_customer_mode__days
+msgid "Por tiempo (días)"
+msgstr "Por tiempo (días)"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_auto_promote_customer
+msgid "Promover a 'Cliente' con la primera factura pagada"
+msgstr "Promover a 'Cliente' con la primera factura pagada"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Promover a Cliente con la 1ª factura pagada"
+msgstr "Promover a Cliente con la 1ª factura pagada"
+
+#. module: sales_field_sfa_account
+#. odoo-python
+#: code:addons/sales_field_sfa_account/models/lifecycle.py:0
+msgid ""
+"Promovido a '%(status)s' automáticamente por su primera factura pagada."
+msgstr "Promovido a '%(status)s' automáticamente por su primera factura pagada."
+
+#. module: sales_field_sfa_account
+#: model:ir.actions.server,name:sales_field_sfa_account.cron_sfa_status_automation_ir_actions_server
+msgid "SFA: automatización de estado de cliente"
+msgstr "SFA: automatización de estado de cliente"
+
+#. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Salesperson"
+msgstr "Salesperson"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Search Targets"
+msgstr "Search Targets"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_tree
+msgid "Targets"
+msgstr "Targets"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
+msgid ""
+"The dashboard will show the % progress of collected vs the period target."
+msgstr "The dashboard will show the % progress of collected vs the period target."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_auto_inactivate
+msgid ""
+"Un cron diario marca Inactivo a los clientes sin facturas en los últimos N "
+"meses."
+msgstr "Un cron diario marca Inactivo a los clientes sin facturas en los últimos N meses."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_auto_promote_customer
+msgid ""
+"Un cron diario marca como Cliente a quien tenga al menos una factura de "
+"cliente pagada (y aún no sea cliente)."
+msgstr "Un cron diario marca como Cliente a quien tenga al menos una factura de cliente pagada (y aún no sea cliente)."
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Un cron diario marca como Cliente a quien tenga una factura pagada."
+msgstr "Un cron diario marca como Cliente a quien tenga una factura pagada."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__user_id
 msgid "Vendedor"
 msgstr "Vendedor"
 

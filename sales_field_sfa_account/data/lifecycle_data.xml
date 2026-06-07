@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- NOTA: la bandera is_inactive sobre el estado 'Inactivo' del core NO se puede
+         fijar aquí: ese registro lo creó el core con noupdate=1, así que un -u no lo
+         re-escribe. Se fija en migrations/18.0.2.1.0/post-migrate.py (install y upgrade). -->
+
+    <!-- Estado 'Cliente Nuevo'. Cuenta como cliente (is_customer) pero se distingue.
+         noupdate=1: el admin puede renombrarlo o desactivarlo. -->
+    <data noupdate="1">
+        <record id="customer_status_new" model="sales.field.customer.status">
+            <field name="name">Cliente Nuevo</field>
+            <field name="code">new_customer</field>
+            <field name="is_customer" eval="True"/>
+            <field name="is_new_customer" eval="True"/>
+            <field name="sequence">15</field>
+        </record>
+
+        <record id="cron_sfa_status_automation" model="ir.cron">
+            <field name="name">SFA: automatización de estado de cliente</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._sfa_run_status_automation()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="nextcall" eval="(DateTime.now() + relativedelta(hours=2))" />
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

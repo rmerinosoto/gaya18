@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Banderas is_new_customer / is_inactive en el catálogo de Estados de Cliente. -->
+    <record id="view_sales_field_customer_status_tree_account" model="ir.ui.view">
+        <field name="name">sales.field.customer.status.tree.account</field>
+        <field name="model">sales.field.customer.status</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_sales_field_customer_status_tree"/>
+        <field name="arch" type="xml">
+            <field name="is_customer" position="after">
+                <field name="is_new_customer" widget="boolean_toggle" optional="show"/>
+                <field name="is_inactive" widget="boolean_toggle" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_field_customer_status_form_account" model="ir.ui.view">
+        <field name="name">sales.field.customer.status.form.account</field>
+        <field name="model">sales.field.customer.status</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_sales_field_customer_status_form"/>
+        <field name="arch" type="xml">
+            <field name="is_customer" position="after">
+                <field name="is_new_customer"/>
+                <field name="is_inactive"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- 'Cliente desde' en la ficha del cliente (solo lectura, lo pone la automatización). -->
+    <record id="view_partner_form_sales_field_sfa_account" model="ir.ui.view">
+        <field name="name">res.partner.form.sales.field.sfa.account</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_partner_form_sales_field_sfa"/>
+        <field name="arch" type="xml">
+            <field name="sfa_customer_status" position="after">
+                <field name="sfa_customer_since" readonly="1" invisible="not sfa_customer_since"/>
+            </field>
+        </field>
+    </record>
+</odoo>

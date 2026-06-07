@@ -48,6 +48,27 @@ class TestPaidKpi(SFACommon):
             "Excluir un partner no puede aumentar el monto de Facturado Pagado.",
         )
 
+    def test_bool_param_missing_uses_default(self):
+        """Regresión: get_param(key) devuelve False (bool) si falta la clave; el
+        helper debe distinguir 'no configurado' (default) de 'configurado en False'."""
+        P = self.env["res.partner"]
+        key = "sales_field_sfa.test_missing_param_xyz"
+        self.env["ir.config_parameter"].sudo().search([("key", "=", key)]).unlink()
+        self.assertTrue(P._sfa_bool_param(key, True), "Param ausente con default True debe ser True")
+        self.assertFalse(P._sfa_bool_param(key, False), "Param ausente con default False debe ser False")
+        self.env["ir.config_parameter"].sudo().set_param(key, "False")
+        self.assertFalse(P._sfa_bool_param(key, True), "Param en 'False' debe ganar al default True")
+        self.env["ir.config_parameter"].sudo().set_param(key, "True")
+        self.assertTrue(P._sfa_bool_param(key, False))
+
+    def test_inactive_status_flagged(self):
+        """La migración/hook deja is_inactive=True en el estado 'Inactivo'."""
+        inactive = self.env.ref("sales_field_sfa.customer_status_inactive")
+        self.assertTrue(inactive.is_inactive)
+        new_status = self.env.ref("sales_field_sfa_account.customer_status_new")
+        self.assertTrue(new_status.is_customer)
+        self.assertTrue(new_status.is_new_customer)
+
     def test_paid_date_simple_invoice(self):
         """_get_paid_date_by_invoice devuelve un dict con todas las ids dadas."""
         Invoice = self.env["account.move"]
