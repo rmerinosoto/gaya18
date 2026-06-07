@@ -5,7 +5,7 @@ post_init_hook: aplica la visibilidad del menu CRM para los Usuarios de
     (por defecto True = ocultar). Motivacion: los vendedores de campo trabajan
     desde "Seguimiento Comercial" y normalmente no deben ver el modulo CRM.
 
-    La logica vive en res.config.settings._sfa_apply_crm_visibility() para poder
+    La logica vive en sales.field.config._sfa_apply_crm_visibility() para poder
     reaplicarse tambien al guardar los Ajustes, sin esperar a un -u. Apunta al
     menu raiz de CRM por xml_id estable (crm.crm_menu_root), no por nombre — mas
     robusto y agnostico del idioma que la version anterior.
@@ -19,7 +19,7 @@ uninstall_hook: revierte el ocultamiento devolviendo el acceso al menu CRM.
 
 
 def post_init_hook(env):
-    env["res.config.settings"]._sfa_apply_crm_visibility()
+    env["sales.field.config"]._sfa_apply_crm_visibility()
 
 
 def uninstall_hook(env):

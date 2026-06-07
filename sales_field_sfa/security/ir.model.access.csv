@@ -9,3 +9,4 @@ access_sales_field_customer_status_user,sales.field.customer.status read user,mo
 access_sales_field_customer_status_manager,sales.field.customer.status manage,model_sales_field_customer_status,sales_field_sfa.group_sales_field_manager,1,1,1,1
 access_sales_field_exclusion_reason_user,sales.field.exclusion.reason read user,model_sales_field_exclusion_reason,sales_field_sfa.group_sales_field_user,1,0,0,0
 access_sales_field_exclusion_reason_manager,sales.field.exclusion.reason manage,model_sales_field_exclusion_reason,sales_field_sfa.group_sales_field_manager,1,1,1,1
+access_sales_field_config_manager,sales.field.config manager,model_sales_field_config,sales_field_sfa.group_sales_field_manager,1,1,1,1
