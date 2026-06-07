@@ -28,11 +28,12 @@ class ResConfigSettings(models.TransientModel):
         "de cliente pagada (y aún no sea cliente).",
     )
     sfa_distinguish_new_customer = fields.Boolean(
-        string="Distinguir 'Cliente Nuevo' de 'Cliente regular'",
+        string="Distinguir etapas del cliente (Nuevo/Regular e Inactivo/Perdido)",
         config_parameter="sales_field_sfa.distinguish_new_customer",
         default=False,
-        help="Al promover, el cliente queda como 'Cliente Nuevo' y luego se gradúa a "
-        "'Cliente regular' según el criterio elegido abajo.",
+        help="Activa la granularidad del ciclo de vida en ambos extremos: al promover, "
+        "el cliente queda como 'Cliente Nuevo' (luego se gradúa a regular); y los Inactivos "
+        "que llevan mucho sin comprar pasan a 'Perdido'.",
     )
     sfa_new_customer_mode = fields.Selection(
         selection=[("days", "Por tiempo (días)"), ("invoices", "Por nº de facturas pagadas")],
@@ -62,6 +63,14 @@ class ResConfigSettings(models.TransientModel):
         string="Meses sin facturas para 'Inactivo'",
         config_parameter="sales_field_sfa.inactive_months",
         default=6,
+    )
+    sfa_lost_months = fields.Integer(
+        string="Meses sin facturas para 'Perdido'",
+        config_parameter="sales_field_sfa.lost_months",
+        default=12,
+        help="Un Inactivo que lleva estos meses sin facturas pasa a 'Perdido'. "
+        "Solo aplica si la distinción de etapas está activada. Debe ser mayor que "
+        "los meses para 'Inactivo'.",
     )
 
     def set_values(self):

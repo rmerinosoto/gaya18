@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e-20250909\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 20:48+0000\n"
-"PO-Revision-Date: 2026-06-07 20:48+0000\n"
+"POT-Creation-Date: 2026-06-07 21:12+0000\n"
+"PO-Revision-Date: 2026-06-07 21:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,14 +18,27 @@ msgstr ""
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Al promover queda como 'Cliente Nuevo' y luego se gradúa."
+msgid ""
+"Activa la distinción de etapas (arriba) para separar 'Perdido' de "
+"'Inactivo'."
 msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_distinguish_new_customer
 msgid ""
-"Al promover, el cliente queda como 'Cliente Nuevo' y luego se gradúa a "
-"'Cliente regular' según el criterio elegido abajo."
+"Activa la granularidad del ciclo de vida en ambos extremos: al promover, el "
+"cliente queda como 'Cliente Nuevo' (luego se gradúa a regular); y los "
+"Inactivos que llevan mucho sin comprar pasan a 'Perdido'."
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__active
+msgid "Active"
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Al promover queda como 'Cliente Nuevo' y luego se gradúa."
 msgstr ""
 
 #. module: sales_field_sfa_account
@@ -37,6 +50,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_invoice_lookback_days
 msgid "Antigüedad máxima de factura para 'Facturado Pagado' (días)"
 msgstr ""
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
+msgid "Buscar Objetivos"
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:sales.field.lost.reason,name:sales_field_sfa_account.lost_reason_competitor
+msgid "Cambió de proveedor"
+msgstr "Switched supplier"
 
 #. module: sales_field_sfa_account
 #. odoo-python
@@ -51,9 +74,9 @@ msgid "Cartera Vencida - %(seller)s"
 msgstr "Overdue Receivables - %(seller)s"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Ciclo de vida del estado de cliente"
-msgstr "Customer status lifecycle"
+#: model:sales.field.lost.reason,name:sales_field_sfa_account.lost_reason_closed
+msgid "Cerró / dejó de operar"
+msgstr "Closed down"
 
 #. module: sales_field_sfa_account
 #: model:sales.field.customer.status,name:sales_field_sfa_account.customer_status_new
@@ -94,11 +117,13 @@ msgid "Contact"
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__create_uid
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__create_date
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__create_date
 msgid "Created on"
 msgstr ""
@@ -109,29 +134,51 @@ msgid "Cualquier día del mes objetivo; se guarda normalizado al día 1."
 msgstr "Any day of the target month; stored normalized to day 1."
 
 #. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Customer status lifecycle"
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__code
+msgid "Código Técnico"
+msgstr ""
+
+#. module: sales_field_sfa_account
 #: model:ir.model,name:sales_field_sfa_account.model_sales_field_dashboard
 msgid "Dashboard Seguimiento Comercial"
 msgstr ""
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
-msgid "Define collected-invoicing targets per salesperson and month."
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Days as New Customer"
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
+msgid "Define objetivos de facturación cobrada por vendedor y mes."
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_partner__sfa_inactivity_note
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_users__sfa_inactivity_note
+msgid "Detalle libre del motivo de inactividad/pérdida."
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__display_name
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_distinguish_new_customer
-msgid "Distinguir 'Cliente Nuevo' de 'Cliente regular'"
-msgstr "Distinguish 'New Customer' from 'Regular Customer'"
+msgid "Distinguir etapas del cliente (Nuevo/Regular e Inactivo/Perdido)"
+msgstr "Distinguish customer stages (New/Regular and Inactive/Lost)"
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Distinguir Cliente Nuevo de Cliente regular"
-msgstr "Distinguish New Customer from Regular Customer"
+msgid "Distinguish New Customer from Regular Customer"
+msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_days
@@ -139,14 +186,21 @@ msgid "Días como 'Cliente Nuevo'"
 msgstr "Days as 'New Customer'"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Días como Cliente Nuevo"
-msgstr "Days as New Customer"
-
-#. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_days
 msgid ""
 "Días desde la primera factura pagada antes de pasar a 'Cliente regular'."
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_partner__sfa_days_since_last_invoice
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_users__sfa_days_since_last_invoice
+msgid "Días sin comprar"
+msgstr "Days without purchase"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_partner__sfa_days_since_last_invoice
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_users__sfa_days_since_last_invoice
+msgid "Días transcurridos desde la última factura del cliente, a hoy."
 msgstr ""
 
 #. module: sales_field_sfa_account
@@ -171,9 +225,20 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
+msgid ""
+"El panel mostrará el % de avance del cobrado contra el objetivo del periodo."
+msgstr ""
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_customer_status__is_new_customer
 msgid "Es Cliente Nuevo"
 msgstr "Is New Customer"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_customer_status__is_lost
+msgid "Es Cliente Perdido"
+msgstr "Is Lost Customer"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_customer_status__is_inactive
@@ -188,6 +253,13 @@ msgstr ""
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_customer_status__is_inactive
 msgid "Estado que la automatización asigna a clientes sin facturas recientes."
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_customer_status__is_lost
+msgid ""
+"Etapa más profunda que 'Inactivo': cliente sin compras por mucho tiempo. La "
+"automatización lo asigna cuando está activada la distinción de etapas."
 msgstr ""
 
 #. module: sales_field_sfa_account
@@ -221,7 +293,6 @@ msgstr "Paid Invoices %(suffix)s - %(seller)s"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_invoices
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
 msgid "Facturas pagadas para ser regular"
 msgstr "Paid invoices to become regular"
 
@@ -234,24 +305,45 @@ msgid ""
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_partner__sfa_last_invoice_date
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_users__sfa_last_invoice_date
+msgid "Fecha de la última factura emitida. La actualiza la automatización."
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_partner__sfa_inactive_since
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_users__sfa_inactive_since
+msgid ""
+"Fecha en que la automatización marcó al cliente como Inactivo. Se limpia si "
+"el cliente vuelve a comprar."
+msgstr ""
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_mode
 msgid "Graduar 'Cliente Nuevo' a regular"
 msgstr "Graduate 'New Customer' to regular"
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Graduar por"
-msgstr "Graduate by"
+msgid "Graduate by"
+msgstr ""
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__id
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__id
 msgid "ID"
 msgstr ""
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_form
-msgid "Invoicing Target"
-msgstr ""
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_partner__sfa_inactive_since
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_users__sfa_inactive_since
+msgid "Inactivo desde"
+msgstr "Inactive since"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_partner_search_sfa_lifecycle
+msgid "Inactivos"
+msgstr "Inactive"
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
@@ -259,11 +351,13 @@ msgid "Las facturas más viejas que este umbral no se consideran para el KPI."
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__write_uid
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__write_date
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__write_date
 msgid "Last Updated on"
 msgstr ""
@@ -275,18 +369,14 @@ msgstr "Mark 'Inactive' on lack of invoices"
 
 #. module: sales_field_sfa_account
 #: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Marcar Inactivo por falta de facturas"
-msgstr "Mark Inactive on lack of invoices"
+msgid "Mark Inactive on lack of invoices"
+msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__date_month
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
 msgid "Mes"
 msgstr "Month"
-
-#. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Meses sin facturas"
-msgstr "Months without invoices"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_inactive_months
@@ -294,20 +384,59 @@ msgid "Meses sin facturas para 'Inactivo'"
 msgstr "Months without invoices for 'Inactive'"
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_lost_months
+msgid "Meses sin facturas para 'Perdido'"
+msgstr "Months without invoices for 'Lost'"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Meses sin facturas → Inactivo"
+msgstr "Months without invoices → Inactive"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Meses sin facturas → Perdido"
+msgstr "Months without invoices → Lost"
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__currency_id
 msgid "Moneda"
 msgstr "Currency"
-
-#. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
-msgid "Month"
-msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_sales_field_target__target_amount
 msgid ""
 "Monto de Facturado Pagado (cobrado) que se espera del vendedor en el mes."
 msgstr "Paid-invoiced (collected) amount expected from the salesperson in the month."
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__name
+msgid "Motivo"
+msgstr "Reason"
+
+#. module: sales_field_sfa_account
+#: model:ir.model,name:sales_field_sfa_account.model_sales_field_lost_reason
+msgid "Motivo de Inactividad/Pérdida (SFA)"
+msgstr "Inactivity/Loss Reason (SFA)"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_partner__sfa_inactivity_reason
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_users__sfa_inactivity_reason
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_partner_search_sfa_lifecycle
+msgid "Motivo de inactividad"
+msgstr "Inactivity reason"
+
+#. module: sales_field_sfa_account
+#: model:ir.actions.act_window,name:sales_field_sfa_account.action_sales_field_lost_reason
+#: model:ir.ui.menu,name:sales_field_sfa_account.menu_sales_field_config_lost_reason
+msgid "Motivos de Inactividad"
+msgstr "Inactivity Reasons"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_partner__sfa_inactivity_note
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_users__sfa_inactivity_note
+msgid "Nota de inactividad"
+msgstr "Inactivity note"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_new_customer_invoices
@@ -320,6 +449,11 @@ msgid "Objetivo (cobrado)"
 msgstr "Target (collected)"
 
 #. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_form
+msgid "Objetivo de Facturación"
+msgstr ""
+
+#. module: sales_field_sfa_account
 #: model:ir.model,name:sales_field_sfa_account.model_sales_field_target
 msgid "Objetivo de Facturación (SFA)"
 msgstr "Invoicing Target (SFA)"
@@ -327,8 +461,29 @@ msgstr "Invoicing Target (SFA)"
 #. module: sales_field_sfa_account
 #: model:ir.actions.act_window,name:sales_field_sfa_account.action_sales_field_target
 #: model:ir.ui.menu,name:sales_field_sfa_account.menu_sales_field_target
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_tree
 msgid "Objetivos"
 msgstr "Targets"
+
+#. module: sales_field_sfa_account
+#: model:sales.field.lost.reason,name:sales_field_sfa_account.lost_reason_other
+msgid "Otro"
+msgstr "Other"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Paid invoices to become regular"
+msgstr ""
+
+#. module: sales_field_sfa_account
+#: model:sales.field.customer.status,name:sales_field_sfa_account.customer_status_lost
+msgid "Perdido"
+msgstr "Lost"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_partner_search_sfa_lifecycle
+msgid "Perdidos"
+msgstr "Lost"
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields.selection,name:sales_field_sfa_account.selection__res_config_settings__sfa_new_customer_mode__invoices
@@ -336,9 +491,25 @@ msgid "Por nº de facturas pagadas"
 msgstr "By number of paid invoices"
 
 #. module: sales_field_sfa_account
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_partner__sfa_inactivity_reason
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_users__sfa_inactivity_reason
+msgid "Por qué el cliente está inactivo o perdido. Lo registra Gerencia."
+msgstr ""
+
+#. module: sales_field_sfa_account
 #: model:ir.model.fields.selection,name:sales_field_sfa_account.selection__res_config_settings__sfa_new_customer_mode__days
 msgid "Por tiempo (días)"
 msgstr "By time (days)"
+
+#. module: sales_field_sfa_account
+#: model:sales.field.lost.reason,name:sales_field_sfa_account.lost_reason_price
+msgid "Precio"
+msgstr "Price"
+
+#. module: sales_field_sfa_account
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
+msgid "Promote to Customer on 1st paid invoice"
+msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_config_settings__sfa_auto_promote_customer
@@ -346,41 +517,26 @@ msgid "Promover a 'Cliente' con la primera factura pagada"
 msgstr "Promote to 'Customer' on first paid invoice"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.res_config_settings_view_form_sfa_account
-msgid "Promover a Cliente con la 1ª factura pagada"
-msgstr "Promote to Customer on 1st paid invoice"
-
-#. module: sales_field_sfa_account
-#. odoo-python
-#: code:addons/sales_field_sfa_account/models/lifecycle.py:0
-msgid ""
-"Promovido a '%(status)s' automáticamente por su primera factura pagada."
-msgstr "Automatically promoted to '%(status)s' by their first paid invoice."
-
-#. module: sales_field_sfa_account
 #: model:ir.actions.server,name:sales_field_sfa_account.cron_sfa_status_automation_ir_actions_server
 msgid "SFA: automatización de estado de cliente"
 msgstr "SFA: customer status automation"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
-msgid "Salesperson"
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_lost_reason__sequence
+msgid "Sequence"
 msgstr ""
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
-msgid "Search Targets"
-msgstr ""
+#: model:sales.field.lost.reason,name:sales_field_sfa_account.lost_reason_service
+msgid "Servicio / atención"
+msgstr "Service"
 
 #. module: sales_field_sfa_account
-#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_tree
-msgid "Targets"
-msgstr ""
-
-#. module: sales_field_sfa_account
-#: model_terms:ir.actions.act_window,help:sales_field_sfa_account.action_sales_field_target
+#: model:ir.model.fields,help:sales_field_sfa_account.field_res_config_settings__sfa_lost_months
 msgid ""
-"The dashboard will show the % progress of collected vs the period target."
+"Un Inactivo que lleva estos meses sin facturas pasa a 'Perdido'. Solo aplica"
+" si la distinción de etapas está activada. Debe ser mayor que los meses para"
+" 'Inactivo'."
 msgstr ""
 
 #. module: sales_field_sfa_account
@@ -404,6 +560,7 @@ msgstr ""
 
 #. module: sales_field_sfa_account
 #: model:ir.model.fields,field_description:sales_field_sfa_account.field_sales_field_target__user_id
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa_account.view_sales_field_target_search
 msgid "Vendedor"
 msgstr "Salesperson"
 
@@ -417,3 +574,9 @@ msgstr "A target already exists for that salesperson and month."
 #: code:addons/sales_field_sfa_account/models/dashboard.py:0
 msgid "del Mes"
 msgstr "of the Month"
+
+#. module: sales_field_sfa_account
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_partner__sfa_last_invoice_date
+#: model:ir.model.fields,field_description:sales_field_sfa_account.field_res_users__sfa_last_invoice_date
+msgid "Última compra"
+msgstr "Last purchase"

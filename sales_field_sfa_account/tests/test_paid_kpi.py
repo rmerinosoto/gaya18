@@ -68,6 +68,11 @@ class TestPaidKpi(SFACommon):
         new_status = self.env.ref("sales_field_sfa_account.customer_status_new")
         self.assertTrue(new_status.is_customer)
         self.assertTrue(new_status.is_new_customer)
+        lost = self.env.ref("sales_field_sfa_account.customer_status_lost")
+        self.assertTrue(lost.is_lost)
+        self.assertFalse(lost.is_customer)
+        # catálogo de razones disponible
+        self.assertTrue(self.env["sales.field.lost.reason"].search_count([]) > 0)
 
     def test_paid_date_simple_invoice(self):
         """_get_paid_date_by_invoice devuelve un dict con todas las ids dadas."""

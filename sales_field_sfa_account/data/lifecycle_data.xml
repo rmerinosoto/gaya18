@@ -15,6 +15,41 @@
             <field name="sequence">15</field>
         </record>
 
+        <!-- Estado 'Perdido': etapa más profunda que Inactivo. -->
+        <record id="customer_status_lost" model="sales.field.customer.status">
+            <field name="name">Perdido</field>
+            <field name="code">lost</field>
+            <field name="is_lost" eval="True"/>
+            <field name="sequence">40</field>
+        </record>
+
+        <!-- Motivos de inactividad/pérdida (genéricos; el admin los edita). -->
+        <record id="lost_reason_competitor" model="sales.field.lost.reason">
+            <field name="name">Cambió de proveedor</field>
+            <field name="code">competitor</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="lost_reason_price" model="sales.field.lost.reason">
+            <field name="name">Precio</field>
+            <field name="code">price</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="lost_reason_service" model="sales.field.lost.reason">
+            <field name="name">Servicio / atención</field>
+            <field name="code">service</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="lost_reason_closed" model="sales.field.lost.reason">
+            <field name="name">Cerró / dejó de operar</field>
+            <field name="code">closed</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="lost_reason_other" model="sales.field.lost.reason">
+            <field name="name">Otro</field>
+            <field name="code">other</field>
+            <field name="sequence">90</field>
+        </record>
+
         <record id="cron_sfa_status_automation" model="ir.cron">
             <field name="name">SFA: automatización de estado de cliente</field>
             <field name="model_id" ref="base.model_res_partner"/>

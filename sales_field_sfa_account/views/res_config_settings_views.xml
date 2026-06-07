@@ -42,8 +42,15 @@
                         <field name="sfa_auto_inactivate"/>
                         <div class="content-group mt-2" invisible="not sfa_auto_inactivate">
                             <div class="row">
-                                <label for="sfa_inactive_months" string="Meses sin facturas" class="col-lg-4 o_light_label"/>
+                                <label for="sfa_inactive_months" string="Meses sin facturas → Inactivo" class="col-lg-5 o_light_label"/>
                                 <field name="sfa_inactive_months"/>
+                            </div>
+                            <div class="row" invisible="not sfa_distinguish_new_customer">
+                                <label for="sfa_lost_months" string="Meses sin facturas → Perdido" class="col-lg-5 o_light_label"/>
+                                <field name="sfa_lost_months"/>
+                            </div>
+                            <div class="text-muted" invisible="sfa_distinguish_new_customer">
+                                Activa la distinción de etapas (arriba) para separar 'Perdido' de 'Inactivo'.
                             </div>
                         </div>
                     </setting>
