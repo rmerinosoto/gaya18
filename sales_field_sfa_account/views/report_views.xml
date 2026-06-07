@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Reporte de cartera en riesgo: Inactivos + Perdidos, con valor de venta perdida. -->
+    <record id="view_partner_at_risk_list" model="ir.ui.view">
+        <field name="name">res.partner.at.risk.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Clientes en Riesgo" default_order="sfa_lost_value desc" create="0">
+                <field name="display_name" string="Cliente"/>
+                <field name="user_id" string="Vendedor"/>
+                <field name="sfa_customer_status" string="Estado"/>
+                <field name="sfa_last_invoice_date" string="Última compra"/>
+                <field name="sfa_days_since_last_invoice" string="Días sin comprar"/>
+                <field name="sfa_inactivity_reason" string="Motivo"/>
+                <field name="sfa_currency_id" column_invisible="1"/>
+                <field name="sfa_lost_value" string="Valor perdido (año)" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_partner_at_risk_pivot" model="ir.ui.view">
+        <field name="name">res.partner.at.risk.pivot</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <pivot string="Venta Perdida">
+                <field name="sfa_customer_status" type="row"/>
+                <field name="sfa_inactivity_reason" type="col"/>
+                <field name="sfa_lost_value" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_partner_at_risk_graph" model="ir.ui.view">
+        <field name="name">res.partner.at.risk.graph</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <graph string="Venta Perdida" type="bar">
+                <field name="user_id"/>
+                <field name="sfa_lost_value" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_sales_field_at_risk" model="ir.actions.act_window">
+        <field name="name">Clientes en Riesgo</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,pivot,graph,kanban,form</field>
+        <field name="domain">['|', ('sfa_customer_status.is_inactive', '=', True), ('sfa_customer_status.is_lost', '=', True)]</field>
+        <field name="search_view_id" ref="sales_field_sfa.view_partner_search_sales_field_sfa"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'list', 'view_id': ref('view_partner_at_risk_list')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'pivot', 'view_id': ref('view_partner_at_risk_pivot')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'graph', 'view_id': ref('view_partner_at_risk_graph')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Sin clientes inactivos ni perdidos.</p>
+            <p>Aquí verás los clientes que dejaron de comprar, cuánto llevan sin hacerlo y la venta anual que se deja de recibir. Usa los filtros Inactivos / Perdidos y agrupa por motivo o vendedor.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sales_field_at_risk"
+              name="Clientes en Riesgo"
+              parent="sales_field_sfa.menu_sales_field_equipo"
+              sequence="55"
+              action="action_sales_field_at_risk"
+              groups="sales_field_sfa.group_sales_field_manager"/>
+</odoo>

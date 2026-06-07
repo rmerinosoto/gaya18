@@ -84,12 +84,29 @@ class ResPartner(models.Model):
         string="Nota de inactividad",
         help="Detalle libre del motivo de inactividad/pérdida.",
     )
+    sfa_currency_id = fields.Many2one(
+        "res.currency",
+        string="Moneda SFA",
+        compute="_compute_sfa_currency_id",
+    )
+    sfa_lost_value = fields.Monetary(
+        string="Valor venta perdida (año)",
+        currency_field="sfa_currency_id",
+        readonly=True,
+        help="Facturado en los 12 meses previos a su última compra: la venta anual "
+        "que se deja de recibir. La calcula la automatización al marcar Inactivo.",
+    )
 
     @api.depends("sfa_last_invoice_date")
     def _compute_sfa_days_since_last_invoice(self):
         today = fields.Date.context_today(self)
         for p in self:
             p.sfa_days_since_last_invoice = (today - p.sfa_last_invoice_date).days if p.sfa_last_invoice_date else 0
+
+    @api.depends_context("company")
+    def _compute_sfa_currency_id(self):
+        for p in self:
+            p.sfa_currency_id = (p.company_id or self.env.company).currency_id
 
     # ---- helpers de parámetros ----
     @api.model
@@ -242,6 +259,30 @@ class ResPartner(models.Model):
             self.browse(pids).with_context(tracking_disable=True).write({"sfa_last_invoice_date": d})
 
     @api.model
+    def _sfa_lost_value_by_partner(self, Move, partner_ids):
+        """Valor de venta perdida = facturado en los 12 meses previos a la última
+        compra de cada cliente (ventana propia por cliente). Una sola lectura de
+        facturas del conjunto, agregada en Python."""
+        moves = Move.search_read(
+            [
+                ("move_type", "=", "out_invoice"),
+                ("state", "=", "posted"),
+                ("partner_id", "in", partner_ids),
+                ("invoice_date", "!=", False),
+            ],
+            ["partner_id", "invoice_date", "amount_total_signed"],
+        )
+        items = defaultdict(list)
+        for m in moves:
+            items[m["partner_id"][0]].append((fields.Date.to_date(m["invoice_date"]), m["amount_total_signed"]))
+        out = {}
+        for pid, rows in items.items():
+            last = max(d for d, _ in rows)
+            start = last - relativedelta(days=365)
+            out[pid] = round(sum(a for d, a in rows if d >= start), 2)
+        return out
+
+    @api.model
     def _sfa_inactivate_stale_customers(self, Move, inactive, inactive_months, lost_target, lost_months, today):
         cutoff_inactive = today - relativedelta(months=inactive_months)
 
@@ -257,10 +298,17 @@ class ResPartner(models.Model):
                 lambda p: not last_by.get(p.id) or last_by[p.id] < cutoff_inactive
             )
             if to_inactivate:
+                # Estado + 'inactivo desde' en un solo write por lote.
                 to_inactivate.with_context(tracking_disable=True).write({
                     "sfa_customer_status": inactive.id,
                     "sfa_inactive_since": today,
                 })
+                # Valor de venta perdida (ventana propia por cliente): se calcula al
+                # transicionar y se conserva. Escritura por registro (Monetary no admite
+                # write en lote si las monedas difieren entre clientes).
+                lost_value = self._sfa_lost_value_by_partner(Move, to_inactivate.ids)
+                for p in to_inactivate.with_context(tracking_disable=True):
+                    p.sfa_lost_value = lost_value.get(p.id, 0.0)
                 _logger.info("sfa lifecycle: %d clientes marcados inactivos", len(to_inactivate))
 
         # 2) Inactivos -> Perdido (solo si la distinción de etapas está activa).

@@ -39,6 +39,9 @@
                 <field name="sfa_last_invoice_date" readonly="1" invisible="not sfa_last_invoice_date"/>
                 <field name="sfa_days_since_last_invoice" invisible="not sfa_last_invoice_date"/>
                 <field name="sfa_inactive_since" readonly="1" invisible="not sfa_inactive_since"/>
+                <field name="sfa_currency_id" invisible="1"/>
+                <field name="sfa_lost_value" readonly="1" invisible="not sfa_inactive_since"
+                       groups="sales_field_sfa.group_sales_field_manager"/>
                 <field name="sfa_inactivity_reason"
                        invisible="not sfa_inactive_since"
                        groups="sales_field_sfa.group_sales_field_manager"/>
