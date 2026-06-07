@@ -68,6 +68,14 @@ class SalesFieldCustomerStatus(models.Model):
         string="Es Cliente activo",
         help="Marca este estado como 'cliente convertido' (no prospecto ni inactivo). Afecta a qué KPI del dashboard cuenta los partners con este estado.",
     )
+    # Bandera semantica gemela de is_customer: KPI "Prospectos Contactados" cuenta solo
+    # registros con is_prospect=True. Antes el dashboard filtraba por code == 'prospect'
+    # literal — fragil si el admin renombra el code en otra empresa. Con la bandera el
+    # KPI sigue funcionando sin depender de un code concreto.
+    is_prospect = fields.Boolean(
+        string="Es Prospecto",
+        help="Marca este estado como 'prospecto' (cliente potencial aún no convertido). Afecta al KPI 'Prospectos Contactados' del dashboard.",
+    )
 
     _sql_constraints = [
         ("code_uniq", "unique(code)", "El código técnico debe ser único."),

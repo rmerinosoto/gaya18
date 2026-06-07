@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Banderas del ciclo de vida en el catálogo de Estados de Cliente. -->
+    <record id="view_sales_field_customer_status_tree_account" model="ir.ui.view">
+        <field name="name">sales.field.customer.status.tree.account</field>
+        <field name="model">sales.field.customer.status</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_sales_field_customer_status_tree"/>
+        <field name="arch" type="xml">
+            <field name="is_customer" position="after">
+                <field name="is_new_customer" widget="boolean_toggle" optional="show"/>
+                <field name="is_inactive" widget="boolean_toggle" optional="show"/>
+                <field name="is_lost" widget="boolean_toggle" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_field_customer_status_form_account" model="ir.ui.view">
+        <field name="name">sales.field.customer.status.form.account</field>
+        <field name="model">sales.field.customer.status</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_sales_field_customer_status_form"/>
+        <field name="arch" type="xml">
+            <field name="is_customer" position="after">
+                <field name="is_new_customer"/>
+                <field name="is_inactive"/>
+                <field name="is_lost"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Campos de ciclo de vida en la ficha del cliente. Las fechas las pone la
+         automatización (solo lectura); el motivo/nota los registra Gerencia. -->
+    <record id="view_partner_form_sales_field_sfa_account" model="ir.ui.view">
+        <field name="name">res.partner.form.sales.field.sfa.account</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_partner_form_sales_field_sfa"/>
+        <field name="arch" type="xml">
+            <field name="sfa_customer_status" position="after">
+                <field name="sfa_customer_since" readonly="1" invisible="not sfa_customer_since"/>
+                <field name="sfa_last_invoice_date" readonly="1" invisible="not sfa_last_invoice_date"/>
+                <field name="sfa_days_since_last_invoice" invisible="not sfa_last_invoice_date"/>
+                <field name="sfa_inactive_since" readonly="1" invisible="not sfa_inactive_since"/>
+                <field name="sfa_currency_id" invisible="1"/>
+                <field name="sfa_lost_value" readonly="1" invisible="not sfa_inactive_since"
+                       groups="sales_field_sfa.group_sales_field_manager"/>
+                <field name="sfa_inactivity_reason"
+                       invisible="not sfa_inactive_since"
+                       groups="sales_field_sfa.group_sales_field_manager"/>
+                <field name="sfa_inactivity_note"
+                       invisible="not sfa_inactive_since"
+                       groups="sales_field_sfa.group_sales_field_manager"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Filtros SFA de ciclo de vida en el search de Contactos (gerencia). -->
+    <record id="view_partner_search_sfa_lifecycle" model="ir.ui.view">
+        <field name="name">res.partner.search.sfa.lifecycle</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sales_field_sfa.view_partner_search_sales_field_sfa"/>
+        <field name="arch" type="xml">
+            <filter name="sfa_active" position="after">
+                <separator/>
+                <filter name="sfa_inactive" string="Inactivos"
+                        domain="[('sfa_customer_status.is_inactive', '=', True)]"
+                        groups="sales_field_sfa.group_sales_field_manager"/>
+                <filter name="sfa_lost" string="Perdidos"
+                        domain="[('sfa_customer_status.is_lost', '=', True)]"
+                        groups="sales_field_sfa.group_sales_field_manager"/>
+            </filter>
+            <filter name="group_sfa_channel" position="after">
+                <filter name="group_sfa_inactivity_reason" string="Motivo de inactividad"
+                        context="{'group_by': 'sfa_inactivity_reason'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- Catálogo de Motivos de Inactividad/Pérdida -->
+    <record id="view_sales_field_lost_reason_tree" model="ir.ui.view">
+        <field name="name">sales.field.lost.reason.tree</field>
+        <field name="model">sales.field.lost.reason</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_sales_field_lost_reason" model="ir.actions.act_window">
+        <field name="name">Motivos de Inactividad</field>
+        <field name="res_model">sales.field.lost.reason</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+    <menuitem id="menu_sales_field_config_lost_reason"
+              name="Motivos de Inactividad"
+              parent="sales_field_sfa.menu_sales_field_config"
+              sequence="50"
+              action="action_sales_field_lost_reason"
+              groups="sales_field_sfa.group_sales_field_manager"/>
+</odoo>

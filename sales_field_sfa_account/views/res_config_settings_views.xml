@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Agrega el ajuste contable al bloque <app> de Seguimiento Comercial dentro
+         de la página de Ajustes nativa. -->
+    <record id="res_config_settings_view_form_sfa_account" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sales.field.sfa.account</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sales_field_sfa.res_config_settings_view_form_sfa"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='sales_field_sfa']" position="inside">
+                <block title="Facturación (KPI Facturado Pagado)" name="sfa_account_block">
+                    <setting string="Antigüedad máxima de factura" help="Las facturas más viejas que este umbral no se consideran para el KPI.">
+                        <field name="sfa_invoice_lookback_days"/>
+                    </setting>
+                </block>
+                <block title="Ciclo de vida del estado de cliente" name="sfa_lifecycle_block">
+                    <setting string="Promover a Cliente con la 1ª factura pagada"
+                             help="Un cron diario marca como Cliente a quien tenga una factura pagada.">
+                        <field name="sfa_auto_promote_customer"/>
+                    </setting>
+                    <setting string="Distinguir Cliente Nuevo de Cliente regular"
+                             help="Al promover queda como 'Cliente Nuevo' y luego se gradúa."
+                             invisible="not sfa_auto_promote_customer">
+                        <field name="sfa_distinguish_new_customer"/>
+                        <div class="content-group mt-2" invisible="not sfa_distinguish_new_customer">
+                            <div class="row">
+                                <label for="sfa_new_customer_mode" string="Graduar por" class="col-lg-4 o_light_label"/>
+                                <field name="sfa_new_customer_mode"/>
+                            </div>
+                            <div class="row" invisible="sfa_new_customer_mode != 'days'">
+                                <label for="sfa_new_customer_days" string="Días como Cliente Nuevo" class="col-lg-4 o_light_label"/>
+                                <field name="sfa_new_customer_days"/>
+                            </div>
+                            <div class="row" invisible="sfa_new_customer_mode != 'invoices'">
+                                <label for="sfa_new_customer_invoices" string="Facturas pagadas para ser regular" class="col-lg-4 o_light_label"/>
+                                <field name="sfa_new_customer_invoices"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting string="Marcar Inactivo por falta de facturas"
+                             help="Clientes sin facturas en los últimos N meses pasan a Inactivo.">
+                        <field name="sfa_auto_inactivate"/>
+                        <div class="content-group mt-2" invisible="not sfa_auto_inactivate">
+                            <div class="row">
+                                <label for="sfa_inactive_months" string="Meses sin facturas → Inactivo" class="col-lg-5 o_light_label"/>
+                                <field name="sfa_inactive_months"/>
+                            </div>
+                            <div class="row" invisible="not sfa_distinguish_new_customer">
+                                <label for="sfa_lost_months" string="Meses sin facturas → Perdido" class="col-lg-5 o_light_label"/>
+                                <field name="sfa_lost_months"/>
+                            </div>
+                            <div class="text-muted" invisible="sfa_distinguish_new_customer">
+                                Activa la distinción de etapas (arriba) para separar 'Perdido' de 'Inactivo'.
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

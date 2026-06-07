@@ -1,0 +1,1677 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sales_field_sfa
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20250909\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-07 21:12+0000\n"
+"PO-Revision-Date: 2026-06-07 21:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es_MX\n"
+"Plural-Forms: \n"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "% cobrado"
+msgstr "% cobrado"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "% cobrado del objetivo"
+msgstr "% cobrado del objetivo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Abril"
+msgstr "Abril"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_needaction
+msgid "Action Needed"
+msgstr "Action Needed"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__active
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__active
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__active
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__active
+msgid "Active"
+msgstr "Active"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_ids
+msgid "Activities"
+msgstr "Activities"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Activity Exception Decoration"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_state
+msgid "Activity State"
+msgstr "Activity State"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Activity Type Icon"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Activos"
+msgstr "Activos"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Activos en Seguimiento Comercial"
+msgstr "Activos en Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Actualizar"
+msgstr "Actualizar"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Agosto"
+msgstr "Agosto"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Agrupar Por"
+msgstr "Agrupar Por"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Agrupar SFA"
+msgstr "Agrupar SFA"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_config_settings
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_settings
+msgid "Ajustes"
+msgstr "Ajustes"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__approved
+msgid "Aprobada"
+msgstr "Aprobada"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Aprobar Reasignación"
+msgstr "Aprobar Reasignación"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Atrasadas"
+msgstr "Atrasadas"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Atrasados"
+msgstr "Atrasados"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_attachment_count
+msgid "Attachment Count"
+msgstr "Attachment Count"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Buscar Interacciones"
+msgstr "Buscar Interacciones"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__partner_visit_frequency
+msgid ""
+"Cada cuánto se visita a este cliente. Editar aquí actualiza la ficha del "
+"cliente."
+msgstr "Cada cuánto se visita a este cliente. Editar aquí actualiza la ficha del cliente."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_partner__sfa_visit_frequency
+#: model:ir.model.fields,help:sales_field_sfa.field_res_users__sfa_visit_frequency
+msgid ""
+"Cada cuánto se visita a este cliente. Las opciones se gestionan en "
+"Seguimiento Comercial → Configuración → Frecuencias de Visita."
+msgstr "Cada cuánto se visita a este cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Frecuencias de Visita."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_channel
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_channel
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__name
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_channel
+msgid "Canal"
+msgstr "Canal"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_sales_field_channel
+msgid "Canal Comercial (SFA)"
+msgstr "Canal Comercial (SFA)"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Canal SFA"
+msgstr "Canal SFA"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__partner_channel
+msgid ""
+"Canal comercial del cliente. Editar aquí actualiza la ficha del cliente."
+msgstr "Canal comercial del cliente. Editar aquí actualiza la ficha del cliente."
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_channel
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_channel
+msgid "Canales"
+msgstr "Canales"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__partner_recent_interaction_count
+msgid ""
+"Cantidad de interacciones registradas con este cliente en los últimos 90 "
+"días (excluyendo la actual)."
+msgstr "Cantidad de interacciones registradas con este cliente en los últimos 90 días (excluyendo la actual)."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Cargando panel..."
+msgstr "Cargando panel..."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Cartera Vencida"
+msgstr "Cartera Vencida"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Cartera Vencida Equipo"
+msgstr "Cartera Vencida Equipo"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_field_channel__code
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_field_customer_status__code
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_field_exclusion_reason__code
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_field_visit_frequency__code
+msgid ""
+"Clave técnica referenciada desde código. No modificar sin coordinación con "
+"TI."
+msgstr "Clave técnica referenciada desde código. No modificar sin coordinación con TI."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_id
+#: model:sales.field.customer.status,name:sales_field_sfa.customer_status_customer
+msgid "Cliente"
+msgstr "Cliente"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid ""
+"Cliente asignado automáticamente a %(user)s por no tener vendedor previo."
+msgstr "Cliente asignado automáticamente a %(user)s por no tener vendedor previo."
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Cliente sin contacto"
+msgstr "Cliente sin contacto"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Clientes Contactados"
+msgstr "Clientes Contactados"
+
+#. module: sales_field_sfa
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_excluded_customers
+msgid "Clientes Excluidos"
+msgstr "Clientes Excluidos"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_excluded_customers
+msgid "Clientes Excluidos del Seguimiento"
+msgstr "Clientes Excluidos del Seguimiento"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_customers
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_customers
+msgid "Clientes del Equipo"
+msgstr "Clientes del Equipo"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Clientes sin Interacción (%(days)s días)"
+msgstr "Clientes sin Interacción (%(days)s días)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__company_id
+msgid "Compañía"
+msgstr "Compañía"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_res_config_settings
+msgid "Config Settings"
+msgstr "Config Settings"
+
+#. module: sales_field_sfa
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config
+msgid "Configuración"
+msgstr "Configuración"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__contacted
+msgid "Contactado"
+msgstr "Contactado"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Contactar"
+msgstr "Contactar"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Cotizaciones"
+msgstr "Cotizaciones"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Cotizaciones %(suffix)s - %(seller)s"
+msgstr "Cotizaciones %(suffix)s - %(seller)s"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_quotes
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_quotes
+msgid "Cotizaciones del Equipo"
+msgstr "Cotizaciones del Equipo"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__sale_order_id
+msgid "Cotización"
+msgstr "Cotización"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__quotation_sent
+msgid "Cotización enviada"
+msgstr "Cotización enviada"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__sale_order_id
+msgid ""
+"Cotización generada desde esta interacción. Se llena automáticamente al "
+"pulsar 'Crear Cotización'."
+msgstr "Cotización generada desde esta interacción. Se llena automáticamente al pulsar 'Crear Cotización'."
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Crear Cotización"
+msgstr "Crear Cotización"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__create_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__create_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__create_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__create_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__create_uid
+msgid "Created by"
+msgstr "Created by"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__create_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__create_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__create_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__create_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__create_date
+msgid "Created on"
+msgstr "Created on"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Cuando registres una interacción aparecerá aquí."
+msgstr "Cuando registres una interacción aparecerá aquí."
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Customer"
+msgstr "Customer"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__interaction_datetime
+msgid ""
+"Cuándo ocurrió el contacto. Se llena con la fecha y hora actual por defecto."
+msgstr "Cuándo ocurrió el contacto. Se llena con la fecha y hora actual por defecto."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__code
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__code
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__code
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__code
+msgid "Código Técnico"
+msgstr "Código Técnico"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_sales_field_dashboard
+msgid "Dashboard Seguimiento Comercial"
+msgstr "Dashboard Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Debiste contactar el"
+msgstr "Debiste contactar el"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__notes
+msgid ""
+"Detalles del contacto: lo que dijo el cliente, productos que pidió, "
+"observaciones que quieras recordar."
+msgstr "Detalles del contacto: lo que dijo el cliente, productos que pidió, observaciones que quieras recordar."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Diciembre"
+msgstr "Diciembre"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__display_name
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__display_name
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__display_name
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__display_name
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__display_name
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_config_settings__sfa_inactivity_days
+msgid "Días para 'cliente sin contacto'"
+msgstr "Días para 'cliente sin contacto'"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Días sin interacción para que un cliente aparezca como 'sin contacto'."
+msgstr "Días sin interacción para que un cliente aparezca como 'sin contacto'."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid ""
+"El cliente '%(partner)s' está excluido del Seguimiento Comercial. Si "
+"necesitas registrar una interacción, contacta a Gerencia para que revise la "
+"exclusión."
+msgstr "El cliente '%(partner)s' está excluido del Seguimiento Comercial. Si necesitas registrar una interacción, contacta a Gerencia para que revise la exclusión."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "El cliente no tenía vendedor y se asignó automáticamente a %(user)s."
+msgstr "El cliente no tenía vendedor y se asignó automáticamente a %(user)s."
+
+#. module: sales_field_sfa
+#: model:ir.model.constraint,message:sales_field_sfa.constraint_sales_field_channel_code_uniq
+#: model:ir.model.constraint,message:sales_field_sfa.constraint_sales_field_customer_status_code_uniq
+#: model:ir.model.constraint,message:sales_field_sfa.constraint_sales_field_exclusion_reason_code_uniq
+#: model:ir.model.constraint,message:sales_field_sfa.constraint_sales_field_visit_frequency_code_uniq
+msgid "El código técnico debe ser único."
+msgstr "El código técnico debe ser único."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid ""
+"El vendedor %(user)s solicita reasignación del cliente %(partner)s "
+"(actualmente asignado a %(current_owner)s) desde la interacción "
+"%(interaction)s."
+msgstr "El vendedor %(user)s solicita reasignación del cliente %(partner)s (actualmente asignado a %(current_owner)s) desde la interacción %(interaction)s."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid ""
+"Empieza registrando tu primer contacto del mes — visita, llamada o WhatsApp."
+msgstr "Empieza registrando tu primer contacto del mes — visita, llamada o WhatsApp."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Enero"
+msgstr "Enero"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__is_customer
+msgid "Es Cliente activo"
+msgstr "Es Cliente activo"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__is_prospect
+msgid "Es Prospecto"
+msgstr "Es Prospecto"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__requested
+msgid "Esperando a Gerencia"
+msgstr "Esperando a Gerencia"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Esta Semana"
+msgstr "Esta Semana"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Esta interacción no tiene una solicitud pendiente."
+msgstr "Esta interacción no tiene una solicitud pendiente."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Esta semana"
+msgstr "Esta semana"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__name
+msgid "Estado"
+msgstr "Estado"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_customer_status
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_customer_status
+msgid "Estado Cliente"
+msgstr "Estado Cliente"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_sales_field_customer_status
+msgid "Estado de Cliente (SFA)"
+msgstr "Estado de Cliente (SFA)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__assignment_request_state
+msgid ""
+"Estado de la solicitud cuando este cliente ya pertenece a otro vendedor y "
+"pides reasignarlo."
+msgstr "Estado de la solicitud cuando este cliente ya pertenece a otro vendedor y pides reasignarlo."
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_customer_status
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_customer_status
+msgid "Estados de Cliente"
+msgstr "Estados de Cliente"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Este Mes"
+msgstr "Este Mes"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Este cliente ya está asignado a este vendedor."
+msgstr "Este cliente ya está asignado a este vendedor."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Este mes (%s)"
+msgstr "Este mes (%s)"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Este panel requiere permisos de Gerente de Seguimiento Comercial."
+msgstr "Este panel requiere permisos de Gerente de Seguimiento Comercial."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_partner__sfa_customer_status
+#: model:ir.model.fields,help:sales_field_sfa.field_res_users__sfa_customer_status
+msgid ""
+"Etapa comercial del cliente. Las opciones se gestionan en Seguimiento "
+"Comercial → Configuración → Estados de Cliente."
+msgstr "Etapa comercial del cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Estados de Cliente."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_excluded
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_excluded
+msgid "Excluido del Seguimiento Comercial"
+msgstr "Excluido del Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Excluidos del Seguimiento Comercial"
+msgstr "Excluidos del Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_search_sales_field_sfa
+msgid "Exclusion Reason"
+msgstr "Exclusion Reason"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Facturado"
+msgstr "Facturado"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Facturado Equipo"
+msgstr "Facturado Equipo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Facturado Pagado"
+msgstr "Facturado Pagado"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Facturado Pagado Equipo"
+msgstr "Facturado Pagado Equipo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Febrero"
+msgstr "Febrero"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__assignment_request_date
+msgid "Fecha Solicitud Asignación"
+msgstr "Fecha Solicitud Asignación"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__next_action_date
+msgid ""
+"Fecha en la que volverás a buscar a este cliente. Obligatoria salvo que el "
+"resultado sea 'No interesado' o 'Pedido tomado'."
+msgstr "Fecha en la que volverás a buscar a este cliente. Obligatoria salvo que el resultado sea 'No interesado' o 'Pedido tomado'."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__interaction_datetime
+msgid "Fecha y Hora"
+msgstr "Fecha y Hora"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Ficha del cliente (opcional)"
+msgstr "Ficha del cliente (opcional)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_follower_ids
+msgid "Followers"
+msgstr "Followers"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Followers (Partners)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__interaction_type
+msgid ""
+"Forma en que contactaste al cliente: visita en persona, llamada, mensaje de "
+"WhatsApp o seguimiento general."
+msgstr "Forma en que contactaste al cliente: visita en persona, llamada, mensaje de WhatsApp o seguimiento general."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__name
+msgid "Frecuencia"
+msgstr "Frecuencia"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_visit_frequency
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_visit_frequency
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_visit_frequency
+msgid "Frecuencia de Visita"
+msgstr "Frecuencia de Visita"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_sales_field_visit_frequency
+msgid "Frecuencia de Visita (SFA)"
+msgstr "Frecuencia de Visita (SFA)"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_visit_frequency
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_visit_frequency
+msgid "Frecuencias de Visita"
+msgstr "Frecuencias de Visita"
+
+#. module: sales_field_sfa
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_equipo
+msgid "Gerencia"
+msgstr "Gerencia"
+
+#. module: sales_field_sfa
+#: model:res.groups,name:sales_field_sfa.group_sales_field_manager
+msgid "Gerente Seguimiento Comercial"
+msgstr "Gerente Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__has_message
+msgid "Has Message"
+msgstr "Has Message"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Horizonte (días) de la lista 'pendientes esta semana'."
+msgstr "Horizonte (días) de la lista 'pendientes esta semana'."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_config_settings__sfa_week_horizon_days
+msgid "Horizonte de 'pendientes esta semana' (días)"
+msgstr "Horizonte de 'pendientes esta semana' (días)"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Hoy"
+msgstr "Hoy"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__id
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__id
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__id
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__id
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_exception_icon
+msgid "Icon"
+msgstr "Icon"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__message_has_error
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:sales.field.customer.status,name:sales_field_sfa.customer_status_inactive
+msgid "Inactivo"
+msgstr "Inactivo"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Integración con CRM"
+msgstr "Integración con CRM"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_interaction
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_interactions
+msgid "Interacciones"
+msgstr "Interacciones"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Interacciones %(suffix)s"
+msgstr "Interacciones %(suffix)s"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Interacciones %(suffix)s - %(seller)s"
+msgstr "Interacciones %(suffix)s - %(seller)s"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Interacciones Atrasadas"
+msgstr "Interacciones Atrasadas"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Interacciones de Hoy"
+msgstr "Interacciones de Hoy"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_team_interactions
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_team_interactions
+msgid "Interacciones del Equipo"
+msgstr "Interacciones del Equipo"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Interacciones recientes"
+msgstr "Interacciones recientes"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__partner_recent_interaction_count
+msgid "Interacciones recientes del cliente"
+msgstr "Interacciones recientes del cliente"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Interacciones registradas hoy"
+msgstr "Interacciones registradas hoy"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Interacción"
+msgstr "Interacción"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_sales_interaction
+msgid "Interacción Comercial"
+msgstr "Interacción Comercial"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_calendar
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_tree
+msgid "Interactions"
+msgstr "Interactions"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__interested
+msgid "Interesado"
+msgstr "Interesado"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_is_follower
+msgid "Is Follower"
+msgstr "Is Follower"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Julio"
+msgstr "Julio"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Junio"
+msgstr "Junio"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid ""
+"La Próxima Acción es obligatoria cuando el resultado no es 'No interesado' o"
+" 'Pedido tomado'."
+msgstr "La Próxima Acción es obligatoria cuando el resultado no es 'No interesado' o 'Pedido tomado'."
+
+#. module: sales_field_sfa
+#: model:ir.model.constraint,message:sales_field_sfa.constraint_sales_interaction_sales_interaction_name_uniq
+msgid "La referencia debe ser única por compañía."
+msgstr "La referencia debe ser única por compañía."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__write_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__write_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__write_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__write_uid
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__write_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__write_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__write_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__write_date
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Listas operativas del panel"
+msgstr "Listas operativas del panel"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__call
+msgid "Llamada"
+msgstr "Llamada"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Llamadas"
+msgstr "Llamadas"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Llamadas %(suffix)s"
+msgstr "Llamadas %(suffix)s"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Los Usuarios de Seguimiento Comercial no verán el menú CRM."
+msgstr "Los Usuarios de Seguimiento Comercial no verán el menú CRM."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_field_customer_status__is_customer
+msgid ""
+"Marca este estado como 'cliente convertido' (no prospecto ni inactivo). "
+"Afecta a qué KPI del dashboard cuenta los partners con este estado."
+msgstr "Marca este estado como 'cliente convertido' (no prospecto ni inactivo). Afecta a qué KPI del dashboard cuenta los partners con este estado."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_field_customer_status__is_prospect
+msgid ""
+"Marca este estado como 'prospecto' (cliente potencial aún no convertido). "
+"Afecta al KPI 'Prospectos Contactados' del dashboard."
+msgstr "Marca este estado como 'prospecto' (cliente potencial aún no convertido). Afecta al KPI 'Prospectos Contactados' del dashboard."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Marzo"
+msgstr "Marzo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Mayo"
+msgstr "Mayo"
+
+#. module: sales_field_sfa
+#: model:sales.field.visit.frequency,name:sales_field_sfa.visit_frequency_monthly
+msgid "Mensual"
+msgstr "Mensual"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Mes anterior (%s)"
+msgstr "Mes anterior (%s)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_has_error
+msgid "Message Delivery error"
+msgstr "Message Delivery error"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_ids
+msgid "Messages"
+msgstr "Messages"
+
+#. module: sales_field_sfa
+#: model:ir.actions.client,name:sales_field_sfa.action_sales_field_dashboard
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_dashboard
+msgid "Mi Panel"
+msgstr "Mi Panel"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Mi Panel Comercial"
+msgstr "Mi Panel Comercial"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_my_customers
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_customers
+msgid "Mis Clientes"
+msgstr "Mis Clientes"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_my_quotes
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_quotes
+msgid "Mis Cotizaciones"
+msgstr "Mis Cotizaciones"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Mis Cotizaciones %(suffix)s"
+msgstr "Mis Cotizaciones %(suffix)s"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__name
+msgid "Motivo"
+msgstr "Motivo"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_partner__sfa_exclusion_reason
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_users__sfa_exclusion_reason
+msgid "Motivo de Exclusión"
+msgstr "Motivo de Exclusión"
+
+#. module: sales_field_sfa
+#: model:ir.model,name:sales_field_sfa.model_sales_field_exclusion_reason
+msgid "Motivo de Exclusión del Seguimiento (SFA)"
+msgstr "Motivo de Exclusión del Seguimiento (SFA)"
+
+#. module: sales_field_sfa
+#: model:ir.actions.act_window,name:sales_field_sfa.action_sales_field_exclusion_reason
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_config_exclusion_reason
+msgid "Motivos de Exclusión"
+msgstr "Motivos de Exclusión"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "My Activity Deadline"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Nada para hoy."
+msgstr "Nada para hoy."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "Next Activity Calendar Event"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Next Activity Deadline"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_summary
+msgid "Next Activity Summary"
+msgstr "Next Activity Summary"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_type_id
+msgid "Next Activity Type"
+msgstr "Next Activity Type"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Ningún cliente abandonado"
+msgstr "Ningún cliente abandonado"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__not_available
+msgid "No disponible"
+msgstr "No disponible"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "No hay vendedores para mostrar."
+msgstr "No hay vendedores para mostrar."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__not_interested
+msgid "No interesado"
+msgstr "No interesado"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__no_answer
+msgid "No respondió"
+msgstr "No respondió"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Notas"
+msgstr "Notas"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Noviembre"
+msgstr "Noviembre"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Nuevo"
+msgstr "Nuevo"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Number of Actions"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_has_error_counter
+msgid "Number of errors"
+msgstr "Number of errors"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Objetivo"
+msgstr "Objetivo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Objetivo Equipo"
+msgstr "Objetivo Equipo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Octubre"
+msgstr "Octubre"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Ocultar CRM a los vendedores"
+msgstr "Ocultar CRM a los vendedores"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_config_settings__sfa_hide_crm_for_users
+msgid "Ocultar el menú CRM a los vendedores de campo"
+msgstr "Ocultar el menú CRM a los vendedores de campo"
+
+#. module: sales_field_sfa
+#: model:sales.field.exclusion.reason,name:sales_field_sfa.exclusion_reason_otro
+msgid "Otro motivo"
+msgstr "Otro motivo"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+#: model:ir.actions.client,name:sales_field_sfa.action_sales_field_dashboard_manager
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_manager_dashboard
+msgid "Panel Gerencial"
+msgstr "Panel Gerencial"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Panel Gerencial por Vendedor"
+msgstr "Panel Gerencial por Vendedor"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Para hoy"
+msgstr "Para hoy"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__result__order_taken
+msgid "Pedido tomado"
+msgstr "Pedido tomado"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Pendientes Esta Semana"
+msgstr "Pendientes Esta Semana"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Pendientes esta semana"
+msgstr "Pendientes esta semana"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Pendientes para Hoy"
+msgstr "Pendientes para Hoy"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Por Año"
+msgstr "Por Año"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Por Mes"
+msgstr "Por Mes"
+
+#. module: sales_field_sfa
+#: model:sales.field.customer.status,name:sales_field_sfa.customer_status_prospect
+msgid "Prospecto"
+msgstr "Prospecto"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Prospectos Contactados"
+msgstr "Prospectos Contactados"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_kanban
+msgid "Próxima:"
+msgstr "Próxima:"
+
+#. module: sales_field_sfa
+#: model:sales.field.visit.frequency,name:sales_field_sfa.visit_frequency_biweekly
+msgid "Quincenal"
+msgstr "Quincenal"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_config_settings__sfa_week_horizon_days
+msgid ""
+"Rango hacia adelante para la lista 'Pendientes esta semana' del dashboard."
+msgstr "Rango hacia adelante para la lista 'Pendientes esta semana' del dashboard."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__rating_ids
+msgid "Ratings"
+msgstr "Ratings"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_partner__sfa_exclusion_reason
+#: model:ir.model.fields,help:sales_field_sfa.field_res_users__sfa_exclusion_reason
+msgid ""
+"Razón por la que el cliente no requiere seguimiento comercial. Útil para "
+"auditoría. Las opciones se gestionan en Seguimiento Comercial → "
+"Configuración → Motivos de Exclusión."
+msgstr "Razón por la que el cliente no requiere seguimiento comercial. Útil para auditoría. Las opciones se gestionan en Seguimiento Comercial → Configuración → Motivos de Exclusión."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Reasignación aprobada por %(mgr)s. Nuevo vendedor: %(user)s."
+msgstr "Reasignación aprobada por %(mgr)s. Nuevo vendedor: %(user)s."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__rejected
+msgid "Rechazada"
+msgstr "Rechazada"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Rechazar"
+msgstr "Rechazar"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Recientes (90 días)"
+msgstr "Recientes (90 días)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__name
+msgid "Referencia"
+msgstr "Referencia"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Registrar nueva interacción"
+msgstr "Registrar nueva interacción"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Registrar siguiente interacción"
+msgstr "Registrar siguiente interacción"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__activity_user_id
+msgid "Responsible User"
+msgstr "Responsible User"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Resultado"
+msgstr "Resultado"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__result
+msgid ""
+"Resultado del contacto. Si seleccionas Interesado, Cotización enviada o "
+"Pedido tomado, podrás generar una cotización."
+msgstr "Resultado del contacto. Si seleccionas Interesado, Cotización enviada o Pedido tomado, podrás generar una cotización."
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_kanban
+msgid "Resultado:"
+msgstr "Resultado:"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "SMS Delivery error"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_partner_form_sales_field_sfa
+msgid "Sales Follow-up"
+msgstr "Sales Follow-up"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__followup
+msgid "Seguimiento"
+msgstr "Seguimiento"
+
+#. module: sales_field_sfa
+#: model:ir.ui.menu,name:sales_field_sfa.menu_sales_field_root
+msgid "Seguimiento Comercial"
+msgstr "Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Seguimientos"
+msgstr "Seguimientos"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Seguimientos %(suffix)s"
+msgstr "Seguimientos %(suffix)s"
+
+#. module: sales_field_sfa
+#: model:sales.field.visit.frequency,name:sales_field_sfa.visit_frequency_weekly
+msgid "Semanal"
+msgstr "Semanal"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/js/dashboard.js:0
+msgid "Septiembre"
+msgstr "Septiembre"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_channel__sequence
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_customer_status__sequence
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_exclusion_reason__sequence
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_field_visit_frequency__sequence
+msgid "Sequence"
+msgstr "Sequence"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_partner__sfa_excluded
+#: model:ir.model.fields,help:sales_field_sfa.field_res_users__sfa_excluded
+msgid ""
+"Si está activado, este cliente no aparece en las listas operativas del "
+"módulo de Seguimiento Comercial (Mis Clientes, Clientes del Equipo, Sin "
+"contacto 30 días) y los vendedores no pueden registrar interacciones. Solo "
+"Gerencia puede modificar este campo."
+msgstr "Si está activado, este cliente no aparece en las listas operativas del módulo de Seguimiento Comercial (Mis Clientes, Clientes del Equipo, Sin contacto 30 días) y los vendedores no pueden registrar interacciones. Solo Gerencia puede modificar este campo."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_config_settings__sfa_hide_crm_for_users
+msgid ""
+"Si está activado, los Usuarios de Seguimiento Comercial no ven el menú CRM. "
+"Se aplica al instalar/actualizar el módulo o al guardar estos ajustes."
+msgstr "Si está activado, los Usuarios de Seguimiento Comercial no ven el menú CRM. Se aplica al instalar/actualizar el módulo o al guardar estos ajustes."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Siguiente interacción"
+msgstr "Siguiente interacción"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Sin actividad este mes todavía"
+msgstr "Sin actividad este mes todavía"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Sin atrasados."
+msgstr "Sin atrasados."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Sin contacto desde hace 30 días"
+msgstr "Sin contacto desde hace 30 días"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Sin contactos hoy"
+msgstr "Sin contactos hoy"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Sin objetivo definido"
+msgstr "Sin objetivo definido"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Sin pendientes esta semana."
+msgstr "Sin pendientes esta semana."
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Sin próxima acción"
+msgstr "Sin próxima acción"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__assignment_request_state__not_requested
+msgid "Sin solicitud"
+msgstr "Sin solicitud"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__assignment_requested_by_id
+msgid "Solicitada Por"
+msgstr "Solicitada Por"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "Solicitar Asignación de Cliente"
+msgstr "Solicitar Asignación de Cliente"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__assignment_request_state
+msgid "Solicitud de Asignación"
+msgstr "Solicitud de Asignación"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Solicitud de reasignación de cliente"
+msgstr "Solicitud de reasignación de cliente"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Solicitud de reasignación enviada a Gerencia."
+msgstr "Solicitud de reasignación enviada a Gerencia."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Solicitud de reasignación rechazada por %(mgr)s."
+msgstr "Solicitud de reasignación rechazada por %(mgr)s."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Solo Gerencia puede aprobar reasignaciones."
+msgstr "Solo Gerencia puede aprobar reasignaciones."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Solo Gerencia puede rechazar reasignaciones."
+msgstr "Solo Gerencia puede rechazar reasignaciones."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "Status based on activities\nOverdue: Due date is already passed\nToday: Activity date is today\nPlanned: Future activities."
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_search
+msgid "Tipo"
+msgstr "Tipo"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_partner__sfa_channel
+#: model:ir.model.fields,help:sales_field_sfa.field_res_users__sfa_channel
+msgid ""
+"Tipo de negocio del cliente. Las opciones se gestionan en Seguimiento "
+"Comercial → Configuración → Canales."
+msgstr "Tipo de negocio del cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Canales."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Todos tus clientes tuvieron contacto reciente."
+msgstr "Todos tus clientes tuvieron contacto reciente."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Total Interacciones"
+msgstr "Total Interacciones"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid ""
+"Tu solicitud de reasignación fue %(decision)s por %(mgr)s. El cliente "
+"%(partner)s ahora es tuyo."
+msgstr "Tu solicitud de reasignación fue %(decision)s por %(mgr)s. El cliente %(partner)s ahora es tuyo."
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid ""
+"Tu solicitud de reasignación fue rechazada por %(mgr)s. El cliente "
+"%(partner)s sigue con su vendedor actual."
+msgstr "Tu solicitud de reasignación fue rechazada por %(mgr)s. El cliente %(partner)s sigue con su vendedor actual."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_config_settings__sfa_inactivity_days
+msgid ""
+"Un cliente asignado aparece en la lista 'Sin contacto' del dashboard cuando "
+"no tiene interacciones en este número de días."
+msgstr "Un cliente asignado aparece en la lista 'Sin contacto' del dashboard cuando no tiene interacciones en este número de días."
+
+#. module: sales_field_sfa
+#: model:res.groups,name:sales_field_sfa.group_sales_field_user
+msgid "Usuario Seguimiento Comercial"
+msgstr "Usuario Seguimiento Comercial"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__user_id
+msgid "Vendedor"
+msgstr "Vendedor"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Vendedores"
+msgstr "Vendedores"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.res_config_settings_view_form_sfa
+msgid "Ventana (días) para el contexto de reasignación que ve Gerencia."
+msgstr "Ventana (días) para el contexto de reasignación que ve Gerencia."
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_res_config_settings__sfa_recent_interaction_days
+msgid "Ventana de 'interacciones recientes' (días)"
+msgstr "Ventana de 'interacciones recientes' (días)"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_res_config_settings__sfa_recent_interaction_days
+msgid ""
+"Ventana usada para contar las interacciones recientes de un cliente "
+"(contexto que ve Gerencia al evaluar una reasignación)."
+msgstr "Ventana usada para contar las interacciones recientes de un cliente (contexto que ve Gerencia al evaluar una reasignación)."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Ver todas"
+msgstr "Ver todas"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Ver todos"
+msgstr "Ver todos"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__visit
+msgid "Visita"
+msgstr "Visita"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Visitas"
+msgstr "Visitas"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "Visitas %(suffix)s"
+msgstr "Visitas %(suffix)s"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Volver el"
+msgstr "Volver el"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__website_message_ids
+msgid "Website Messages"
+msgstr "Website Messages"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,help:sales_field_sfa.field_sales_interaction__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+#: model:ir.model.fields.selection,name:sales_field_sfa.selection__sales_interaction__interaction_type__whatsapp
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+msgid "WhatsApp %(suffix)s"
+msgstr "WhatsApp %(suffix)s"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "aprobada"
+msgstr "aprobada"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+#: code:addons/sales_field_sfa/tests/test_dashboard.py:0
+msgid "del Año"
+msgstr "del Año"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/dashboard.py:0
+#: code:addons/sales_field_sfa/tests/test_dashboard.py:0
+msgid "del Mes"
+msgstr "del Mes"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿A qué cliente contactaste?"
+msgstr "¿A qué cliente contactaste?"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__next_action_date
+msgid "¿Cuándo vuelvo a contactar?"
+msgstr "¿Cuándo vuelvo a contactar?"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__interaction_type
+msgid "¿Cómo lo contactaste?"
+msgstr "¿Cómo lo contactaste?"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿Cómo terminó el contacto?"
+msgstr "¿Cómo terminó el contacto?"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__result
+msgid "¿Cómo terminó?"
+msgstr "¿Cómo terminó?"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿Qué pasó?"
+msgstr "¿Qué pasó?"
+
+#. module: sales_field_sfa
+#: model:ir.model.fields,field_description:sales_field_sfa.field_sales_interaction__notes
+msgid "¿Qué pasó? (notas)"
+msgstr "¿Qué pasó? (notas)"
+
+#. module: sales_field_sfa
+#: model_terms:ir.ui.view,arch_db:sales_field_sfa.view_sales_interaction_form
+msgid "¿Qué te dijo el cliente? ¿Qué productos pidió? Anota lo importante..."
+msgstr "¿Qué te dijo el cliente? ¿Qué productos pidió? Anota lo importante..."
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Última:"
+msgstr "Última:"
+
+#. module: sales_field_sfa
+#. odoo-python
+#: code:addons/sales_field_sfa/models/sales_interaction.py:0
+msgid "Últimas interacciones de %(partner)s"
+msgstr "Últimas interacciones de %(partner)s"
+
+#. module: sales_field_sfa
+#. odoo-javascript
+#: code:addons/sales_field_sfa/static/src/xml/dashboard.xml:0
+msgid "Último contacto:"
+msgstr "Último contacto:"

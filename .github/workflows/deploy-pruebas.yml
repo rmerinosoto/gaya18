@@ -1,0 +1,24 @@
+name: Deploy pruebas
+
+on:
+  push:
+    branches:
+      - pruebas
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull and restart pruebas
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.GAYA18_PRUEBAS_HOST }}
+          username: ${{ secrets.GAYA18_PRUEBAS_USER }}
+          key: ${{ secrets.GAYA18_PRUEBAS_SSH_KEY }}
+          script: |
+            cd /odoo/odoo-pruebas-01/custom/addons
+            git pull --ff-only
+            sudo systemctl restart odoo-pruebas-01

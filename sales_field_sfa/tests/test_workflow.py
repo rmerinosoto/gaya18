@@ -101,21 +101,21 @@ class TestWorkflow(SFACommon):
         i2.invalidate_recordset(["assignment_request_state"])
         self.assertEqual(i2.assignment_request_state, "approved")
 
-    def test_partner_default_x_customer_status_is_empty(self):
+    def test_partner_default_sfa_customer_status_is_empty(self):
         """Nuevos partners ya no quedan tagged como 'prospect' por default."""
         p = self.Partner.create({"name": "Partner sin status SFA"})
-        self.assertFalse(p.x_customer_status)
+        self.assertFalse(p.sfa_customer_status)
 
-    def test_partner_x_customer_status_still_writable(self):
+    def test_partner_sfa_customer_status_still_writable(self):
         """Asignar un estado de cliente desde catalogo funciona y se persiste."""
         prospect = self.env.ref("sales_field_sfa.customer_status_prospect")
         p = self.Partner.create({
             "name": "Prospecto SFA",
             "customer_rank": 1,
-            "x_customer_status": prospect.id,
+            "sfa_customer_status": prospect.id,
         })
-        self.assertEqual(p.x_customer_status, prospect)
-        self.assertEqual(p.x_customer_status.code, "prospect")
+        self.assertEqual(p.sfa_customer_status, prospect)
+        self.assertEqual(p.sfa_customer_status.code, "prospect")
 
     def test_reject_notifies_requester(self):
         """W-01: al rechazar, el mensaje del chatter incluye al solicitante como partner notificado."""
@@ -187,11 +187,11 @@ class TestWorkflow(SFACommon):
         self.assertNotIn(third.id, domain_ids)
 
     def test_excluded_partner_blocks_interaction_create(self):
-        """Cliente marcado x_sfa_excluded no permite crear nuevas interacciones."""
+        """Cliente marcado sfa_excluded no permite crear nuevas interacciones."""
         self.partner_orphan.user_id = self.seller_a
         self.partner_orphan.sudo().write({
-            "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
+            "sfa_excluded": True,
+            "sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_otro").id,
         })
         with self.assertRaises(ValidationError):
             self.Interaction.with_user(self.seller_a).create({
@@ -211,8 +211,8 @@ class TestWorkflow(SFACommon):
         })
         # Gerencia excluye al cliente despues
         self.partner_orphan.sudo().write({
-            "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_empresa_interna").id,
+            "sfa_excluded": True,
+            "sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_otro").id,
         })
         # Cargar la interaccion historica no debe fallar (no se re-evalua el constraint)
         # — el constraint es @api.constrains de partner_id, no se dispara en read
@@ -224,8 +224,8 @@ class TestWorkflow(SFACommon):
         self.partner_orphan.user_id = self.seller_a
         # Sin interacciones recientes — el partner calificaria normalmente como inactive
         self.partner_orphan.sudo().write({
-            "x_sfa_excluded": True,
-            "x_sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_mercado_libre").id,
+            "sfa_excluded": True,
+            "sfa_exclusion_reason": self.env.ref("sales_field_sfa.exclusion_reason_otro").id,
         })
         data = self.env["sales.field.dashboard"].with_user(self.seller_a).get_dashboard_data()
         inactive_ids = {p["id"] for p in data["lists"]["inactive_partners"]}

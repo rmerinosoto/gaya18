@@ -1,7 +1,6 @@
-from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class SalesFieldDashboard(models.AbstractModel):
@@ -35,76 +34,27 @@ class SalesFieldDashboard(models.AbstractModel):
         return year_start, year_end
 
     @api.model
-    def _get_paid_date_by_invoice(self, invoices):
-        paid_dates = {invoice.id: False for invoice in invoices}
-        if not invoices:
-            return paid_dates
+    def _sfa_get_int_param(self, key, default):
+        """Lee un parametro entero de ir.config_parameter con fallback robusto.
+        Permite a cada empresa ajustar las ventanas temporales del dashboard
+        (inactividad, horizonte semanal, etc) sin tocar codigo."""
+        raw = self.env["ir.config_parameter"].sudo().get_param(key)
+        try:
+            value = int(raw)
+            return value if value > 0 else default
+        except (TypeError, ValueError):
+            return default
 
-        line_model = self.env["account.move.line"]
-        partial_model = self.env["account.partial.reconcile"]
+    @api.model
+    def _sfa_extend_dashboard(self, result, dashboard_user, month_start, month_end, seller_ids):
+        """Seam de extension para modulos puente (p.ej. sales_field_sfa_account).
 
-        receivable_lines = line_model.search(
-            [
-                ("move_id", "in", invoices.ids),
-                ("account_id.account_type", "=", "asset_receivable"),
-            ]
-        )
-        if not receivable_lines:
-            return paid_dates
-
-        invoice_by_line = {line.id: line.move_id.id for line in receivable_lines}
-        partials = partial_model.search(
-            [
-                "|",
-                ("debit_move_id", "in", receivable_lines.ids),
-                ("credit_move_id", "in", receivable_lines.ids),
-            ]
-        )
-        if not partials:
-            return paid_dates
-
-        counterpart_line_ids = set()
-        for part in partials:
-            debit_id = part.debit_move_id.id
-            credit_id = part.credit_move_id.id
-            if debit_id in invoice_by_line:
-                counterpart_line_ids.add(credit_id)
-            if credit_id in invoice_by_line:
-                counterpart_line_ids.add(debit_id)
-
-        counterpart_lines = line_model.browse(list(counterpart_line_ids)).exists()
-        counterpart_move_date = {
-            line.id: line.move_id.date for line in counterpart_lines if line.move_id
-        }
-
-        dates_by_invoice = defaultdict(list)
-        for part in partials:
-            debit_id = part.debit_move_id.id
-            credit_id = part.credit_move_id.id
-
-            if debit_id in invoice_by_line:
-                inv_id = invoice_by_line[debit_id]
-                pay_date = counterpart_move_date.get(credit_id)
-                if pay_date:
-                    dates_by_invoice[inv_id].append(pay_date)
-
-            if credit_id in invoice_by_line:
-                inv_id = invoice_by_line[credit_id]
-                pay_date = counterpart_move_date.get(debit_id)
-                if pay_date:
-                    dates_by_invoice[inv_id].append(pay_date)
-
-        for invoice_id, dates in dates_by_invoice.items():
-            if dates:
-                paid_dates[invoice_id] = max(dates)
-
-        # why: facturas marcadas paid sin reconcile (refund autoaplicado, asiento
-        # manual) quedaban en False y desaparecian del KPI. Fallback a la fecha
-        # de la propia factura — mejor sub-aproximacion que perder el dato.
-        for inv in invoices:
-            if not paid_dates.get(inv.id):
-                paid_dates[inv.id] = inv.invoice_date or inv.date
-        return paid_dates
+        El core NO depende de `account`. El KPI "Facturado Pagado" y los importes
+        por vendedor los inyecta el modulo puente sobreescribiendo este metodo.
+        Recibe el dict `result` ya construido y lo muta in-place. En el core es un
+        no-op; `result['has_account']` queda en False y el frontend oculta las
+        tarjetas de facturacion."""
+        return result
 
     @api.model
     def get_dashboard_data(self, date_ref=False, target_user_id=False, period="month"):
@@ -145,7 +95,12 @@ class SalesFieldDashboard(models.AbstractModel):
         interaction_model = self.env["sales.interaction"]
         sale_order_model = self.env["sale.order"]
         partner_model = self.env["res.partner"]
-        invoice_model = self.env["account.move"]
+
+        # Ventanas temporales configurables por empresa (ir.config_parameter).
+        # Defaults = comportamiento historico de Gaya. Otra empresa las ajusta
+        # desde Seguimiento Comercial → Configuración → Ajustes.
+        inactivity_days = self._sfa_get_int_param("sales_field_sfa.inactivity_days", 30)
+        week_horizon_days = self._sfa_get_int_param("sales_field_sfa.week_horizon_days", 7)
 
         interaction_month_domain = [
             ("user_id", "=", dashboard_user.id),
@@ -165,17 +120,20 @@ class SalesFieldDashboard(models.AbstractModel):
             if itype in type_counts:
                 type_counts[itype] = count
         total_interactions = sum(type_counts.values())
+        # Prospecto/Cliente ya no se filtran por el `code` literal del catalogo,
+        # sino por las banderas semanticas is_prospect/is_customer. Asi otra empresa
+        # puede renombrar o reordenar sus estados sin romper estos KPIs.
         prospect_contacted = interaction_model.search_count(
             interaction_month_domain
             + [
-                ("partner_id.x_customer_status.code", "=", "prospect"),
+                ("partner_id.sfa_customer_status.is_prospect", "=", True),
                 ("result", "in", valid_results),
             ]
         )
         customer_contacted = interaction_model.search_count(
             interaction_month_domain
             + [
-                ("partner_id.x_customer_status.code", "=", "customer"),
+                ("partner_id.sfa_customer_status.is_customer", "=", True),
                 ("result", "in", valid_results),
             ]
         )
@@ -189,40 +147,9 @@ class SalesFieldDashboard(models.AbstractModel):
                 ("state", "in", ["draft", "sent"]),
                 ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                 ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
-                ("partner_id.x_sfa_excluded", "=", False),
+                ("partner_id.sfa_excluded", "=", False),
             ]
         )
-
-        # why: la fecha real de pago se reconstruye desde reconciles, asi que no
-        # podemos filtrar el mes en SQL. Pero descartamos facturas viejas: una
-        # emitida hace >90 dias rara vez se paga dentro del mes consultado.
-        invoice_date_floor = (month_start - timedelta(days=90)).isoformat()
-        invoice_domain = [
-            ("move_type", "=", "out_invoice"),
-            ("state", "=", "posted"),
-            ("payment_state", "=", "paid"),
-            ("company_id", "in", allowed_company_ids),
-            ("invoice_date", ">=", invoice_date_floor),
-            # Clientes excluidos del seguimiento (Mercado Libre, empresas internas,
-            # autoservicio) NO cuentan en el KPI "Facturado Pagado del Mes" — su
-            # operacion no la atiende el vendedor de campo y distorsiona el indicador.
-            ("partner_id.x_sfa_excluded", "=", False),
-            "|",
-            ("invoice_user_id", "=", dashboard_user.id),
-            "&",
-            ("invoice_user_id", "=", False),
-            ("partner_id.user_id", "=", dashboard_user.id),
-        ]
-        paid_invoices = invoice_model.search(invoice_domain)
-        paid_date_by_invoice = self._get_paid_date_by_invoice(paid_invoices)
-
-        paid_invoice_ids_in_month = []
-        paid_amount = 0.0
-        for inv in paid_invoices:
-            paid_date = paid_date_by_invoice.get(inv.id)
-            if paid_date and month_start <= paid_date <= month_end:
-                paid_invoice_ids_in_month.append(inv.id)
-                paid_amount += inv.amount_total_signed
 
         today_start_dt = datetime.combine(today, time.min)
         today_end_dt = datetime.combine(today, time.max)
@@ -253,7 +180,7 @@ class SalesFieldDashboard(models.AbstractModel):
             JOIN res_partner p ON p.id = si.partner_id
             WHERE si.user_id = %s
               AND si.partner_id IS NOT NULL
-              AND COALESCE(p.x_sfa_excluded, FALSE) = FALSE
+              AND COALESCE(p.sfa_excluded, FALSE) = FALSE
             ORDER BY si.partner_id, si.interaction_datetime DESC, si.id DESC
             """,
             (dashboard_user.id,),
@@ -272,9 +199,9 @@ class SalesFieldDashboard(models.AbstractModel):
             limit=15,
         )
 
-        # S-03: pendientes para HOY y para los proximos 7 dias. Mismo criterio
-        # (solo la ultima del cliente cuenta) para no inflar las listas.
-        week_end = today + timedelta(days=7)
+        # S-03: pendientes para HOY y para los proximos N dias (config, default 7).
+        # Mismo criterio (solo la ultima del cliente cuenta) para no inflar las listas.
+        week_end = today + timedelta(days=week_horizon_days)
         due_today_interactions = interaction_model.search_read(
             [
                 ("id", "in", latest_ids),
@@ -298,7 +225,7 @@ class SalesFieldDashboard(models.AbstractModel):
         assigned_partners = partner_model.search(
             [
                 ("user_id", "=", dashboard_user.id),
-                ("x_sfa_excluded", "=", False),
+                ("sfa_excluded", "=", False),
                 "|",
                 ("company_id", "=", False),
                 ("company_id", "in", allowed_company_ids),
@@ -319,7 +246,7 @@ class SalesFieldDashboard(models.AbstractModel):
                 for item in grouped_last
                 if item.get("partner_id") and item.get("interaction_datetime_max")
             }
-            threshold = fields.Datetime.now() - timedelta(days=30)
+            threshold = fields.Datetime.now() - timedelta(days=inactivity_days)
             for partner in assigned_partners[:200]:
                 last_dt = last_by_partner.get(partner.id)
                 if not last_dt or last_dt < threshold:
@@ -353,33 +280,33 @@ class SalesFieldDashboard(models.AbstractModel):
                 "domain": domain,
             }
 
-        # Sufijo dinamico segun periodo: "del Mes" para month, "del Año" para year.
+        # Sufijo dinamico segun periodo. Traducible: cada idioma lo resuelve via .po.
         # Aparece en los titulos de las pantallas de detalle (al tocar una card).
-        period_suffix = "del Año" if period == "year" else "del Mes"
+        period_suffix = _("del Año") if period == "year" else _("del Mes")
 
         actions = {
-            "total_interactions": _interaction_action(name=f"Interacciones {period_suffix}"),
-            "visit": _interaction_action([("interaction_type", "=", "visit")], f"Visitas {period_suffix}"),
-            "call": _interaction_action([("interaction_type", "=", "call")], f"Llamadas {period_suffix}"),
-            "whatsapp": _interaction_action([("interaction_type", "=", "whatsapp")], f"WhatsApp {period_suffix}"),
-            "followup": _interaction_action([("interaction_type", "=", "followup")], f"Seguimientos {period_suffix}"),
+            "total_interactions": _interaction_action(name=_("Interacciones %(suffix)s") % {"suffix": period_suffix}),
+            "visit": _interaction_action([("interaction_type", "=", "visit")], _("Visitas %(suffix)s") % {"suffix": period_suffix}),
+            "call": _interaction_action([("interaction_type", "=", "call")], _("Llamadas %(suffix)s") % {"suffix": period_suffix}),
+            "whatsapp": _interaction_action([("interaction_type", "=", "whatsapp")], _("WhatsApp %(suffix)s") % {"suffix": period_suffix}),
+            "followup": _interaction_action([("interaction_type", "=", "followup")], _("Seguimientos %(suffix)s") % {"suffix": period_suffix}),
             "prospect_contacted": _interaction_action(
                 [
-                    ("partner_id.x_customer_status.code", "=", "prospect"),
+                    ("partner_id.sfa_customer_status.is_prospect", "=", True),
                     ("result", "in", valid_results),
                 ],
-                "Prospectos Contactados",
+                _("Prospectos Contactados"),
             ),
             "customer_contacted": _interaction_action(
                 [
-                    ("partner_id.x_customer_status.code", "=", "customer"),
+                    ("partner_id.sfa_customer_status.is_customer", "=", True),
                     ("result", "in", valid_results),
                 ],
-                "Clientes Contactados",
+                _("Clientes Contactados"),
             ),
             "quotations_month": {
                 "type": "ir.actions.act_window",
-                "name": f"Mis Cotizaciones {period_suffix}",
+                "name": _("Mis Cotizaciones %(suffix)s") % {"suffix": period_suffix},
                 "res_model": "sale.order",
                 "view_mode": "list,form,kanban",
                 "views": _views_from_mode("list,form,kanban"),
@@ -391,29 +318,12 @@ class SalesFieldDashboard(models.AbstractModel):
                     ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
                     # Coherente con el KPI: la lista abierta desde la card
                     # tampoco muestra cotizaciones de clientes excluidos.
-                    ("partner_id.x_sfa_excluded", "=", False),
+                    ("partner_id.sfa_excluded", "=", False),
                 ],
-            },
-            "paid_invoices_month_amount": {
-                "type": "ir.actions.act_window",
-                "name": f"Facturas Pagadas {period_suffix}",
-                "res_model": "account.move",
-                "view_mode": "list,form",
-                "views": _views_from_mode("list,form"),
-                "target": "current",
-                # Agregar move_type al domain hace que Odoo elija la vista de
-                # "Facturas de Cliente" (que incluye partner_id como columna)
-                # en lugar de la vista generica de account.move (sin partner).
-                # default_move_type en el context refuerza el comportamiento.
-                "domain": [
-                    ("id", "in", paid_invoice_ids_in_month),
-                    ("move_type", "=", "out_invoice"),
-                ],
-                "context": {"default_move_type": "out_invoice"},
             },
             "interactions_today": {
                 "type": "ir.actions.act_window",
-                "name": "Interacciones de Hoy",
+                "name": _("Interacciones de Hoy"),
                 "res_model": "sales.interaction",
                 "view_mode": "list,kanban,form,calendar",
                 "views": _views_from_mode("list,kanban,form,calendar"),
@@ -427,7 +337,7 @@ class SalesFieldDashboard(models.AbstractModel):
             # S-02: action_overdue usa latest_ids para coincidir con la lista del dashboard.
             "overdue": {
                 "type": "ir.actions.act_window",
-                "name": "Interacciones Atrasadas",
+                "name": _("Interacciones Atrasadas"),
                 "res_model": "sales.interaction",
                 "view_mode": "list,kanban,form,calendar",
                 "views": _views_from_mode("list,kanban,form,calendar"),
@@ -437,7 +347,7 @@ class SalesFieldDashboard(models.AbstractModel):
             # S-03: pendientes hoy / esta semana — mismo criterio (ultima del cliente).
             "due_today": {
                 "type": "ir.actions.act_window",
-                "name": "Pendientes para Hoy",
+                "name": _("Pendientes para Hoy"),
                 "res_model": "sales.interaction",
                 "view_mode": "list,kanban,form,calendar",
                 "views": _views_from_mode("list,kanban,form,calendar"),
@@ -446,7 +356,7 @@ class SalesFieldDashboard(models.AbstractModel):
             },
             "due_this_week": {
                 "type": "ir.actions.act_window",
-                "name": "Pendientes Esta Semana",
+                "name": _("Pendientes Esta Semana"),
                 "res_model": "sales.interaction",
                 "view_mode": "list,kanban,form,calendar",
                 "views": _views_from_mode("list,kanban,form,calendar"),
@@ -459,7 +369,7 @@ class SalesFieldDashboard(models.AbstractModel):
             },
             "inactive_partners": {
                 "type": "ir.actions.act_window",
-                "name": "Clientes sin Interacción (30 días)",
+                "name": _("Clientes sin Interacción (%(days)s días)") % {"days": inactivity_days},
                 "res_model": "res.partner",
                 "view_mode": "list,form,kanban",
                 "views": _views_from_mode("list,form,kanban"),
@@ -478,7 +388,6 @@ class SalesFieldDashboard(models.AbstractModel):
                     "team_active_sellers": 0,
                     "team_interactions": 0,
                     "team_quotations": 0,
-                    "team_paid_amount": 0.0,
                 },
                 "sellers_summary": [],
             }
@@ -520,7 +429,7 @@ class SalesFieldDashboard(models.AbstractModel):
                         ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                         ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
                         # Mismo criterio que en la vista del vendedor.
-                        ("partner_id.x_sfa_excluded", "=", False),
+                        ("partner_id.sfa_excluded", "=", False),
                     ],
                     ["user_id"],
                     ["user_id"],
@@ -532,50 +441,17 @@ class SalesFieldDashboard(models.AbstractModel):
                     if item.get("user_id")
                 }
 
-                team_invoice_domain = [
-                    ("move_type", "=", "out_invoice"),
-                    ("state", "=", "posted"),
-                    ("payment_state", "=", "paid"),
-                    ("company_id", "in", allowed_company_ids),
-                    ("invoice_date", ">=", invoice_date_floor),
-                    # Mismo criterio que en la vista del vendedor: las facturas de
-                    # clientes excluidos del seguimiento no cuentan en el "Facturado
-                    # Pagado del Equipo" ni en el desglose por vendedor.
-                    ("partner_id.x_sfa_excluded", "=", False),
-                    "|",
-                    ("invoice_user_id", "in", seller_ids),
-                    "&",
-                    ("invoice_user_id", "=", False),
-                    ("partner_id.user_id", "in", seller_ids),
-                ]
-                team_paid_invoices = invoice_model.search(team_invoice_domain)
-                team_paid_dates = self._get_paid_date_by_invoice(team_paid_invoices)
-
-                paid_amount_by_user = defaultdict(float)
-                paid_invoice_ids_by_user = defaultdict(list)
-                for inv in team_paid_invoices:
-                    paid_date = team_paid_dates.get(inv.id)
-                    if not paid_date or not (month_start <= paid_date <= month_end):
-                        continue
-                    seller = inv.invoice_user_id or inv.partner_id.user_id
-                    if not seller or seller.id not in seller_ids:
-                        continue
-                    paid_amount_by_user[seller.id] += inv.amount_total_signed
-                    paid_invoice_ids_by_user[seller.id].append(inv.id)
-
                 sellers_summary = []
                 for seller in sales_users.sorted(key=lambda u: u.name or ""):
                     interaction_count = interactions_by_user.get(seller.id, 0)
                     quotation_count = quotations_by_user.get(seller.id, 0)
-                    paid_amount_seller = round(paid_amount_by_user.get(seller.id, 0.0), 2)
 
                     interaction_action_key = f"manager_seller_interactions_{seller.id}"
                     quotation_action_key = f"manager_seller_quotations_{seller.id}"
-                    paid_action_key = f"manager_seller_paid_{seller.id}"
 
                     actions[interaction_action_key] = {
                         "type": "ir.actions.act_window",
-                        "name": f"Interacciones {period_suffix} - {seller.name}",
+                        "name": _("Interacciones %(suffix)s - %(seller)s") % {"suffix": period_suffix, "seller": seller.name},
                         "res_model": "sales.interaction",
                         "view_mode": "kanban,list,calendar,form",
                         "views": _views_from_mode("kanban,list,calendar,form"),
@@ -588,7 +464,7 @@ class SalesFieldDashboard(models.AbstractModel):
                     }
                     actions[quotation_action_key] = {
                         "type": "ir.actions.act_window",
-                        "name": f"Cotizaciones {period_suffix} - {seller.name}",
+                        "name": _("Cotizaciones %(suffix)s - %(seller)s") % {"suffix": period_suffix, "seller": seller.name},
                         "res_model": "sale.order",
                         "view_mode": "list,form,kanban",
                         "views": _views_from_mode("list,form,kanban"),
@@ -598,21 +474,8 @@ class SalesFieldDashboard(models.AbstractModel):
                             ("state", "in", ["draft", "sent"]),
                             ("create_date", ">=", fields.Datetime.to_string(month_start_dt)),
                             ("create_date", "<=", fields.Datetime.to_string(month_end_dt)),
-                            ("partner_id.x_sfa_excluded", "=", False),
+                            ("partner_id.sfa_excluded", "=", False),
                         ],
-                    }
-                    actions[paid_action_key] = {
-                        "type": "ir.actions.act_window",
-                        "name": f"Facturas Pagadas {period_suffix} - {seller.name}",
-                        "res_model": "account.move",
-                        "view_mode": "list,form",
-                        "views": _views_from_mode("list,form"),
-                        "target": "current",
-                        "domain": [
-                            ("id", "in", paid_invoice_ids_by_user.get(seller.id, [])),
-                            ("move_type", "=", "out_invoice"),
-                        ],
-                        "context": {"default_move_type": "out_invoice"},
                     }
 
                     sellers_summary.append(
@@ -621,10 +484,8 @@ class SalesFieldDashboard(models.AbstractModel):
                             "seller_name": seller.name,
                             "interactions": interaction_count,
                             "quotations": quotation_count,
-                            "paid_amount": paid_amount_seller,
                             "interaction_action_key": interaction_action_key,
                             "quotation_action_key": quotation_action_key,
-                            "paid_action_key": paid_action_key,
                         }
                     )
 
@@ -635,13 +496,12 @@ class SalesFieldDashboard(models.AbstractModel):
                         "team_active_sellers": sum(1 for row in sellers_summary if row["interactions"] > 0),
                         "team_interactions": sum(row["interactions"] for row in sellers_summary),
                         "team_quotations": sum(row["quotations"] for row in sellers_summary),
-                        "team_paid_amount": round(sum(row["paid_amount"] for row in sellers_summary), 2),
                     },
                     "sellers_summary": sellers_summary,
                 }
 
         interaction_field = self.env["sales.interaction"]._fields
-        return {
+        result = {
             "period": period,
             "period_suffix": period_suffix,
             "month_start": month_start.isoformat(),
@@ -662,7 +522,6 @@ class SalesFieldDashboard(models.AbstractModel):
                 "prospect_contacted": prospect_contacted,
                 "customer_contacted": customer_contacted,
                 "quotations_month": quotations_month,
-                "paid_invoices_month_amount": round(paid_amount, 2),
             },
             "lists": {
                 "interactions_today": interactions_today,
@@ -677,4 +536,13 @@ class SalesFieldDashboard(models.AbstractModel):
                 "position": self.env.company.currency_id.position,
             },
             "manager": manager_data,
+            # El core no toca contabilidad. El modulo puente sales_field_sfa_account
+            # pone has_account=True e inyecta el KPI "Facturado Pagado". El frontend
+            # oculta las tarjetas de facturacion cuando has_account es falso.
+            "has_account": False,
         }
+        # Seam: el modulo puente (si esta instalado) muta result para agregar el
+        # KPI de facturacion. seller_ids solo tiene sentido en vista gerencial.
+        seller_ids = [row["seller_id"] for row in manager_data.get("sellers_summary", [])]
+        self._sfa_extend_dashboard(result, dashboard_user, month_start, month_end, seller_ids)
+        return result

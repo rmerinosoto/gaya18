@@ -83,11 +83,48 @@
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="prospect_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-user-plus me-1"/>Prospectos Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.prospect_contacted || 0"/></h4></div></div></div>
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="customer_contacted" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-handshake-o me-1"/>Clientes Contactados</small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.customer_contacted || 0"/></h4></div></div></div>
                     <div class="col-6 col-md-3"><div class="card h-100 o_sfa_kpi" data-action-key="quotations_month" t-on-click="onKpiClick"><div class="card-body p-2 p-md-3"><small class="text-muted"><i class="fa fa-file-text-o me-1"/>Cotizaciones <t t-esc="state.data.period_suffix || 'del Mes'"/></small><h4 class="mb-0 mt-1"><t t-esc="state.data.kpis.quotations_month || 0"/></h4></div></div></div>
-                    <div class="col-12 col-md-6">
+                    <!-- Bloque de facturación: solo si el puente de contabilidad está instalado (has_account). -->
+                    <div class="col-6 col-md-3" t-if="state.data.has_account">
                         <div class="card h-100 o_sfa_kpi border-success" data-action-key="paid_invoices_month_amount" t-on-click="onKpiClick">
                             <div class="card-body p-2 p-md-3">
                                 <small class="text-muted"><i class="fa fa-money me-1"/>Facturado Pagado <t t-esc="state.data.period_suffix || 'del Mes'"/></small>
                                 <h4 class="mt-1 mb-0 text-success"><t t-esc="formatMoney(state.data.kpis.paid_invoices_month_amount)"/></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3" t-if="state.data.has_account">
+                        <div class="card h-100 o_sfa_kpi" data-action-key="invoiced_month_amount" t-on-click="onKpiClick">
+                            <div class="card-body p-2 p-md-3">
+                                <small class="text-muted"><i class="fa fa-file-text me-1"/>Facturado <t t-esc="state.data.period_suffix || 'del Mes'"/></small>
+                                <h4 class="mt-1 mb-0"><t t-esc="formatMoney(state.data.kpis.invoiced_month_amount)"/></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3" t-if="state.data.has_account">
+                        <div class="card h-100 o_sfa_kpi border-danger" data-action-key="overdue_amount" t-on-click="onKpiClick">
+                            <div class="card-body p-2 p-md-3">
+                                <small class="text-muted"><i class="fa fa-exclamation-circle me-1 text-danger"/>Cartera Vencida</small>
+                                <h4 class="mt-1 mb-0 text-danger"><t t-esc="formatMoney(state.data.kpis.overdue_amount)"/></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3" t-if="state.data.has_account">
+                        <div class="card h-100 o_sfa_kpi">
+                            <div class="card-body p-2 p-md-3">
+                                <small class="text-muted"><i class="fa fa-bullseye me-1"/>Objetivo <t t-esc="state.data.period_suffix || 'del Mes'"/></small>
+                                <t t-if="state.data.kpis.target_amount">
+                                    <h4 class="mt-1 mb-0"><t t-esc="formatMoney(state.data.kpis.target_amount)"/></h4>
+                                    <div class="progress mt-1" style="height: 6px;">
+                                        <div class="progress-bar bg-success" t-att-style="'width:' + Math.min(100, state.data.kpis.target_pct || 0) + '%'"/>
+                                    </div>
+                                    <small t-attf-class="text-{{ (state.data.kpis.target_pct || 0) >= 100 ? 'success' : 'muted' }}">
+                                        <t t-esc="state.data.kpis.target_pct || 0"/>% cobrado del objetivo
+                                    </small>
+                                </t>
+                                <t t-else="">
+                                    <h4 class="mt-1 mb-0 text-muted">—</h4>
+                                    <small class="text-muted">Sin objetivo definido</small>
+                                </t>
                             </div>
                         </div>
                     </div>
@@ -125,10 +162,31 @@
                                         <h4 class="mb-0"><t t-esc="state.data.manager.kpis.team_quotations || 0"/></h4>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-6 col-md-3" t-if="state.data.has_account">
                                     <div class="border rounded p-2 h-100">
                                         <small class="text-muted">Facturado Pagado Equipo</small>
                                         <h4 class="mb-0 text-success"><t t-esc="formatMoney(state.data.manager.kpis.team_paid_amount)"/></h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3" t-if="state.data.has_account">
+                                    <div class="border rounded p-2 h-100">
+                                        <small class="text-muted">Facturado Equipo</small>
+                                        <h4 class="mb-0"><t t-esc="formatMoney(state.data.manager.kpis.team_invoiced_amount)"/></h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3" t-if="state.data.has_account">
+                                    <div class="border rounded p-2 h-100">
+                                        <small class="text-muted">Cartera Vencida Equipo</small>
+                                        <h4 class="mb-0 text-danger"><t t-esc="formatMoney(state.data.manager.kpis.team_overdue_amount)"/></h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3" t-if="state.data.has_account">
+                                    <div class="border rounded p-2 h-100">
+                                        <small class="text-muted">Objetivo Equipo</small>
+                                        <h4 class="mb-0"><t t-esc="formatMoney(state.data.manager.kpis.team_target_amount)"/></h4>
+                                        <small t-if="state.data.manager.kpis.team_target_amount" class="text-muted">
+                                            <t t-esc="state.data.manager.kpis.team_target_pct || 0"/>% cobrado
+                                        </small>
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +198,10 @@
                                             <th>Vendedor</th>
                                             <th class="text-end">Interacciones</th>
                                             <th class="text-end">Cotizaciones</th>
-                                            <th class="text-end">Facturado Pagado</th>
+                                            <th class="text-end" t-if="state.data.has_account">Facturado Pagado</th>
+                                            <th class="text-end" t-if="state.data.has_account">Facturado</th>
+                                            <th class="text-end" t-if="state.data.has_account">Cartera Vencida</th>
+                                            <th class="text-end" t-if="state.data.has_account">Objetivo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -157,16 +218,33 @@
                                                         <t t-esc="row.quotations"/>
                                                     </button>
                                                 </td>
-                                                <td class="text-end">
+                                                <td class="text-end" t-if="state.data.has_account">
                                                     <button class="btn btn-sm btn-link p-0 text-success" t-att-data-action-key="row.paid_action_key" t-on-click="onActionClick">
                                                         <t t-esc="formatMoney(row.paid_amount)"/>
                                                     </button>
+                                                </td>
+                                                <td class="text-end" t-if="state.data.has_account">
+                                                    <button class="btn btn-sm btn-link p-0" t-att-data-action-key="row.invoiced_action_key" t-on-click="onActionClick">
+                                                        <t t-esc="formatMoney(row.invoiced_amount)"/>
+                                                    </button>
+                                                </td>
+                                                <td class="text-end" t-if="state.data.has_account">
+                                                    <button class="btn btn-sm btn-link p-0 text-danger" t-att-data-action-key="row.overdue_action_key" t-on-click="onActionClick">
+                                                        <t t-esc="formatMoney(row.overdue_amount)"/>
+                                                    </button>
+                                                </td>
+                                                <td class="text-end" t-if="state.data.has_account">
+                                                    <t t-if="row.target_amount">
+                                                        <t t-esc="formatMoney(row.target_amount)"/>
+                                                        <span class="text-muted"> (<t t-esc="row.target_pct || 0"/>%)</span>
+                                                    </t>
+                                                    <t t-else=""><span class="text-muted">—</span></t>
                                                 </td>
                                             </tr>
                                         </t>
                                         <t t-if="!(state.data.manager.sellers_summary || []).length">
                                             <tr>
-                                                <td colspan="4" class="text-muted">No hay vendedores para mostrar.</td>
+                                                <td colspan="7" class="text-muted">No hay vendedores para mostrar.</td>
                                             </tr>
                                         </t>
                                     </tbody>
