@@ -7,7 +7,8 @@
             <list string="Objetivos" editable="bottom" default_order="date_month desc, user_id">
                 <field name="date_month" widget="date"/>
                 <field name="user_id"/>
-                <field name="target_amount"/>
+                <field name="partner_id" optional="show" placeholder="(General · sin cliente)"/>
+                <field name="target_amount" sum="Total"/>
                 <field name="currency_id" column_invisible="1"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </list>
@@ -22,6 +23,7 @@
                 <sheet>
                     <group>
                         <field name="user_id"/>
+                        <field name="partner_id" placeholder="Déjalo vacío para un objetivo general (sin cliente)"/>
                         <field name="date_month" widget="date"/>
                         <field name="target_amount"/>
                         <field name="currency_id" invisible="1"/>
@@ -29,7 +31,9 @@
                     </group>
                     <p class="text-muted">
                         El objetivo se compara contra el <b>Facturado Pagado (cobrado)</b> del
-                        mes. En la vista anual del panel, se suman los objetivos de los 12 meses.
+                        mes. El objetivo del vendedor es la <b>suma</b> de sus objetivos del periodo:
+                        el general (sin cliente) más los que definas por cliente. En la vista anual
+                        del panel, se suman además los 12 meses.
                     </p>
                 </sheet>
             </form>
@@ -42,8 +46,13 @@
         <field name="arch" type="xml">
             <search string="Buscar Objetivos">
                 <field name="user_id"/>
+                <field name="partner_id"/>
                 <field name="date_month"/>
+                <filter name="with_partner" string="Con cliente" domain="[('partner_id', '!=', False)]"/>
+                <filter name="without_partner" string="General (sin cliente)" domain="[('partner_id', '=', False)]"/>
+                <separator/>
                 <filter name="group_user" string="Vendedor" context="{'group_by': 'user_id'}"/>
+                <filter name="group_partner" string="Cliente" context="{'group_by': 'partner_id'}"/>
                 <filter name="group_month" string="Mes" context="{'group_by': 'date_month'}"/>
             </search>
         </field>

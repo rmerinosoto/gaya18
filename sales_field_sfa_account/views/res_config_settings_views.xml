@@ -54,6 +54,15 @@
                             </div>
                         </div>
                     </setting>
+                    <setting string="Vigencia en 'Clientes en Riesgo'"
+                             help="Inactivos/Perdidos cuya última compra sea más antigua que estos meses dejan de aparecer (y de sumar) en el reporte 'Clientes en Riesgo'. El cliente sigue marcado como Perdido. 0 = sin límite.">
+                        <div class="content-group">
+                            <div class="row">
+                                <label for="sfa_at_risk_window_months" string="Meses desde la última compra" class="col-lg-5 o_light_label"/>
+                                <field name="sfa_at_risk_window_months"/>
+                            </div>
+                        </div>
+                    </setting>
                 </block>
             </xpath>
         </field>

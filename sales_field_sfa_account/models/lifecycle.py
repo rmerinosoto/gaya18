@@ -96,6 +96,16 @@ class ResPartner(models.Model):
         help="Facturado en los 12 meses previos a su última compra: la venta anual "
         "que se deja de recibir. La calcula la automatización al marcar Inactivo.",
     )
+    sfa_at_risk = fields.Boolean(
+        string="En riesgo (vigente)",
+        readonly=True,
+        index=True,
+        help="Cliente Inactivo o Perdido cuya última compra está dentro de la "
+        "ventana configurada en Ajustes (meses desde la última compra). Es el filtro "
+        "del reporte 'Clientes en Riesgo': fuera de la ventana el cliente deja de "
+        "aparecer (y de sumar) aunque siga marcado como Perdido. La mantiene la "
+        "automatización diaria.",
+    )
 
     @api.depends("sfa_last_invoice_date")
     def _compute_sfa_days_since_last_invoice(self):
@@ -155,6 +165,47 @@ class ResPartner(models.Model):
             # 'Perdido' solo se separa si la distinción de etapas está activa.
             lost_target = lost if (distinguish and lost) else None
             self._sfa_inactivate_stale_customers(Move, inactive, inactive_months, lost_target, lost_months, today)
+
+        # Vigencia en 'Clientes en Riesgo': se recalcula SIEMPRE (refleja también
+        # Inactivos/Perdidos marcados a mano, no solo por la automatización).
+        self._sfa_refresh_at_risk(today)
+
+    @api.model
+    def _sfa_refresh_at_risk(self, today):
+        """Marca `sfa_at_risk` en los Inactivos/Perdidos cuya última compra está
+        dentro de la ventana configurada (meses desde la última compra). Fuera de la
+        ventana —o sin última compra— dejan de estar 'en riesgo' y desaparecen del
+        reporte 'Clientes en Riesgo', aunque sigan marcados como Perdido. La ventana
+        en 0 (o negativa) significa 'sin límite': muestra todos los Inactivos/Perdidos."""
+        Status = self.env["sales.field.customer.status"].sudo()
+        at_risk_states = Status.search(["|", ("is_inactive", "=", True), ("is_lost", "=", True)])
+        raw = self.env["ir.config_parameter"].sudo().get_param("sales_field_sfa.at_risk_window_months", 24)
+        try:
+            window = int(raw)
+        except (TypeError, ValueError):
+            window = 24
+
+        candidates = self.search([
+            ("sfa_customer_status", "in", at_risk_states.ids),
+            ("sfa_excluded", "=", False),
+        ]) if at_risk_states else self.browse()
+        if window > 0:
+            cutoff = today - relativedelta(months=window)
+            should = candidates.filtered(
+                lambda p: p.sfa_last_invoice_date and p.sfa_last_invoice_date >= cutoff
+            )
+        else:
+            should = candidates
+
+        to_true = should.filtered(lambda p: not p.sfa_at_risk)
+        if to_true:
+            to_true.with_context(tracking_disable=True).write({"sfa_at_risk": True})
+        to_false = self.search([("sfa_at_risk", "=", True), ("id", "not in", should.ids)])
+        if to_false:
+            to_false.with_context(tracking_disable=True).write({"sfa_at_risk": False})
+        _logger.info(
+            "sfa lifecycle: en riesgo vigentes=%d (ventana=%s meses)", len(should), window or "sin límite"
+        )
 
     @api.model
     def _sfa_promote_paid_customers(self, Move, promote_target, today):
