@@ -72,6 +72,16 @@ class ResConfigSettings(models.TransientModel):
         "Solo aplica si la distinción de etapas está activada. Debe ser mayor que "
         "los meses para 'Inactivo'.",
     )
+    sfa_at_risk_window_months = fields.Integer(
+        string="Antigüedad máxima en 'Clientes en Riesgo' (meses)",
+        config_parameter="sales_field_sfa.at_risk_window_months",
+        default=24,
+        help="Un cliente Inactivo o Perdido cuya última compra sea más antigua que "
+        "estos meses deja de aparecer (y de sumar) en el reporte 'Clientes en "
+        "Riesgo'. Se mide desde su última compra; el cliente sigue marcado como "
+        "Perdido, solo deja de representarse como operación presente. 0 = sin "
+        "límite (mostrar siempre).",
+    )
 
     def set_values(self):
         super().set_values()

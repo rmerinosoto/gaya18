@@ -1,6 +1,9 @@
 """Tests del KPI 'Facturado Pagado' que aporta el puente con Contabilidad.
 
 Reutilizan el setup común del core (SFACommon) importándolo como addon."""
+from dateutil.relativedelta import relativedelta
+
+from odoo import fields
 from odoo.tests import tagged
 
 from odoo.addons.sales_field_sfa.tests.common import SFACommon
@@ -88,3 +91,39 @@ class TestPaidKpi(SFACommon):
         self.assertEqual(set(result.keys()), set(sample.ids))
         for inv in sample:
             self.assertTrue(result[inv.id], f"Invoice {inv.id} sin paid_date ni fallback")
+
+    def test_at_risk_window_by_last_invoice(self):
+        """'Clientes en Riesgo' (sfa_at_risk) solo incluye Inactivos/Perdidos cuya
+        última compra está dentro de la ventana en meses; fuera de ella, o sin última
+        compra, caen. La ventana en 0 = sin límite."""
+        P = self.env["res.partner"]
+        Param = self.env["ir.config_parameter"].sudo()
+        lost = self.env.ref("sales_field_sfa_account.customer_status_lost")
+        today = fields.Date.context_today(P)
+
+        recent = P.create({"name": "Perdido reciente", "sfa_customer_status": lost.id,
+                           "sfa_last_invoice_date": today - relativedelta(months=18)})
+        old = P.create({"name": "Perdido antiguo", "sfa_customer_status": lost.id,
+                       "sfa_last_invoice_date": today - relativedelta(months=30)})
+        never = P.create({"name": "Perdido sin compra", "sfa_customer_status": lost.id,
+                         "sfa_last_invoice_date": False})
+
+        # Ventana de 24 meses: solo el reciente sigue vigente.
+        Param.set_param("sales_field_sfa.at_risk_window_months", "24")
+        P._sfa_refresh_at_risk(today)
+        self.assertTrue(recent.sfa_at_risk, "Última compra a 18m (<24) debe seguir en riesgo")
+        self.assertFalse(old.sfa_at_risk, "Última compra a 30m (>24) debe caer del reporte")
+        self.assertFalse(never.sfa_at_risk, "Sin última compra debe caer del reporte")
+
+        # Sin límite (0): todos los Inactivos/Perdidos vuelven a aparecer.
+        Param.set_param("sales_field_sfa.at_risk_window_months", "0")
+        P._sfa_refresh_at_risk(today)
+        self.assertTrue(recent.sfa_at_risk)
+        self.assertTrue(old.sfa_at_risk, "Con ventana 0 (sin límite) el antiguo reaparece")
+        self.assertTrue(never.sfa_at_risk, "Con ventana 0 (sin límite) el sin-compra reaparece")
+
+        # Si deja de ser Inactivo/Perdido (p.ej. vuelve a comprar y se promueve), cae.
+        regular = self.env.ref("sales_field_sfa.customer_status_customer")
+        recent.sfa_customer_status = regular.id
+        P._sfa_refresh_at_risk(today)
+        self.assertFalse(recent.sfa_at_risk, "Un Cliente regular no está 'en riesgo'")

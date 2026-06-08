@@ -45,15 +45,15 @@
         <field name="name">Clientes en Riesgo</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,pivot,graph,kanban,form</field>
-        <field name="domain">['|', ('sfa_customer_status.is_inactive', '=', True), ('sfa_customer_status.is_lost', '=', True)]</field>
+        <field name="domain">[('sfa_at_risk', '=', True)]</field>
         <field name="search_view_id" ref="sales_field_sfa.view_partner_search_sales_field_sfa"/>
         <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'sequence': 1, 'view_mode': 'list', 'view_id': ref('view_partner_at_risk_list')}),
             (0, 0, {'sequence': 2, 'view_mode': 'pivot', 'view_id': ref('view_partner_at_risk_pivot')}),
             (0, 0, {'sequence': 3, 'view_mode': 'graph', 'view_id': ref('view_partner_at_risk_graph')})]"/>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Sin clientes inactivos ni perdidos.</p>
-            <p>Aquí verás los clientes que dejaron de comprar, cuánto llevan sin hacerlo y la venta anual que se deja de recibir. Usa los filtros Inactivos / Perdidos y agrupa por motivo o vendedor.</p>
+            <p class="o_view_nocontent_smiling_face">Sin clientes inactivos ni perdidos vigentes.</p>
+            <p>Aquí verás los clientes que dejaron de comprar (Inactivos y Perdidos), cuánto llevan sin hacerlo y la venta anual que se deja de recibir. Solo aparecen mientras su última compra esté dentro de la ventana configurada en Ajustes (por defecto 24 meses); pasada esa antigüedad dejan de representarse como operación presente. Usa los filtros Inactivos / Perdidos y agrupa por motivo o vendedor.</p>
         </field>
     </record>
 
