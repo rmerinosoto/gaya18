@@ -147,9 +147,12 @@ class SalesInteraction(models.Model):
             "sales_field_sfa.recent_interaction_days"
         )
         try:
-            recent_days = int(raw) if int(raw) > 0 else 90
+            recent_days = int(raw)
         except (TypeError, ValueError):
             recent_days = 90
+        else:
+            if recent_days <= 0:
+                recent_days = 90
         threshold = fields.Datetime.now() - timedelta(days=recent_days)
         for rec in self:
             if not rec.partner_id:
@@ -268,16 +271,28 @@ class SalesInteraction(models.Model):
             "target": "current",
         }
 
+    def _assign_orphan_partner(self, message):
+        """Asigna el partner (sin vendedor) al vendedor de la interaccion y deja
+        la solicitud en estado neutro. `message` es la nota de chatter, que difiere
+        segun el camino (creacion automatica vs boton manual). Centraliza el write
+        + reset + post que antes estaba duplicado en ambos flujos."""
+        self.ensure_one()
+        self.partner_id.sudo().write({"user_id": self.user_id.id})
+        self.write(
+            {
+                "assignment_request_state": "not_requested",
+                "assignment_request_date": False,
+                "assignment_requested_by_id": False,
+            }
+        )
+        self.message_post(body=message, subtype_xmlid="mail.mt_note")
+
     def action_request_partner_assignment(self):
         self.ensure_one()
         if not self.partner_id.user_id:
-            self.partner_id.sudo().write({"user_id": self.user_id.id})
-            self.assignment_request_state = "not_requested"
-            self.assignment_request_date = False
-            self.assignment_requested_by_id = False
-            self.message_post(
-                body=_("El cliente no tenía vendedor y se asignó automáticamente a %(user)s.") % {"user": self.user_id.display_name},
-                subtype_xmlid="mail.mt_note",
+            self._assign_orphan_partner(
+                _("El cliente no tenía vendedor y se asignó automáticamente a %(user)s.")
+                % {"user": self.user_id.display_name}
             )
             return True
         if self.partner_id.user_id == self.user_id:
@@ -372,17 +387,9 @@ class SalesInteraction(models.Model):
             partner.invalidate_recordset(["user_id"])
 
             if not current_user_id:
-                partner.sudo().write({"user_id": rec.user_id.id})
-                rec.write(
-                    {
-                        "assignment_request_state": "not_requested",
-                        "assignment_request_date": False,
-                        "assignment_requested_by_id": False,
-                    }
-                )
-                rec.message_post(
-                    body=_("Cliente asignado automáticamente a %(user)s por no tener vendedor previo.") % {"user": rec.user_id.display_name},
-                    subtype_xmlid="mail.mt_note",
+                rec._assign_orphan_partner(
+                    _("Cliente asignado automáticamente a %(user)s por no tener vendedor previo.")
+                    % {"user": rec.user_id.display_name}
                 )
             elif current_user_id != rec.user_id.id:
                 rec._create_assignment_request()

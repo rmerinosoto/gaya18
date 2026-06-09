@@ -224,6 +224,28 @@ class TestDashboard(SFACommon):
         self.assertEqual(count_before - count_after, 2,
                          "Exactamente 2 cotizaciones del excluido deben salir.")
 
+    def test_inactive_list_measures_only_owner_interactions(self):
+        """#8 (2026-06-09): la inactividad se mide por el vendedor DUEÑO. Un cliente
+        de seller_a contactado SOLO por seller_b sigue apareciendo como 'sin contacto'
+        para seller_a. Se prueba via gerente (ve todas las interacciones por record
+        rule) — es el caso donde el filtro user_id importa."""
+        self.partner_orphan.user_id = self.seller_a
+        # seller_b registra una interaccion RECIENTE sobre el cliente de seller_a.
+        self.Interaction.with_user(self.seller_b).create({
+            "partner_id": self.partner_orphan.id,
+            "interaction_type": "call",
+            "result": "interested",
+            "next_action_date": "2026-12-31",
+        })
+        data = self.env["sales.field.dashboard"].with_user(self.manager).get_dashboard_data(
+            target_user_id=self.seller_a.id
+        )
+        inactive_ids = {p["id"] for p in data["lists"]["inactive_partners"]}
+        self.assertIn(
+            self.partner_orphan.id, inactive_ids,
+            "El cliente sin contacto propio debe aparecer inactivo aunque otro vendedor lo haya visto.",
+        )
+
     def test_action_register_next_interaction_returns_form_with_defaults(self):
         """S-01: el action devuelve form con default_partner_id y default_user_id precargados."""
         self.partner_orphan.user_id = self.seller_a
