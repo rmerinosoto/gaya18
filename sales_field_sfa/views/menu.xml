@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_sales_field_root" name="Seguimiento Comercial" sequence="10" web_icon="sales_field_sfa,static/description/icon.png" groups="sales_field_sfa.group_sales_field_user,sales_field_sfa.group_sales_field_manager"/>
+    <menuitem id="menu_sales_field_root" name="Seguimiento Comercial" sequence="10" web_icon="fa fa-line-chart,#FFFFFF,#0F766E" groups="sales_field_sfa.group_sales_field_user,sales_field_sfa.group_sales_field_manager"/>
 
     <menuitem id="menu_sales_field_dashboard" name="Mi Panel" parent="menu_sales_field_root" sequence="5" action="sales_field_sfa.action_sales_field_dashboard" groups="sales_field_sfa.group_sales_field_user,sales_field_sfa.group_sales_field_manager"/>
 
