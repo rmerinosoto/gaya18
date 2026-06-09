@@ -1,7 +1,7 @@
 {
     "name": "Sales Field SFA",
     "summary": "Seguimiento comercial de campo con panel OWL",
-    "version": "18.0.2.0.3",
+    "version": "18.0.2.0.4",
     "category": "Sales",
     "author": "ANFEPI - Rodrigo Merino",
     "license": "LGPL-3",
