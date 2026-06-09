@@ -1,9 +1,9 @@
 {
     "name": "Sales Field SFA",
     "summary": "Seguimiento comercial de campo con panel OWL",
-    "version": "18.0.2.0.0",
+    "version": "18.0.2.0.1",
     "category": "Sales",
-    "author": "ANFEPI: Rodrigo Merino",
+    "author": "ANFEPI - Rodrigo Merino",
     "license": "LGPL-3",
     # El core NO depende de `account`: el KPI contable "Facturado Pagado" lo
     # aporta el modulo puente opcional `sales_field_sfa_account`. Asi una empresa
