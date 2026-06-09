@@ -1,9 +1,9 @@
 {
     "name": "Sales Field SFA - Contabilidad",
     "summary": "KPI 'Facturado Pagado' para el Seguimiento Comercial (puente con Contabilidad)",
-    "version": "18.0.2.3.0",
+    "version": "18.0.2.3.1",
     "category": "Sales",
-    "author": "ANFEPI: Rodrigo Merino",
+    "author": "ANFEPI - Rodrigo Merino",
     "license": "LGPL-3",
     # Modulo puente: conecta el core sales_field_sfa (sin contabilidad) con account.
     # Aporta el KPI "Facturado Pagado del Mes/Año" reconstruyendo la fecha real de
