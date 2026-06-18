@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
-        Oculta los REGISTROS de la Lista de Materiales (mrp.bom y modelos
-        relacionados) a quien no sea de Manufactura, SIN tocar el acceso de
-        modelo (perm_read). Asi el formulario de producto puede calcular
-        bom_count (=0 para esos usuarios) sin AccessError: ven el producto,
-        pero no ven ninguna lista de materiales.
+        Oculta los REGISTROS de la Lista de Materiales de MANUFACTURA (type=normal)
+        a quien no sea de Manufactura, SIN tocar el acceso de modelo (perm_read).
+        Asi el formulario de producto calcula bom_count (=0 para esos usuarios en
+        productos manufacturados) sin AccessError: ven el producto, pero no ven la
+        receta de manufactura.
 
-        Diseno por record rule (no por ACL de modelo): revocar perm_read a
-        nivel de ir.model.access rompia la ficha de producto, porque mrp
-        calcula bom_count leyendo mrp.bom en el contexto del usuario.
+        EXCEPCION CLAVE - kits (type=phantom): los BOM phantom son un constructo de
+        VENTA (kits), no una receta de manufactura. Flujos como POS, venta de kits
+        y entregas de kits leen el BOM phantom en el contexto del usuario (cajero,
+        vendedor, almacenista) para explotar los componentes. Por eso a los NO
+        Manufactura se les permite leer SOLO los BOM phantom; los type=normal
+        quedan ocultos. Esto evita romper el PDV (paro de ventas) y mantiene la
+        receta de manufactura reservada.
 
-        Reglas globales (sin grupos): el dominio devuelve todos los registros
-        si el usuario tiene Manufactura/Usuario (mrp.group_mrp_manager lo
-        implica) y ninguno en caso contrario.
+        Diseno por record rule (no por ACL de modelo): revocar perm_read a nivel de
+        ir.model.access rompia la ficha de producto (mrp calcula bom_count leyendo
+        mrp.bom en el contexto del usuario -> AccessError).
+
+        Reglas globales (sin grupos): Manufactura/Usuario (mrp.group_mrp_manager lo
+        implica) ve todo; el resto solo phantom.
     -->
     <record id="bom_rule_mrp_only" model="ir.rule">
-        <field name="name">BOM visible solo a Manufactura</field>
+        <field name="name">BOM manufactura solo a Manufactura (kits visibles)</field>
         <field name="model_id" ref="mrp.model_mrp_bom"/>
         <field name="groups" eval="[(5, 0, 0)]"/>
-        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [(0, '=', 1)]</field>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [('type', '=', 'phantom')]</field>
     </record>
 
     <record id="bom_line_rule_mrp_only" model="ir.rule">
-        <field name="name">BOM (lineas) visible solo a Manufactura</field>
+        <field name="name">BOM (lineas) manufactura solo a Manufactura (kits visibles)</field>
         <field name="model_id" ref="mrp.model_mrp_bom_line"/>
         <field name="groups" eval="[(5, 0, 0)]"/>
-        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [(0, '=', 1)]</field>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [('bom_id.type', '=', 'phantom')]</field>
     </record>
 
     <record id="bom_byproduct_rule_mrp_only" model="ir.rule">
-        <field name="name">BOM (subproductos) visible solo a Manufactura</field>
+        <field name="name">BOM (subproductos) manufactura solo a Manufactura</field>
         <field name="model_id" ref="mrp.model_mrp_bom_byproduct"/>
         <field name="groups" eval="[(5, 0, 0)]"/>
-        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [(0, '=', 1)]</field>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [('bom_id.type', '=', 'phantom')]</field>
     </record>
 </odoo>
