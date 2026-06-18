@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Reserva la LECTURA de la Lista de Materiales (mrp.bom y modelos
+        relacionados) a los grupos de Manufactura. Se ejecuta en cada
+        instalacion/actualizacion del modulo, por lo que reaplica el bloqueo
+        aunque los modulos puente (mrp_account, sale_mrp, purchase_mrp)
+        regeneren sus ACL en un upgrade.
+    -->
+    <function model="ir.model.access" name="_gaya_restrict_bom_read"/>
+</odoo>
