@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_bom_internal_read,mrp.bom internal read-only,mrp.model_mrp_bom,base.group_user,1,0,0,0
+access_mrp_bom_line_internal_read,mrp.bom.line internal read-only,mrp.model_mrp_bom_line,base.group_user,1,0,0,0
+access_mrp_bom_byproduct_internal_read,mrp.bom.byproduct internal read-only,mrp.model_mrp_bom_byproduct,base.group_user,1,0,0,0

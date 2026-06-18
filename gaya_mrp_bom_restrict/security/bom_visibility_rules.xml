@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Oculta los REGISTROS de la Lista de Materiales (mrp.bom y modelos
+        relacionados) a quien no sea de Manufactura, SIN tocar el acceso de
+        modelo (perm_read). Asi el formulario de producto puede calcular
+        bom_count (=0 para esos usuarios) sin AccessError: ven el producto,
+        pero no ven ninguna lista de materiales.
+
+        Diseno por record rule (no por ACL de modelo): revocar perm_read a
+        nivel de ir.model.access rompia la ficha de producto, porque mrp
+        calcula bom_count leyendo mrp.bom en el contexto del usuario.
+
+        Reglas globales (sin grupos): el dominio devuelve todos los registros
+        si el usuario tiene Manufactura/Usuario (mrp.group_mrp_manager lo
+        implica) y ninguno en caso contrario.
+    -->
+    <record id="bom_rule_mrp_only" model="ir.rule">
+        <field name="name">BOM visible solo a Manufactura</field>
+        <field name="model_id" ref="mrp.model_mrp_bom"/>
+        <field name="groups" eval="[(5, 0, 0)]"/>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [(0, '=', 1)]</field>
+    </record>
+
+    <record id="bom_line_rule_mrp_only" model="ir.rule">
+        <field name="name">BOM (lineas) visible solo a Manufactura</field>
+        <field name="model_id" ref="mrp.model_mrp_bom_line"/>
+        <field name="groups" eval="[(5, 0, 0)]"/>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [(0, '=', 1)]</field>
+    </record>
+
+    <record id="bom_byproduct_rule_mrp_only" model="ir.rule">
+        <field name="name">BOM (subproductos) visible solo a Manufactura</field>
+        <field name="model_id" ref="mrp.model_mrp_bom_byproduct"/>
+        <field name="groups" eval="[(5, 0, 0)]"/>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('mrp.group_mrp_user') else [(0, '=', 1)]</field>
+    </record>
+</odoo>
