@@ -96,9 +96,9 @@ class SalesInteraction(models.Model):
     partner_channel = fields.Many2one(
         "sales.field.channel",
         related="partner_id.sfa_channel",
-        string="Canal",
+        string="Tipo de Negocio",
         readonly=False,
-        help="Canal comercial del cliente. Editar aquí actualiza la ficha del cliente.",
+        help="Giro del cliente (Restaurante, Tienda, Panadería, etc.). Editar aquí actualiza la ficha del cliente.",
     )
     partner_visit_frequency = fields.Many2one(
         "sales.field.visit.frequency",

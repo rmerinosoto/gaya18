@@ -71,11 +71,11 @@
     </record>
     <menuitem id="menu_sales_field_excluded_customers" name="Clientes Excluidos" parent="menu_sales_field_equipo" sequence="50" action="sales_field_sfa.action_sales_field_excluded_customers" groups="sales_field_sfa.group_sales_field_manager"/>
 
-    <!-- Submenu de Configuracion: solo gerencia. Los catalogos (Canales, Estados,
+    <!-- Submenu de Configuracion: solo gerencia. Los catalogos (Tipos de Negocio, Estados,
          Frecuencias, Motivos) que antes eran Selection hardcodeados ahora se
          administran desde aqui. -->
     <menuitem id="menu_sales_field_config" name="Configuración" parent="menu_sales_field_root" sequence="100" groups="sales_field_sfa.group_sales_field_manager"/>
-    <menuitem id="menu_sales_field_config_channel" name="Canales" parent="menu_sales_field_config" sequence="10" action="sales_field_sfa.action_sales_field_channel" groups="sales_field_sfa.group_sales_field_manager"/>
+    <menuitem id="menu_sales_field_config_channel" name="Tipos de Negocio" parent="menu_sales_field_config" sequence="10" action="sales_field_sfa.action_sales_field_channel" groups="sales_field_sfa.group_sales_field_manager"/>
     <menuitem id="menu_sales_field_config_visit_frequency" name="Frecuencias de Visita" parent="menu_sales_field_config" sequence="20" action="sales_field_sfa.action_sales_field_visit_frequency" groups="sales_field_sfa.group_sales_field_manager"/>
     <menuitem id="menu_sales_field_config_customer_status" name="Estados de Cliente" parent="menu_sales_field_config" sequence="30" action="sales_field_sfa.action_sales_field_customer_status" groups="sales_field_sfa.group_sales_field_manager"/>
     <menuitem id="menu_sales_field_config_exclusion_reason" name="Motivos de Exclusión" parent="menu_sales_field_config" sequence="40" action="sales_field_sfa.action_sales_field_exclusion_reason" groups="sales_field_sfa.group_sales_field_manager"/>

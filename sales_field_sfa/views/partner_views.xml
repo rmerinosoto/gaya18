@@ -19,7 +19,7 @@
                 <group expand="0" string="Agrupar SFA" groups="sales_field_sfa.group_sales_field_manager">
                     <filter name="group_sfa_exclusion_reason" string="Motivo de Exclusión"
                             context="{'group_by': 'sfa_exclusion_reason'}"/>
-                    <filter name="group_sfa_channel" string="Canal SFA"
+                    <filter name="group_sfa_channel" string="Tipo de Negocio"
                             context="{'group_by': 'sfa_channel'}"/>
                 </group>
             </xpath>

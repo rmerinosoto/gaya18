@@ -10,11 +10,16 @@ from odoo.exceptions import ValidationError
 
 
 class SalesFieldChannel(models.Model):
+    # _name historico "sales.field.channel" se mantiene por compatibilidad de xml_ids,
+    # migrations, referencias en codigo. El label user-facing pasa a "Tipo de Negocio"
+    # porque lo que realmente se captura es el segmento del cliente (Restaurante,
+    # Panaderia, Distribuidor) y no un canal de ventas en sentido estricto (Retail vs
+    # Mayoreo vs Foodservice).
     _name = "sales.field.channel"
-    _description = "Canal Comercial (SFA)"
+    _description = "Tipo de Negocio (SFA)"
     _order = "sequence, name"
 
-    name = fields.Char(string="Canal", required=True, translate=True)
+    name = fields.Char(string="Tipo de Negocio", required=True, translate=True)
     code = fields.Char(
         string="Código Técnico",
         required=True,
