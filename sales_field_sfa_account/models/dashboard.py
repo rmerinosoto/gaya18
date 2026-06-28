@@ -92,17 +92,8 @@ class SalesFieldDashboard(models.AbstractModel):
 
     @api.model
     def _sfa_invoice_lookback_days(self):
-        raw = self.env["ir.config_parameter"].sudo().get_param(
-            "sales_field_sfa.invoice_lookback_days"
-        )
-        try:
-            return int(raw) if int(raw) > 0 else 90
-        except (TypeError, ValueError):
-            return 90
-
-    @staticmethod
-    def _views_from_mode(view_mode):
-        return [[False, view.strip()] for view in view_mode.split(",") if view.strip()]
+        # Reusa el lector robusto de parametros enteros del core.
+        return self._sfa_get_int_param("sales_field_sfa.invoice_lookback_days", 90)
 
     @api.model
     def _sfa_seller_invoice_domain(self, seller_ids, allowed_company_ids):
@@ -225,19 +216,12 @@ class SalesFieldDashboard(models.AbstractModel):
                 paid_amount += inv.amount_total_signed
 
         result["kpis"]["paid_invoices_month_amount"] = round(paid_amount, 2)
-        result["actions"]["paid_invoices_month_amount"] = {
-            "type": "ir.actions.act_window",
-            "name": _("Facturas Pagadas %(suffix)s") % {"suffix": period_suffix},
-            "res_model": "account.move",
-            "view_mode": "list,form",
-            "views": self._views_from_mode("list,form"),
-            "target": "current",
-            "domain": [
-                ("id", "in", paid_invoice_ids_in_month),
-                ("move_type", "=", "out_invoice"),
-            ],
-            "context": {"default_move_type": "out_invoice"},
-        }
+        result["actions"]["paid_invoices_month_amount"] = self._sfa_window_action(
+            _("Facturas Pagadas %(suffix)s") % {"suffix": period_suffix},
+            "account.move", "list,form",
+            [("id", "in", paid_invoice_ids_in_month), ("move_type", "=", "out_invoice")],
+            context={"default_move_type": "out_invoice"},
+        )
 
         # ---- Facturado / Vencido / Objetivo del vendedor ----
         today = fields.Date.context_today(self)
@@ -255,26 +239,18 @@ class SalesFieldDashboard(models.AbstractModel):
         result["kpis"]["target_amount"] = target_amount
         result["kpis"]["target_pct"] = self._sfa_pct(paid_amount, target_amount)
 
-        result["actions"]["invoiced_month_amount"] = {
-            "type": "ir.actions.act_window",
-            "name": _("Facturado %(suffix)s") % {"suffix": period_suffix},
-            "res_model": "account.move",
-            "view_mode": "list,form",
-            "views": self._views_from_mode("list,form"),
-            "target": "current",
-            "domain": [("id", "in", inv_ids.get(dashboard_user.id, [])), ("move_type", "=", "out_invoice")],
-            "context": {"default_move_type": "out_invoice"},
-        }
-        result["actions"]["overdue_amount"] = {
-            "type": "ir.actions.act_window",
-            "name": _("Cartera Vencida"),
-            "res_model": "account.move",
-            "view_mode": "list,form",
-            "views": self._views_from_mode("list,form"),
-            "target": "current",
-            "domain": [("id", "in", ovd_ids.get(dashboard_user.id, [])), ("move_type", "=", "out_invoice")],
-            "context": {"default_move_type": "out_invoice"},
-        }
+        result["actions"]["invoiced_month_amount"] = self._sfa_window_action(
+            _("Facturado %(suffix)s") % {"suffix": period_suffix},
+            "account.move", "list,form",
+            [("id", "in", inv_ids.get(dashboard_user.id, [])), ("move_type", "=", "out_invoice")],
+            context={"default_move_type": "out_invoice"},
+        )
+        result["actions"]["overdue_amount"] = self._sfa_window_action(
+            _("Cartera Vencida"),
+            "account.move", "list,form",
+            [("id", "in", ovd_ids.get(dashboard_user.id, [])), ("move_type", "=", "out_invoice")],
+            context={"default_move_type": "out_invoice"},
+        )
 
         # ---- Desglose gerencial por vendedor ----
         manager = result.get("manager") or {}
@@ -318,16 +294,11 @@ class SalesFieldDashboard(models.AbstractModel):
         )
 
         def _seller_move_action(name, ids):
-            return {
-                "type": "ir.actions.act_window",
-                "name": name,
-                "res_model": "account.move",
-                "view_mode": "list,form",
-                "views": self._views_from_mode("list,form"),
-                "target": "current",
-                "domain": [("id", "in", ids), ("move_type", "=", "out_invoice")],
-                "context": {"default_move_type": "out_invoice"},
-            }
+            return self._sfa_window_action(
+                name, "account.move", "list,form",
+                [("id", "in", ids), ("move_type", "=", "out_invoice")],
+                context={"default_move_type": "out_invoice"},
+            )
 
         for row in manager.get("sellers_summary", []):
             seller_id = row["seller_id"]

@@ -1,7 +1,7 @@
 {
     "name": "Sales Field SFA - Contabilidad",
     "summary": "KPI 'Facturado Pagado' para el Seguimiento Comercial (puente con Contabilidad)",
-    "version": "18.0.2.3.1",
+    "version": "18.0.2.3.2",
     "category": "Sales",
     "author": "ANFEPI - Rodrigo Merino",
     "license": "LGPL-3",
