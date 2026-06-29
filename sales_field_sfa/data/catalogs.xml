@@ -13,7 +13,7 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- NOTA: los Canales y los motivos de exclusión específicos de un negocio
+        <!-- NOTA: los Tipos de Negocio (modelo sales.field.channel) y los motivos de exclusión específicos de un negocio
              (Tienda/Restaurante/Distribuidor, Mercado Libre, etc.) NO se cargan
              aquí: son ejemplos de Gaya y viven en demo/catalogs_demo.xml. Una
              instalación nueva arranca con catálogos neutros y el admin crea los

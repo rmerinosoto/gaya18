@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- =================== Canales =================== -->
+    <!-- =================== Tipos de Negocio =================== -->
+    <!-- Modelo historicamente llamado sales.field.channel; el label visible es
+         "Tipo de Negocio" (= segmento del cliente: Restaurante, Panaderia, etc.). -->
     <record id="view_sales_field_channel_tree" model="ir.ui.view">
         <field name="name">sales.field.channel.tree</field>
         <field name="model">sales.field.channel</field>
@@ -31,7 +33,7 @@
         </field>
     </record>
     <record id="action_sales_field_channel" model="ir.actions.act_window">
-        <field name="name">Canales</field>
+        <field name="name">Tipos de Negocio</field>
         <field name="res_model">sales.field.channel</field>
         <field name="view_mode">list,form</field>
         <field name="context">{'active_test': False}</field>

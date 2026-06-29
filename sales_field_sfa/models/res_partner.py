@@ -18,10 +18,10 @@ class ResPartner(models.Model):
     )
     sfa_channel = fields.Many2one(
         "sales.field.channel",
-        string="Canal",
+        string="Tipo de Negocio",
         tracking=True,
         ondelete="restrict",
-        help="Tipo de negocio del cliente. Las opciones se gestionan en Seguimiento Comercial → Configuración → Canales.",
+        help="Giro o segmento del cliente (Restaurante, Tienda, Distribuidor, Panadería, Industrial, etc.). Las opciones se gestionan en Seguimiento Comercial → Configuración → Tipos de Negocio.",
     )
     sfa_visit_frequency = fields.Many2one(
         "sales.field.visit.frequency",

@@ -2,16 +2,18 @@
 <!--
   Catálogos de EJEMPLO (demo). Solo se cargan si la base se instala con datos de
   demostración. Son los valores del negocio de Gaya (alimentos/retail): sirven
-  como ejemplo de cómo se modelan canales y motivos de exclusión, pero NO se
-  imponen a una instalación de producción nueva.
+  como ejemplo de cómo se modelan Tipos de Negocio y motivos de exclusión, pero
+  NO se imponen a una instalación de producción nueva.
 
   Conservan los mismos xml_id históricos (channel_store, exclusion_reason_*) para
-  que una base con demo reproduzca exactamente el catálogo original.
+  que una base con demo reproduzca exactamente el catálogo original. El modelo
+  sigue llamandose sales.field.channel; solo el label visible cambio a "Tipo de
+  Negocio" — los xml_id channel_* son estables.
 -->
 <odoo>
     <data noupdate="1">
 
-        <!-- Canales (ejemplo: distribución de alimentos) -->
+        <!-- Tipos de Negocio (ejemplo: distribución de alimentos) -->
         <record id="channel_store" model="sales.field.channel">
             <field name="name">Tienda</field>
             <field name="code">store</field>
